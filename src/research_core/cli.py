@@ -45,6 +45,8 @@ from research_core.observe.writer import (
 from research_core.lineage.build_lineage import build_lineage_for_run
 from research_core.runsets.catalog import create_runset, list_runsets, show_runset, validate_runset
 from research_core.runsets.materialize import materialize_runset
+from research_core.risk.runset_agg import compute_runset_risk
+from research_core.risk.writer import write_risk_artifacts
 from research_core.plan.build import build_plan
 from research_core.plan.execute import execute_plan
 from research_core.psa.contracts import load_psa_schema_contract
@@ -73,6 +75,7 @@ dataset_app = typer.Typer(no_args_is_help=True)
 dataset_register_app = typer.Typer(no_args_is_help=True)
 lineage_app = typer.Typer(no_args_is_help=True)
 runset_app = typer.Typer(no_args_is_help=True)
+risk_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
@@ -85,6 +88,7 @@ app.add_typer(plan_app, name="plan")
 app.add_typer(dataset_app, name="dataset")
 app.add_typer(lineage_app, name="lineage")
 app.add_typer(runset_app, name="runset")
+app.add_typer(risk_app, name="risk")
 project_app.add_typer(project_index_app, name="index")
 dataset_app.add_typer(dataset_register_app, name="register")
 
@@ -644,6 +648,28 @@ def runset_materialize_command(
         project_out=project_out,
     )
     typer.echo(f"RUNSET_MATERIALIZED runset_id={runset_id} out={result['output_dir']}")
+
+
+@risk_app.command("run")
+def risk_run_command(
+    run_dir: Path = typer.Option(..., "--run"),
+) -> None:
+    result = write_risk_artifacts(run_dir=run_dir)
+    typer.echo(f"RISK_RUN_COMPLETED run={run_dir}")
+    typer.echo(f"summary={result['summary_path']}")
+    typer.echo(f"manifest={result['manifest_path']}")
+
+
+@risk_app.command("runset")
+def risk_runset_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    runset_id: str = typer.Option(..., "--id"),
+    out_dir: Path = typer.Option(..., "--out"),
+) -> None:
+    result = compute_runset_risk(catalog_dir=catalog_dir, runset_id=runset_id, out_dir=out_dir)
+    typer.echo(f"RISK_RUNSET_COMPLETED runset_id={runset_id}")
+    typer.echo(f"summary={result['summary_path']}")
+    typer.echo(f"manifest={result['manifest_path']}")
 
 
 @dataset_app.command("list")

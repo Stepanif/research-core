@@ -1,0 +1,34 @@
+from __future__ import annotations
+
+from research_core.psa.contracts import (
+    EVENT_A_CHANGE,
+    EVENT_A_FLIP,
+    EVENT_P_CHANGE,
+    EVENT_P_FLIP,
+    EVENT_S_CHANGE,
+    EVENT_STATE_CHANGE,
+)
+
+RISK_VERSION = "v1"
+RUNSET_RISK_VERSION = "v1"
+REQUIRED_ENV_VAR_CREATED_UTC = "RESEARCH_CREATED_UTC"
+
+K_SET = [1, 5, 10]
+QUANTILES = [0.1, 0.5, 0.9]
+
+WEIGHT_STATE_CHANGE = 0.35
+WEIGHT_P_FLIP = 0.25
+WEIGHT_A_FLIP = 0.20
+WEIGHT_CONCENTRATION = 0.20
+
+EVENT_BITS = {
+    "state_change": EVENT_STATE_CHANGE,
+    "p_change": EVENT_P_CHANGE,
+    "s_change": EVENT_S_CHANGE,
+    "a_change": EVENT_A_CHANGE,
+    "p_flip": EVENT_P_FLIP,
+    "a_flip": EVENT_A_FLIP,
+}
+
+RISK_MANIFEST_VERSION = "v1"
+RUNSET_RISK_MANIFEST_VERSION = "v1"

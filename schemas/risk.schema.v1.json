@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/risk.schema.v1.json",
+  "title": "Research Risk Harness v1",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/RiskSummaryV1"
+    },
+    {
+      "$ref": "#/$defs/RunsetRiskSummaryV1"
+    }
+  ],
+  "$defs": {
+    "RiskSummaryV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "risk_version",
+        "created_utc",
+        "run_ref",
+        "inputs",
+        "counts",
+        "event_rates_per_1000",
+        "streaks",
+        "distributions",
+        "instability_score",
+        "invariants",
+        "risk_summary_canonical_sha256"
+      ],
+      "properties": {
+        "risk_version": {
+          "type": "string",
+          "const": "v1"
+        },
+        "created_utc": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "instrument",
+            "tf",
+            "session_policy",
+            "tz",
+            "rth_start",
+            "rth_end"
+          ],
+          "properties": {
+            "instrument": {"type": "string", "minLength": 1},
+            "tf": {"type": "string", "minLength": 1},
+            "session_policy": {"type": "string", "minLength": 1},
+            "tz": {"type": "string", "minLength": 1},
+            "rth_start": {"type": "string", "minLength": 1},
+            "rth_end": {"type": "string", "minLength": 1}
+          }
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["psa_table_sha256"],
+          "properties": {
+            "psa_table_sha256": {"type": "string", "minLength": 1}
+          }
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["row_count", "transition_count"],
+          "properties": {
+            "row_count": {"type": "integer", "minimum": 0},
+            "transition_count": {"type": "integer", "minimum": 0}
+          }
+        },
+        "event_rates_per_1000": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state_change", "p_change", "s_change", "a_change", "p_flip", "a_flip"],
+          "properties": {
+            "state_change": {"type": "number"},
+            "p_change": {"type": "number"},
+            "s_change": {"type": "number"},
+            "a_change": {"type": "number"},
+            "p_flip": {"type": "number"},
+            "a_flip": {"type": "number"}
+          }
+        },
+        "streaks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["max_state_change_streak", "max_p_flip_streak", "max_a_flip_streak"],
+          "properties": {
+            "max_state_change_streak": {"type": "integer", "minimum": 0},
+            "max_p_flip_streak": {"type": "integer", "minimum": 0},
+            "max_a_flip_streak": {"type": "integer", "minimum": 0}
+          }
+        },
+        "distributions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state_entropy_bits", "transition_entropy_bits", "top_state_share_k", "top_transition_share_k"],
+          "properties": {
+            "state_entropy_bits": {"type": "number"},
+            "transition_entropy_bits": {"type": "number"},
+            "top_state_share_k": {"$ref": "#/$defs/TopKShares"},
+            "top_transition_share_k": {"$ref": "#/$defs/TopKShares"}
+          }
+        },
+        "instability_score": {"type": "number"},
+        "invariants": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required_files_present", "row_count_positive"],
+          "properties": {
+            "required_files_present": {"type": "boolean"},
+            "row_count_positive": {"type": "boolean"}
+          }
+        },
+        "risk_summary_canonical_sha256": {"type": "string", "minLength": 1}
+      }
+    },
+    "RunsetRiskSummaryV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runset_risk_version",
+        "created_utc",
+        "runset_id",
+        "run_count",
+        "per_run",
+        "aggregates",
+        "runset_risk_canonical_sha256"
+      ],
+      "properties": {
+        "runset_risk_version": {"type": "string", "const": "v1"},
+        "created_utc": {"type": "string", "minLength": 1},
+        "runset_id": {"type": "string", "minLength": 1},
+        "run_count": {"type": "integer", "minimum": 0},
+        "per_run": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "aggregates": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "runset_risk_canonical_sha256": {"type": "string", "minLength": 1}
+      }
+    },
+    "TopKShares": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["1", "5", "10"],
+      "properties": {
+        "1": {"type": "number"},
+        "5": {"type": "number"},
+        "10": {"type": "number"}
+      }
+    }
+  }
+}
