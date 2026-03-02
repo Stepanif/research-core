@@ -9,6 +9,9 @@ import pandas as pd
 import typer
 
 from research_core.bundle.exporter import export_bundle
+from research_core.doctor.bundle_verify import verify_bundle_text
+from research_core.doctor.project_doctor import doctor_project_text
+from research_core.doctor.run_doctor import doctor_run_text
 from research_core.experiments.batch import run_experiment_batch
 from research_core.experiments.promote import promote_experiment_label
 from research_core.experiments.report import compute_experiments_report
@@ -50,12 +53,16 @@ bundle_app = typer.Typer(no_args_is_help=True)
 experiment_app = typer.Typer(no_args_is_help=True)
 project_app = typer.Typer(no_args_is_help=True)
 project_index_app = typer.Typer(no_args_is_help=True)
+doctor_app = typer.Typer(no_args_is_help=True)
+verify_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
 app.add_typer(bundle_app, name="bundle")
 app.add_typer(experiment_app, name="experiment")
 app.add_typer(project_app, name="project")
+app.add_typer(doctor_app, name="doctor")
+app.add_typer(verify_app, name="verify")
 project_app.add_typer(project_index_app, name="index")
 
 
@@ -426,6 +433,37 @@ def project_promote_command(
     label: str = typer.Option(..., "--label"),
 ) -> None:
     promote_project(output_dir=output_dir, project_id=project_id, label=label)
+
+
+@doctor_app.command("run")
+def doctor_run_command(
+    run_dir: Path = typer.Option(..., "--run"),
+) -> None:
+    text, ok = doctor_run_text(run_dir=run_dir)
+    typer.echo(text)
+    if not ok:
+        raise typer.Exit(code=1)
+
+
+@doctor_app.command("project")
+def doctor_project_command(
+    output_dir: Path = typer.Option(..., "--output-dir"),
+    project_id: str = typer.Option(..., "--id"),
+) -> None:
+    text, ok = doctor_project_text(output_dir=output_dir, project_id=project_id)
+    typer.echo(text)
+    if not ok:
+        raise typer.Exit(code=1)
+
+
+@verify_app.command("bundle")
+def verify_bundle_command(
+    zip_path: Path = typer.Option(..., "--zip"),
+) -> None:
+    text, ok = verify_bundle_text(bundle_zip_path=zip_path)
+    typer.echo(text)
+    if not ok:
+        raise typer.Exit(code=1)
 
 
 @validate_app.command("canon")
