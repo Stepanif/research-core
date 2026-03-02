@@ -9,16 +9,10 @@ import pandas as pd
 import typer
 
 from research_core.bundle.exporter import export_bundle
-from research_core.experiments.ids import derive_experiment_id
-from research_core.experiments.registry import list_experiment_ids, show_experiment_summary, update_experiments_index
-from research_core.experiments.spec import load_experiment_spec
-from research_core.experiments.transition_matrix import build_transition_matrix_from_psa
-from research_core.experiments.writer import (
-    build_experiment_manifest,
-    ensure_experiment_immutable,
-    write_experiment_manifest,
-    write_transition_matrix,
-)
+from research_core.experiments.batch import run_experiment_batch
+from research_core.experiments.promote import promote_experiment_label
+from research_core.experiments.registry import list_experiment_ids, show_experiment_summary
+from research_core.experiments.runner import run_experiment_from_spec_path
 from research_core.canon.manifest import build_manifest, write_contract_snapshot, write_manifest
 from research_core.canon.normalize import canonicalize_file
 from research_core.canon.writer import write_canon_parquet
@@ -144,27 +138,6 @@ def _load_canon_session_metadata(run_dir: Path) -> dict[str, str]:
         "rth_start": rth_start,
         "rth_end": rth_end,
     }
-
-
-def _canonical_table_hashes_for_experiment(run_dir: Path) -> tuple[str, str | None]:
-    psa_manifest_path = run_dir / "psa.manifest.json"
-    if not psa_manifest_path.exists():
-        raise ResearchError(f"Missing required psa manifest for experiment run: {psa_manifest_path}")
-
-    psa_manifest = json.loads(psa_manifest_path.read_text(encoding="utf-8"))
-    psa_canonical_table_sha256 = psa_manifest.get("output_files", {}).get("psa.parquet", {}).get("canonical_table_sha256")
-    if not isinstance(psa_canonical_table_sha256, str) or not psa_canonical_table_sha256:
-        raise ResearchError("psa.manifest.json missing output_files.psa.parquet.canonical_table_sha256")
-
-    canon_canonical_table_sha256: str | None = None
-    canon_manifest_path = run_dir / "canon.manifest.json"
-    if canon_manifest_path.exists():
-        canon_manifest = json.loads(canon_manifest_path.read_text(encoding="utf-8"))
-        canon_value = canon_manifest.get("output_files", {}).get("canon.parquet", {}).get("canonical_table_sha256")
-        if isinstance(canon_value, str) and canon_value:
-            canon_canonical_table_sha256 = canon_value
-
-    return psa_canonical_table_sha256, canon_canonical_table_sha256
 
 
 @app.command("canon")
@@ -352,45 +325,25 @@ def experiment_run_command(
     run_dir: Path = typer.Option(..., "--run"),
     spec_path: Path = typer.Option(..., "--spec"),
 ) -> None:
-    spec_payload = load_experiment_spec(spec_path=spec_path)
+    run_experiment_from_spec_path(run_dir=run_dir, spec_path=spec_path)
 
-    psa_table_sha256, canon_table_sha256 = _canonical_table_hashes_for_experiment(run_dir)
-    exp_id, _ = derive_experiment_id(
-        spec_payload=spec_payload,
-        psa_canonical_table_sha256=psa_table_sha256,
-        canon_canonical_table_sha256=canon_table_sha256,
-    )
 
-    exp_dir = run_dir / "experiments" / exp_id
-    exp_exists = exp_dir.exists()
+@experiment_app.command("batch")
+def experiment_batch_command(
+    run_dir: Path = typer.Option(..., "--run"),
+    spec_dir: Path = typer.Option(..., "--spec-dir"),
+    out_path: Path = typer.Option(..., "--out"),
+) -> None:
+    run_experiment_batch(run_dir=run_dir, spec_dir=spec_dir, batch_dir=out_path)
 
-    transition_payload = build_transition_matrix_from_psa(
-        psa_path=run_dir / "psa.parquet",
-        include_event_bits=bool(spec_payload["params"]["include_event_bits"]),
-    )
 
-    manifest_payload = build_experiment_manifest(
-        run_dir=run_dir,
-        exp_id=exp_id,
-        spec_payload=spec_payload,
-        transition_matrix_payload=transition_payload,
-    )
-
-    if exp_exists:
-        ensure_experiment_immutable(exp_dir=exp_dir, expected_manifest_payload=manifest_payload)
-    else:
-        ensure_dir(exp_dir)
-        write_transition_matrix(exp_dir / "transition_matrix.json", transition_payload)
-        write_experiment_manifest(exp_dir / "exp.manifest.json", manifest_payload)
-
-    update_experiments_index(
-        run_dir=run_dir,
-        exp_id=exp_id,
-        kind=str(spec_payload["kind"]),
-        spec_sha256=str(manifest_payload["spec_canonical_sha256"]),
-        manifest_canonical_sha256=str(manifest_payload["exp_manifest_canonical_sha256"]),
-        created_utc=str(manifest_payload["created_utc"]),
-    )
+@experiment_app.command("promote")
+def experiment_promote_command(
+    run_dir: Path = typer.Option(..., "--run"),
+    exp_id: str = typer.Option(..., "--id"),
+    label: str = typer.Option(..., "--label"),
+) -> None:
+    promote_experiment_label(run_dir=run_dir, exp_id=exp_id, label=label)
 
 
 @experiment_app.command("list")

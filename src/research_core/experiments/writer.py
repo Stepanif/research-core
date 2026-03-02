@@ -11,8 +11,7 @@ from research_core.util.types import ValidationError
 
 
 def write_transition_matrix(path: Path, payload: dict[str, Any]) -> None:
-    serialized = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False) + "\n"
-    path.write_text(serialized, encoding="utf-8")
+    path.write_bytes(transition_matrix_bytes(payload))
 
 
 def transition_matrix_bytes(payload: dict[str, Any]) -> bytes:
@@ -95,7 +94,7 @@ def build_experiment_manifest(
 
 def write_experiment_manifest(path: Path, payload: dict[str, Any]) -> None:
     serialized = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False) + "\n"
-    path.write_text(serialized, encoding="utf-8")
+    path.write_bytes(serialized.encode("utf-8"))
 
 
 def ensure_experiment_immutable(
