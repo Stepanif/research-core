@@ -27,18 +27,32 @@ def psa_arrow_schema() -> pa.Schema:
             pa.field("open", pa.float64(), nullable=False),
             pa.field("close", pa.float64(), nullable=False),
             pa.field("a", pa.string(), nullable=False),
+            pa.field("state_id", pa.string(), nullable=False),
+            pa.field("event_mask", pa.int64(), nullable=False),
         ]
     )
 
 
 def write_psa_parquet(df: pd.DataFrame, output_path: Path) -> dict[str, str | int]:
-    table = pa.Table.from_pandas(df, schema=psa_arrow_schema(), preserve_index=False)
+    table_columns = ["ts", "instrument", "tf", "open", "close", "a", "state_id", "event_mask"]
+    table = pa.Table.from_pandas(df[table_columns], schema=psa_arrow_schema(), preserve_index=False)
     pq.write_table(table, output_path, compression="snappy", use_dictionary=False)
     return {
         "parquet_bytes_sha256": sha256_file(output_path),
         "canonical_table_sha256": canonical_table_sha256(table),
         "bytes": output_path.stat().st_size,
     }
+
+
+def write_psa_log(df: pd.DataFrame, output_path: Path) -> None:
+    lines = []
+    for row in df.itertuples(index=False):
+        lines.append(
+            f"{row.ts.isoformat()},{row.instrument},{row.tf},{row.p},{row.s},{row.a},{row.state_id},{int(row.event_mask)}"
+        )
+    payload = "\n".join(lines) + "\n"
+    with output_path.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(payload)
 
 
 def build_psa_manifest(
@@ -51,9 +65,10 @@ def build_psa_manifest(
     git_commit: str,
 ) -> dict[str, Any]:
     psa_path = run_dir / "psa.parquet"
+    log_path = run_dir / "psa.log"
     sorted_input_files = sorted(input_files, key=lambda p: _stable_manifest_path(p, input_root))
 
-    return {
+    payload = {
         "manifest_version": "v1",
         "created_utc": current_utc_iso8601(),
         "psa_version": psa_version,
@@ -81,6 +96,13 @@ def build_psa_manifest(
             "hash_source_of_truth": "canonical_table_sha256 from Arrow IPC stream",
         },
     }
+
+    if log_path.exists():
+        payload["output_files"]["psa.log"] = {
+            "sha256": sha256_file(log_path),
+            "bytes": log_path.stat().st_size,
+        }
+    return payload
 
 
 def write_psa_manifest(path: Path, payload: dict[str, Any]) -> None:

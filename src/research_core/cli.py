@@ -13,7 +13,7 @@ from research_core.canon.normalize import canonicalize_file
 from research_core.canon.writer import write_canon_parquet
 from research_core.psa.contracts import load_psa_schema_contract
 from research_core.psa.engine import run_psa_v1
-from research_core.psa.writer import build_psa_manifest, write_psa_manifest, write_psa_parquet
+from research_core.psa.writer import build_psa_manifest, write_psa_log, write_psa_manifest, write_psa_parquet
 from research_core.registry.dataset_registry import build_dataset_registry
 from research_core.registry.run_index import build_run_index
 from research_core.util.hashing import sha256_bytes
@@ -176,6 +176,7 @@ def psa_command(
     psa_df = run_psa_v1(canon_df, psa_schema_payload)
 
     ensure_dir(out_path)
+    write_psa_log(psa_df, out_path / "psa.log")
     psa_path = out_path / "psa.parquet"
     parquet_hashes = write_psa_parquet(psa_df, psa_path)
 

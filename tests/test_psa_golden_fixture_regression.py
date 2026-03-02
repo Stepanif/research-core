@@ -59,11 +59,14 @@ def test_psa_golden_hashes_regression(monkeypatch: object, tmp_path: Path) -> No
 
     manifest = json.loads((run_dir / "psa.manifest.json").read_text(encoding="utf-8"))
     canonical_table_hash = manifest["output_files"]["psa.parquet"]["canonical_table_sha256"]
+    log_hash = manifest["output_files"]["psa.log"]["sha256"]
     manifest_canonical = json.dumps(manifest, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     manifest_hash = hashlib.sha256(manifest_canonical.encode("utf-8")).hexdigest()
 
     expected_table_hash = Path("tests/golden/psa_small_sample_v1.parquet.sha256").read_text(encoding="utf-8").strip()
     expected_manifest_hash = Path("tests/golden/psa_small_sample_v1.manifest.json.sha256").read_text(encoding="utf-8").strip()
+    expected_log_hash = Path("tests/golden/psa_small_sample_v1.log.sha256").read_text(encoding="utf-8").strip()
 
     assert canonical_table_hash == expected_table_hash
+    assert log_hash == expected_log_hash
     assert manifest_hash == expected_manifest_hash

@@ -8,7 +8,9 @@
     "tf",
     "open",
     "close",
-    "a"
+    "a",
+    "state_id",
+    "event_mask"
   ],
   "types": {
     "ts": "timestamp[ns, America/New_York]",
@@ -16,6 +18,8 @@
     "tf": "string",
     "open": "float64",
     "close": "float64",
-    "a": "string"
+    "a": "string",
+    "state_id": "string",
+    "event_mask": "int64"
   }
 }

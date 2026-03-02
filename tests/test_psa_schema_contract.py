@@ -14,3 +14,5 @@ def test_psa_schema_required_columns_present() -> None:
     assert "open" in required_columns
     assert "close" in required_columns
     assert "a" in required_columns
+    assert "state_id" in required_columns
+    assert "event_mask" in required_columns
