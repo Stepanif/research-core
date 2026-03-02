@@ -1,0 +1,6 @@
+from __future__ import annotations
+
+PLAN_VERSION = "v1"
+PLAN_TASK_KIND_EXPERIMENT_BATCH = "experiment_batch"
+PLAN_TOOL_VERSION = "v1"
+REQUIRED_ENV_VAR_CREATED_UTC = "RESEARCH_CREATED_UTC"

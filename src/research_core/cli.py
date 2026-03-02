@@ -34,6 +34,8 @@ from research_core.observe.writer import (
     write_observe_profile_manifest,
     write_observe_summary,
 )
+from research_core.plan.build import build_plan
+from research_core.plan.execute import execute_plan
 from research_core.psa.contracts import load_psa_schema_contract
 from research_core.psa.engine import run_psa_v1
 from research_core.psa.writer import build_psa_manifest, write_psa_log, write_psa_manifest, write_psa_parquet
@@ -55,6 +57,7 @@ project_app = typer.Typer(no_args_is_help=True)
 project_index_app = typer.Typer(no_args_is_help=True)
 doctor_app = typer.Typer(no_args_is_help=True)
 verify_app = typer.Typer(no_args_is_help=True)
+plan_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
@@ -63,6 +66,7 @@ app.add_typer(experiment_app, name="experiment")
 app.add_typer(project_app, name="project")
 app.add_typer(doctor_app, name="doctor")
 app.add_typer(verify_app, name="verify")
+app.add_typer(plan_app, name="plan")
 project_app.add_typer(project_index_app, name="index")
 
 
@@ -462,6 +466,26 @@ def verify_bundle_command(
 ) -> None:
     text, ok = verify_bundle_text(bundle_zip_path=zip_path)
     typer.echo(text)
+    if not ok:
+        raise typer.Exit(code=1)
+
+
+@plan_app.command("build")
+def plan_build_command(
+    project_path: Path = typer.Option(..., "--project"),
+    out_path: Path = typer.Option(..., "--out"),
+) -> None:
+    build_plan(project_path=project_path, out_path=out_path)
+
+
+@plan_app.command("execute")
+def plan_execute_command(
+    plan_path: Path = typer.Option(..., "--plan"),
+    jobs: int = typer.Option(..., "--jobs"),
+) -> None:
+    summary_lines, ok = execute_plan(plan_path=plan_path, jobs=jobs)
+    for line in summary_lines:
+        typer.echo(line)
     if not ok:
         raise typer.Exit(code=1)
 
