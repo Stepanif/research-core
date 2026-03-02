@@ -482,8 +482,9 @@ def plan_build_command(
 def plan_execute_command(
     plan_path: Path = typer.Option(..., "--plan"),
     jobs: int = typer.Option(..., "--jobs"),
+    allow_existing: bool = typer.Option(False, "--allow-existing"),
 ) -> None:
-    summary_lines, ok = execute_plan(plan_path=plan_path, jobs=jobs)
+    summary_lines, ok = execute_plan(plan_path=plan_path, jobs=jobs, allow_existing=allow_existing)
     for line in summary_lines:
         typer.echo(line)
     if not ok:

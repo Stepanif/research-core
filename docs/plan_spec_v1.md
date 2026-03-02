@@ -41,6 +41,7 @@ Plan JSON is written as canonical bytes:
 
 ## Execution Rules
 - `plan execute --jobs N` runs tasks with max `N` workers.
+- `plan execute` always runs deterministic preflight before launching tasks.
 - Subprocess working directory is fixed to repository root.
 - Environment passed to each subprocess includes required `RESEARCH_CREATED_UTC`.
 - Per-task logs are deterministic files:
@@ -52,3 +53,17 @@ Plan JSON is written as canonical bytes:
   - on first failure, stop launching new tasks
   - wait for currently running tasks to complete
   - exit non-zero
+
+### Preflight Statuses
+For each task in deterministic `task_id` order:
+- `READY`: `out_dir` does not exist
+- `EXISTS_COMPLETE`: `out_dir` exists and all `expected_outputs` exist
+- `EXISTS_INCOMPLETE`: `out_dir` exists but one or more `expected_outputs` are missing
+
+Default mode (no flags):
+- If any task is `EXISTS_COMPLETE` or `EXISTS_INCOMPLETE`, execution fails before launching tasks.
+
+`--allow-existing` mode:
+- `EXISTS_COMPLETE` tasks are skipped and reported as `SKIP_EXISTS`.
+- `EXISTS_INCOMPLETE` still fails before launch.
+- `READY` tasks run normally and report `RUN_OK` or `RUN_FAIL`.
