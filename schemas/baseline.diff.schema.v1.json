@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/baseline.diff.schema.v1.json",
+  "title": "Research Baseline Diff v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "diff_version",
+    "created_utc",
+    "a",
+    "b",
+    "deltas",
+    "worst5_overlap",
+    "checksum",
+    "classification",
+    "baseline_diff_canonical_sha256"
+  ],
+  "properties": {
+    "diff_version": {"type": "string", "const": "v1"},
+    "created_utc": {"type": "string", "minLength": 1},
+    "a": {"$ref": "#/$defs/CardRef"},
+    "b": {"$ref": "#/$defs/CardRef"},
+    "deltas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instability_mean_delta",
+        "instability_median_delta",
+        "instability_p10_delta",
+        "instability_p90_delta"
+      ],
+      "properties": {
+        "instability_mean_delta": {"type": "number"},
+        "instability_median_delta": {"type": "number"},
+        "instability_p10_delta": {"type": "number"},
+        "instability_p90_delta": {"type": "number"},
+        "state_entropy_mean_delta": {"type": "number"},
+        "transition_entropy_mean_delta": {"type": "number"}
+      }
+    },
+    "worst5_overlap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["jaccard", "intersection_count", "union_count"],
+      "properties": {
+        "jaccard": {"type": "number"},
+        "intersection_count": {"type": "integer", "minimum": 0},
+        "union_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "checksum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["per_run_vector_match"],
+      "properties": {
+        "per_run_vector_match": {"type": "boolean"}
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "rationale"],
+      "properties": {
+        "label": {
+          "type": "string",
+          "enum": ["MORE_UNSTABLE", "LESS_UNSTABLE", "NO_CHANGE"]
+        },
+        "rationale": {"type": "string", "minLength": 1}
+      }
+    },
+    "baseline_diff_canonical_sha256": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "CardRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runset_id",
+        "baseline_card_canonical_sha256",
+        "per_run_vector_sha256"
+      ],
+      "properties": {
+        "runset_id": {"type": "string", "minLength": 1},
+        "baseline_card_canonical_sha256": {"type": "string", "minLength": 1},
+        "per_run_vector_sha256": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

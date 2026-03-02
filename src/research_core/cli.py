@@ -45,6 +45,7 @@ from research_core.observe.writer import (
 from research_core.lineage.build_lineage import build_lineage_for_run
 from research_core.runsets.catalog import create_runset, list_runsets, show_runset, validate_runset
 from research_core.runsets.materialize import materialize_runset
+from research_core.risk.diff_writer import write_baseline_diff_artifacts
 from research_core.risk.sweep import run_risk_sweep
 from research_core.risk.runset_agg import compute_runset_risk
 from research_core.risk.writer import write_risk_artifacts
@@ -685,6 +686,18 @@ def risk_sweep_command(
     typer.echo(f"runset_manifest={result['runset_manifest_path']}")
     typer.echo(f"baseline_card={result['baseline_card_path']}")
     typer.echo(f"baseline_card_manifest={result['baseline_card_manifest_path']}")
+
+
+@risk_app.command("diff")
+def risk_diff_command(
+    a_path: Path = typer.Option(..., "--a"),
+    b_path: Path = typer.Option(..., "--b"),
+    out_dir: Path = typer.Option(..., "--out"),
+) -> None:
+    result = write_baseline_diff_artifacts(a_path=a_path, b_path=b_path, out_dir=out_dir)
+    typer.echo("RISK_DIFF_COMPLETED")
+    typer.echo(f"diff={result['diff_path']}")
+    typer.echo(f"manifest={result['manifest_path']}")
 
 
 @dataset_app.command("list")
