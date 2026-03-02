@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from research_core.plan.contracts import PLAN_TASK_KIND_EXPERIMENT_BATCH, PLAN_VERSION, REQUIRED_ENV_VAR_CREATED_UTC
+from research_core.plan.env import ensure_env_fingerprint
 from research_core.plan.io import read_plan_json
 from research_core.plan.logs import write_task_logs
 from research_core.util.types import ValidationError
@@ -200,20 +201,23 @@ def execute_plan(plan_path: Path, jobs: int, allow_existing: bool = False) -> tu
     logs_dir = plan_dir / "logs"
     repo_root = _repo_root()
 
+    fingerprint_sha = ensure_env_fingerprint(plan_dir=plan_dir, repo_root=repo_root)
+
     env = dict(os.environ)
     env[REQUIRED_ENV_VAR_CREATED_UTC] = created_utc
 
     preflight_results = _preflight(tasks=tasks, plan_dir=plan_dir)
     preflight_lines = [f"preflight,{item.task_id},{item.status}" for item in preflight_results]
+    fingerprint_line = f"ENV_FINGERPRINT_SHA256={fingerprint_sha}"
 
     has_incomplete = any(item.status == "EXISTS_INCOMPLETE" for item in preflight_results)
     has_existing_complete = any(item.status == "EXISTS_COMPLETE" for item in preflight_results)
 
     if has_incomplete:
-        return preflight_lines, False
+        return [fingerprint_line] + preflight_lines, False
 
     if not allow_existing and has_existing_complete:
-        return preflight_lines, False
+        return [fingerprint_line] + preflight_lines, False
 
     preflight_map = {item.task_id: item.status for item in preflight_results}
     task_order = list(tasks)
@@ -258,7 +262,7 @@ def execute_plan(plan_path: Path, jobs: int, allow_existing: bool = False) -> tu
         task_id = str(task["task_id"])
         results[task_id] = TaskResult(task_id=task_id, status="RUN_FAIL", exit_code=-1)
 
-    summary_lines = preflight_lines + [
+    summary_lines = [fingerprint_line] + preflight_lines + [
         f"{task_id},{results[task_id].status},{results[task_id].exit_code}"
         for task_id in sorted(str(task["task_id"]) for task in task_order)
     ]
