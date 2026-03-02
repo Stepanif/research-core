@@ -11,6 +11,8 @@ import typer
 from research_core.canon.manifest import build_manifest, write_contract_snapshot, write_manifest
 from research_core.canon.normalize import canonicalize_file
 from research_core.canon.writer import write_canon_parquet
+from research_core.observe.summarize import build_observe_summary
+from research_core.observe.writer import build_observe_manifest, write_observe_manifest, write_observe_summary
 from research_core.psa.contracts import load_psa_schema_contract
 from research_core.psa.engine import run_psa_v1
 from research_core.psa.writer import build_psa_manifest, write_psa_log, write_psa_manifest, write_psa_parquet
@@ -24,8 +26,10 @@ from research_core.validate.canon_checks import validate_canon_file
 app = typer.Typer(no_args_is_help=True)
 validate_app = typer.Typer(no_args_is_help=True)
 registry_app = typer.Typer(no_args_is_help=True)
+observe_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
+app.add_typer(observe_app, name="observe")
 
 
 def _discover_input_files(input_path: Path) -> list[Path]:
@@ -238,6 +242,32 @@ def psa_command(
         git_commit=_git_commit_or_unknown(Path(__file__).resolve().parents[2]),
     )
     write_psa_manifest(out_path / "psa.manifest.json", manifest)
+
+
+@observe_app.command("summary")
+def observe_summary_command(
+    run_dir: Path = typer.Option(..., "--run"),
+    top_n: int = typer.Option(25, "--top-n"),
+) -> None:
+    required_inputs = [
+        run_dir / "canon.parquet",
+        run_dir / "canon.manifest.json",
+        run_dir / "psa.parquet",
+        run_dir / "psa.manifest.json",
+    ]
+    missing = [str(path) for path in required_inputs if not path.exists()]
+    if missing:
+        raise ResearchError(f"Missing required observe input files: {missing}")
+
+    observe_dir = run_dir / "observe"
+    ensure_dir(observe_dir)
+
+    summary_payload, _ = build_observe_summary(run_dir=run_dir, top_n=top_n)
+    summary_path = observe_dir / "observe.summary.json"
+    write_observe_summary(summary_path, summary_payload)
+
+    observe_manifest_payload = build_observe_manifest(run_dir=run_dir, observe_summary_path=summary_path)
+    write_observe_manifest(observe_dir / "observe.summary.manifest.json", observe_manifest_payload)
 
 
 @validate_app.command("canon")
