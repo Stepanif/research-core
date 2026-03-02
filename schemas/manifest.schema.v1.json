@@ -1,0 +1,19 @@
+{
+  "manifest_version": "v1",
+  "required_fields": [
+    "manifest_version",
+    "created_utc",
+    "instrument",
+    "tf",
+    "session_policy",
+    "input_files",
+    "rowcount",
+    "start_ts",
+    "end_ts",
+    "output_files",
+    "schema_version",
+    "colmap_version",
+    "code_version",
+    "determinism_notes"
+  ]
+}

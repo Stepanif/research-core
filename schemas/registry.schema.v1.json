@@ -1,0 +1,21 @@
+{
+  "registry_version": "v1",
+  "required_fields": [
+    "registry_version",
+    "datasets",
+    "registry_sha256"
+  ],
+  "dataset_required_fields": [
+    "instrument",
+    "tf",
+    "source_path",
+    "source_hash",
+    "rowcount",
+    "start_ts",
+    "end_ts",
+    "schema_version",
+    "colmap_version",
+    "session_policy",
+    "output_hashes"
+  ]
+}

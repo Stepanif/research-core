@@ -1,0 +1,13 @@
+{
+  "colmap_version": "raw_vendor_v1",
+  "mapping": {
+    "Date": "date",
+    "Time": "time",
+    "Open": "open",
+    "High": "high",
+    "Low": "low",
+    "Close": "close",
+    "Up": "up",
+    "Down": "down"
+  }
+}

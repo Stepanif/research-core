@@ -1,0 +1,30 @@
+{
+  "schema_version": "v1",
+  "description": "Research canon schema v1",
+  "required_columns": [
+    "ts",
+    "instrument",
+    "tf",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume"
+  ],
+  "optional_columns": [
+    "up",
+    "down"
+  ],
+  "types": {
+    "ts": "timestamp[ns, America/New_York]",
+    "instrument": "string",
+    "tf": "string",
+    "open": "float64",
+    "high": "float64",
+    "low": "float64",
+    "close": "float64",
+    "volume": "float64",
+    "up": "float64",
+    "down": "float64"
+  }
+}
