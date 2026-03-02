@@ -15,6 +15,7 @@ from research_core.experiments.report import compute_experiments_report
 from research_core.experiments.report_writer import build_report_manifest, write_report_artifacts
 from research_core.experiments.registry import list_experiment_ids, show_experiment_summary
 from research_core.experiments.runner import run_experiment_from_spec_path
+from research_core.projects.runner import report_project, run_project
 from research_core.canon.manifest import build_manifest, write_contract_snapshot, write_manifest
 from research_core.canon.normalize import canonicalize_file
 from research_core.canon.writer import write_canon_parquet
@@ -45,11 +46,13 @@ registry_app = typer.Typer(no_args_is_help=True)
 observe_app = typer.Typer(no_args_is_help=True)
 bundle_app = typer.Typer(no_args_is_help=True)
 experiment_app = typer.Typer(no_args_is_help=True)
+project_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
 app.add_typer(bundle_app, name="bundle")
 app.add_typer(experiment_app, name="experiment")
+app.add_typer(project_app, name="project")
 
 
 def _discover_input_files(input_path: Path) -> list[Path]:
@@ -372,6 +375,20 @@ def experiment_show_command(
 ) -> None:
     payload = show_experiment_summary(run_dir=run_dir, exp_id=exp_id)
     typer.echo(json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
+
+
+@project_app.command("run")
+def project_run_command(
+    project_path: Path = typer.Option(..., "--project"),
+) -> None:
+    run_project(project_path=project_path)
+
+
+@project_app.command("report")
+def project_report_command(
+    project_path: Path = typer.Option(..., "--project"),
+) -> None:
+    report_project(project_path=project_path)
 
 
 @validate_app.command("canon")

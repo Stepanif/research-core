@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/project.schema.v1.json",
+  "title": "Research Project Spec v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["project_version", "name", "runs", "spec_dirs", "output_dir", "policy"],
+  "properties": {
+    "project_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_utc": {
+      "type": "string"
+    },
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "spec_dirs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "output_dir": {
+      "type": "string",
+      "minLength": 1
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fail_fast"],
+      "properties": {
+        "fail_fast": {
+          "type": "boolean",
+          "const": true
+        },
+        "require_observe": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}
