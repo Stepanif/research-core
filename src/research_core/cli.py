@@ -44,6 +44,7 @@ from research_core.observe.writer import (
 )
 from research_core.lineage.build_lineage import build_lineage_for_run
 from research_core.runsets.catalog import create_runset, list_runsets, show_runset, validate_runset
+from research_core.runsets.materialize import materialize_runset
 from research_core.plan.build import build_plan
 from research_core.plan.execute import execute_plan
 from research_core.psa.contracts import load_psa_schema_contract
@@ -627,6 +628,22 @@ def runset_validate_command(
     typer.echo(text)
     if not ok:
         raise typer.Exit(code=1)
+
+
+@runset_app.command("materialize")
+def runset_materialize_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    runset_id: str = typer.Option(..., "--id"),
+    runs_root: Path = typer.Option(..., "--runs-root"),
+    project_out: Path = typer.Option(..., "--project-out"),
+) -> None:
+    result = materialize_runset(
+        catalog_dir=catalog_dir,
+        runset_id=runset_id,
+        runs_root=runs_root,
+        project_out=project_out,
+    )
+    typer.echo(f"RUNSET_MATERIALIZED runset_id={runset_id} out={result['output_dir']}")
 
 
 @dataset_app.command("list")

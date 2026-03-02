@@ -71,6 +71,7 @@ Entry fields:
 - `runset list --catalog <catalog_dir>`
 - `runset show --catalog <catalog_dir> --id <runset_id>`
 - `runset validate --catalog <catalog_dir> --id <runset_id>`
+- `runset materialize --catalog <catalog_dir> --id <runset_id> --runs-root <dir> --project-out <dir>`
 
 ## Validation behavior
 `runset validate` checks:
@@ -82,3 +83,19 @@ Entry fields:
   - that hash must exist in the dataset-to-runs index for that dataset
 
 On-disk `run_ref` resolution is intentionally out of scope for v1 Step 1.
+
+## Materialize outputs (v1)
+`runset materialize` writes to:
+- `<project-out>/<runset_id>/runset.materialize.summary.json`
+- `<project-out>/<runset_id>/runset.materialize.manifest.json`
+
+Summary fields:
+- `materialize_version: "v1"`
+- `runset_id`
+- `created_utc` (`RESEARCH_CREATED_UTC`)
+- `datasets[]` sorted by `dataset_id` with selected run and status (`REUSED` or `MATERIALIZED`)
+- `totals`
+- `conflicts` (empty on success)
+
+Conflict policy:
+- Any explicit `dataset_id+canon_table_sha256` mismatch versus `dataset_to_runs` links is fail-loud.
