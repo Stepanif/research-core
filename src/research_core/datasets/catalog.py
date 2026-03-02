@@ -298,6 +298,16 @@ def _canon_files_and_hashes(run_dir: Path) -> tuple[list[dict[str, Any]], str, s
 def register_canon_dataset(catalog_root: Path, run_dir: Path, description: str | None = None) -> dict[str, Any]:
     created_utc = _require_created_utc()
     files, files_hash, canon_table_sha256 = _canon_files_and_hashes(run_dir)
+
+    lineage_path = run_dir / "lineage" / "lineage.json"
+    if lineage_path.exists() and lineage_path.is_file():
+        lineage_payload = read_json(lineage_path)
+        if not isinstance(lineage_payload, dict):
+            raise ValidationError(f"Invalid lineage payload: {lineage_path}")
+        lineage_canon_hash = lineage_payload.get("artifacts", {}).get("canon_table_sha256")
+        if not isinstance(lineage_canon_hash, str) or lineage_canon_hash != canon_table_sha256:
+            raise ValidationError("Run lineage canon_table_sha256 mismatch during dataset register canon")
+
     file_count, total_bytes = source_counts(files)
 
     id_payload = _dataset_id_payload(

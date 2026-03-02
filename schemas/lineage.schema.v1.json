@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/lineage.schema.v1.json",
+  "title": "Research Run Lineage v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "lineage_version",
+    "created_utc",
+    "run_ref",
+    "inputs",
+    "build",
+    "artifacts",
+    "lineage_canonical_sha256"
+  ],
+  "properties": {
+    "lineage_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_dir_ref",
+        "instrument",
+        "tf",
+        "session_policy",
+        "tz",
+        "rth_start",
+        "rth_end"
+      ],
+      "properties": {
+        "run_dir_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "instrument": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tf": {
+          "type": "string",
+          "minLength": 1
+        },
+        "session_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tz": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rth_start": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rth_end": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_files_sha256",
+        "schema_sha256",
+        "colmap_sha256"
+      ],
+      "properties": {
+        "raw_dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "canon_dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_files_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "colmap_sha256": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "git_commit",
+        "tool_versions"
+      ],
+      "properties": {
+        "git_commit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tool_versions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canon_table_sha256"
+      ],
+      "properties": {
+        "canon_table_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "psa_table_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observe_summary_manifest_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observe_profile_manifest_sha256": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "lineage_canonical_sha256": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

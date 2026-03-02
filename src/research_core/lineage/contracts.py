@@ -1,0 +1,5 @@
+from __future__ import annotations
+
+LINEAGE_VERSION = "v1"
+LINK_INDEX_VERSION = "v1"
+REQUIRED_ENV_VAR_CREATED_UTC = "RESEARCH_CREATED_UTC"

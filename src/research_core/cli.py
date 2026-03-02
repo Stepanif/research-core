@@ -41,6 +41,7 @@ from research_core.observe.writer import (
     write_observe_profile_manifest,
     write_observe_summary,
 )
+from research_core.lineage.build_lineage import build_lineage_for_run
 from research_core.plan.build import build_plan
 from research_core.plan.execute import execute_plan
 from research_core.psa.contracts import load_psa_schema_contract
@@ -67,6 +68,7 @@ verify_app = typer.Typer(no_args_is_help=True)
 plan_app = typer.Typer(no_args_is_help=True)
 dataset_app = typer.Typer(no_args_is_help=True)
 dataset_register_app = typer.Typer(no_args_is_help=True)
+lineage_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
@@ -77,6 +79,7 @@ app.add_typer(doctor_app, name="doctor")
 app.add_typer(verify_app, name="verify")
 app.add_typer(plan_app, name="plan")
 app.add_typer(dataset_app, name="dataset")
+app.add_typer(lineage_app, name="lineage")
 project_app.add_typer(project_index_app, name="index")
 dataset_app.add_typer(dataset_register_app, name="register")
 
@@ -183,7 +186,14 @@ def canon_command(
     rth_start: str = typer.Option("09:30", "--rth-start"),
     rth_end: str = typer.Option("16:00", "--rth-end"),
     keep_updown: bool = typer.Option(False, "--keep-updown"),
+    raw_dataset_id: str | None = typer.Option(None, "--raw-dataset-id"),
+    catalog_dir: Path | None = typer.Option(None, "--catalog"),
 ) -> None:
+    if raw_dataset_id and not catalog_dir:
+        raise ResearchError("canon --raw-dataset-id requires --catalog")
+    if raw_dataset_id and catalog_dir:
+        show_dataset(catalog_root=catalog_dir, dataset_id=raw_dataset_id)
+
     files = _discover_input_files(in_path)
     if not files:
         raise ResearchError("No input files discovered")
@@ -254,6 +264,14 @@ def canon_command(
             git_commit=_git_commit_or_unknown(Path(__file__).resolve().parents[2]),
         )
         write_manifest(run_dir / "canon.manifest.json", manifest)
+
+        if catalog_dir is not None:
+            build_lineage_for_run(
+                run_dir=run_dir,
+                catalog_dir=catalog_dir,
+                raw_dataset_id=raw_dataset_id,
+                canon_dataset_id=None,
+            )
 
 
 @app.command("psa")
@@ -520,7 +538,33 @@ def dataset_register_canon_command(
     description: str | None = typer.Option(None, "--desc"),
 ) -> None:
     entry = register_canon_dataset(catalog_root=catalog_dir, run_dir=run_dir, description=description)
+    lineage_path = run_dir / "lineage" / "lineage.json"
+    if lineage_path.exists() and lineage_path.is_file():
+        lineage_payload = json.loads(lineage_path.read_text(encoding="utf-8"))
+        raw_dataset_id = lineage_payload.get("inputs", {}).get("raw_dataset_id") if isinstance(lineage_payload, dict) else None
+        build_lineage_for_run(
+            run_dir=run_dir,
+            catalog_dir=catalog_dir,
+            raw_dataset_id=raw_dataset_id if isinstance(raw_dataset_id, str) and raw_dataset_id else None,
+            canon_dataset_id=str(entry["dataset_id"]),
+        )
     typer.echo(f"REGISTERED dataset_id={entry['dataset_id']}")
+
+
+@lineage_app.command("build")
+def lineage_build_command(
+    run_dir: Path = typer.Option(..., "--run"),
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    raw_dataset_id: str | None = typer.Option(None, "--raw-dataset-id"),
+    canon_dataset_id: str | None = typer.Option(None, "--canon-dataset-id"),
+) -> None:
+    payload = build_lineage_for_run(
+        run_dir=run_dir,
+        catalog_dir=catalog_dir,
+        raw_dataset_id=raw_dataset_id,
+        canon_dataset_id=canon_dataset_id,
+    )
+    typer.echo(f"LINEAGE_BUILT run_ref={payload['run_ref']['run_dir_ref']} hash={payload['lineage_canonical_sha256']}")
 
 
 @dataset_app.command("list")
