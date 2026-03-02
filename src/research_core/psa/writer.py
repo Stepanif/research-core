@@ -62,6 +62,7 @@ def build_psa_manifest(
     psa_df: pd.DataFrame,
     parquet_hashes: dict[str, Any],
     psa_version: str,
+    session_metadata: dict[str, str],
     git_commit: str,
 ) -> dict[str, Any]:
     psa_path = run_dir / "psa.parquet"
@@ -83,6 +84,12 @@ def build_psa_manifest(
         "rowcount": int(len(psa_df)),
         "start_ts": psa_df["ts"].iloc[0].isoformat() if not psa_df.empty else None,
         "end_ts": psa_df["ts"].iloc[-1].isoformat() if not psa_df.empty else None,
+        "session": {
+            "session_policy": session_metadata["session_policy"],
+            "tz": session_metadata["tz"],
+            "rth_start": session_metadata["rth_start"],
+            "rth_end": session_metadata["rth_end"],
+        },
         "output_files": {
             "psa.parquet": {
                 "sha256": parquet_hashes["parquet_bytes_sha256"],

@@ -70,3 +70,7 @@ def test_psa_golden_hashes_regression(monkeypatch: object, tmp_path: Path) -> No
     assert canonical_table_hash == expected_table_hash
     assert log_hash == expected_log_hash
     assert manifest_hash == expected_manifest_hash
+    assert manifest["session"]["session_policy"] == "full"
+    assert manifest["session"]["tz"] == "America/New_York"
+    assert manifest["session"]["rth_start"] == "09:30"
+    assert manifest["session"]["rth_end"] == "16:00"

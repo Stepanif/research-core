@@ -74,6 +74,50 @@ def _stable_source_ref(input_root: Path, file_path: Path) -> str:
     return file_path.name
 
 
+def _extract_tz_from_ts_type(ts_type: Any) -> str:
+    if not isinstance(ts_type, str):
+        raise ResearchError("Canon contract missing timezone metadata: schema_contract.types.ts")
+    if "," not in ts_type or not ts_type.endswith("]"):
+        raise ResearchError(f"Unsupported canon ts type format for timezone extraction: {ts_type}")
+    return ts_type.split(",", 1)[1].rstrip("]").strip()
+
+
+def _load_canon_session_metadata(run_dir: Path) -> dict[str, str]:
+    manifest_path = run_dir / "canon.manifest.json"
+    contract_path = run_dir / "canon.contract.json"
+
+    if not manifest_path.exists():
+        raise ResearchError(f"Missing canon manifest for psa input run: {manifest_path}")
+    if not contract_path.exists():
+        raise ResearchError(f"Missing canon contract for psa input run: {contract_path}")
+
+    manifest_payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    contract_payload = json.loads(contract_path.read_text(encoding="utf-8"))
+
+    session_policy = manifest_payload.get("session_policy")
+    rth_start = manifest_payload.get("rth_start")
+    rth_end = manifest_payload.get("rth_end")
+    ts_type = contract_payload.get("schema_contract", {}).get("types", {}).get("ts")
+    tz = _extract_tz_from_ts_type(ts_type)
+
+    required = {
+        "session_policy": session_policy,
+        "rth_start": rth_start,
+        "rth_end": rth_end,
+        "tz": tz,
+    }
+    missing = [key for key, value in required.items() if not isinstance(value, str) or not value]
+    if missing:
+        raise ResearchError(f"Missing required canon session metadata fields: {missing}")
+
+    return {
+        "session_policy": session_policy,
+        "tz": tz,
+        "rth_start": rth_start,
+        "rth_end": rth_end,
+    }
+
+
 @app.command("canon")
 def canon_command(
     in_path: Path = typer.Option(..., "--in"),
@@ -171,6 +215,9 @@ def psa_command(
     if in_path.suffix.lower() != ".parquet":
         raise ResearchError(f"Input must be a parquet file: {in_path}")
 
+    canon_run_dir = in_path.parent
+    session_metadata = _load_canon_session_metadata(canon_run_dir)
+
     psa_schema_payload = load_psa_schema_contract(schema)
     canon_df = pd.read_parquet(in_path)
     psa_df = run_psa_v1(canon_df, psa_schema_payload)
@@ -187,6 +234,7 @@ def psa_command(
         psa_df=psa_df,
         parquet_hashes=parquet_hashes,
         psa_version=psa_schema_payload["psa_version"],
+        session_metadata=session_metadata,
         git_commit=_git_commit_or_unknown(Path(__file__).resolve().parents[2]),
     )
     write_psa_manifest(out_path / "psa.manifest.json", manifest)
