@@ -12,6 +12,13 @@ from research_core.bundle.exporter import export_bundle
 from research_core.doctor.bundle_verify import verify_bundle_text
 from research_core.doctor.project_doctor import doctor_project_text
 from research_core.doctor.run_doctor import doctor_run_text
+from research_core.datasets.catalog import (
+    list_datasets,
+    register_canon_dataset,
+    register_raw_dataset,
+    show_dataset,
+    validate_dataset,
+)
 from research_core.experiments.batch import run_experiment_batch
 from research_core.experiments.promote import promote_experiment_label
 from research_core.experiments.report import compute_experiments_report
@@ -58,6 +65,8 @@ project_index_app = typer.Typer(no_args_is_help=True)
 doctor_app = typer.Typer(no_args_is_help=True)
 verify_app = typer.Typer(no_args_is_help=True)
 plan_app = typer.Typer(no_args_is_help=True)
+dataset_app = typer.Typer(no_args_is_help=True)
+dataset_register_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
@@ -67,7 +76,9 @@ app.add_typer(project_app, name="project")
 app.add_typer(doctor_app, name="doctor")
 app.add_typer(verify_app, name="verify")
 app.add_typer(plan_app, name="plan")
+app.add_typer(dataset_app, name="dataset")
 project_app.add_typer(project_index_app, name="index")
+dataset_app.add_typer(dataset_register_app, name="register")
 
 
 def _discover_input_files(input_path: Path) -> list[Path]:
@@ -487,6 +498,73 @@ def plan_execute_command(
     summary_lines, ok = execute_plan(plan_path=plan_path, jobs=jobs, allow_existing=allow_existing)
     for line in summary_lines:
         typer.echo(line)
+    if not ok:
+        raise typer.Exit(code=1)
+
+
+@dataset_register_app.command("raw")
+def dataset_register_raw_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    root_dir: Path = typer.Option(..., "--root"),
+    description: str | None = typer.Option(None, "--desc"),
+    tz: str | None = typer.Option(None, "--tz"),
+) -> None:
+    entry = register_raw_dataset(catalog_root=catalog_dir, root_dir=root_dir, description=description, tz=tz)
+    typer.echo(f"REGISTERED dataset_id={entry['dataset_id']}")
+
+
+@dataset_register_app.command("canon")
+def dataset_register_canon_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    run_dir: Path = typer.Option(..., "--run"),
+    description: str | None = typer.Option(None, "--desc"),
+) -> None:
+    entry = register_canon_dataset(catalog_root=catalog_dir, run_dir=run_dir, description=description)
+    typer.echo(f"REGISTERED dataset_id={entry['dataset_id']}")
+
+
+@dataset_app.command("list")
+def dataset_list_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+) -> None:
+    rows = list_datasets(catalog_root=catalog_dir)
+    if not rows:
+        typer.echo("DATASETS 0")
+        return
+    typer.echo(f"DATASETS {len(rows)}")
+    for row in rows:
+        typer.echo(f"{row['dataset_id']} {row['kind']} {row['created_utc']} {row['entry_path']}")
+
+
+@dataset_app.command("show")
+def dataset_show_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    dataset_id: str = typer.Option(..., "--id"),
+) -> None:
+    payload = show_dataset(catalog_root=catalog_dir, dataset_id=dataset_id)
+    source = payload["source"]
+    fingerprint = payload["fingerprint"]
+    typer.echo(f"DATASET {payload['dataset_id']}")
+    typer.echo(f"kind={payload['kind']}")
+    typer.echo(f"created_utc={payload['created_utc']}")
+    if "tz" in payload:
+        typer.echo(f"tz={payload['tz']}")
+    typer.echo(f"root={source['root']}")
+    typer.echo(f"file_count={source['file_count']}")
+    typer.echo(f"total_bytes={source['total_bytes']}")
+    typer.echo(f"files_sha256={fingerprint['files_sha256']}")
+    if "canon_table_sha256" in fingerprint:
+        typer.echo(f"canon_table_sha256={fingerprint['canon_table_sha256']}")
+    typer.echo(f"dataset_entry_canonical_sha256={payload['dataset_entry_canonical_sha256']}")
+
+
+@dataset_app.command("validate")
+def dataset_validate_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    dataset_id: str = typer.Option(..., "--id"),
+) -> None:
+    ok, text = validate_dataset(catalog_root=catalog_dir, dataset_id=dataset_id)
+    typer.echo(text)
     if not ok:
         raise typer.Exit(code=1)
 
