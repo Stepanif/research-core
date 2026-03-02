@@ -8,6 +8,9 @@ import pandas as pd
 import typer
 
 from research_core.bundle.exporter import export_bundle
+from research_core.baselines.index import refresh_baseline_index, show_baseline_index
+from research_core.baselines.promotions import promote_baseline
+from research_core.baselines.resolve import resolve_baseline
 from research_core.doctor.bundle_verify import verify_bundle_text
 from research_core.doctor.project_doctor import doctor_project_text
 from research_core.doctor.run_doctor import doctor_run_text
@@ -78,6 +81,8 @@ dataset_register_app = typer.Typer(no_args_is_help=True)
 lineage_app = typer.Typer(no_args_is_help=True)
 runset_app = typer.Typer(no_args_is_help=True)
 risk_app = typer.Typer(no_args_is_help=True)
+baseline_app = typer.Typer(no_args_is_help=True)
+baseline_index_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
@@ -91,8 +96,10 @@ app.add_typer(dataset_app, name="dataset")
 app.add_typer(lineage_app, name="lineage")
 app.add_typer(runset_app, name="runset")
 app.add_typer(risk_app, name="risk")
+app.add_typer(baseline_app, name="baseline")
 project_app.add_typer(project_index_app, name="index")
 dataset_app.add_typer(dataset_register_app, name="register")
+baseline_app.add_typer(baseline_index_app, name="index")
 
 
 def _discover_input_files(input_path: Path) -> list[Path]:
@@ -692,6 +699,71 @@ def risk_diff_command(
     typer.echo("RISK_DIFF_COMPLETED")
     typer.echo(f"diff={result['diff_path']}")
     typer.echo(f"manifest={result['manifest_path']}")
+
+
+@risk_app.command("diff-runset")
+def risk_diff_runset_command(
+    baseline_root: Path = typer.Option(..., "--root"),
+    a_runset_id: str = typer.Option(..., "--a"),
+    b_runset_id: str = typer.Option(..., "--b"),
+    label_a: str | None = typer.Option(None, "--label-a"),
+    label_b: str | None = typer.Option(None, "--label-b"),
+    out_dir: Path = typer.Option(..., "--out"),
+) -> None:
+    resolved_a = resolve_baseline(root=baseline_root, runset_id=a_runset_id, label=label_a)
+    resolved_b = resolve_baseline(root=baseline_root, runset_id=b_runset_id, label=label_b)
+
+    result = write_baseline_diff_artifacts(
+        a_path=Path(resolved_a["card_path"]),
+        b_path=Path(resolved_b["card_path"]),
+        out_dir=out_dir,
+    )
+    typer.echo("RISK_DIFF_RUNSET_COMPLETED")
+    typer.echo(f"a_baseline_id={resolved_a['baseline_id']}")
+    typer.echo(f"b_baseline_id={resolved_b['baseline_id']}")
+    typer.echo(f"diff={result['diff_path']}")
+    typer.echo(f"manifest={result['manifest_path']}")
+
+
+@baseline_index_app.command("refresh")
+def baseline_index_refresh_command(
+    baseline_root: Path = typer.Option(..., "--root"),
+) -> None:
+    payload = refresh_baseline_index(root=baseline_root)
+    typer.echo(f"BASELINE_INDEX_REFRESHED runsets={len(payload['runsets'])}")
+
+
+@baseline_index_app.command("show")
+def baseline_index_show_command(
+    baseline_root: Path = typer.Option(..., "--root"),
+    runset_id: str | None = typer.Option(None, "--runset"),
+) -> None:
+    payload = show_baseline_index(root=baseline_root, runset_id=runset_id)
+    typer.echo(json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
+
+
+@baseline_app.command("promote")
+def baseline_promote_command(
+    baseline_root: Path = typer.Option(..., "--root"),
+    runset_id: str = typer.Option(..., "--runset"),
+    baseline_id: str = typer.Option(..., "--baseline-id"),
+    label: str = typer.Option(..., "--label"),
+) -> None:
+    payload = promote_baseline(root=baseline_root, runset_id=runset_id, baseline_id=baseline_id, label=label)
+    typer.echo(f"BASELINE_PROMOTED labels={len(payload['labels'])}")
+
+
+@baseline_app.command("resolve")
+def baseline_resolve_command(
+    baseline_root: Path = typer.Option(..., "--root"),
+    runset_id: str = typer.Option(..., "--runset"),
+    label: str | None = typer.Option(None, "--label"),
+) -> None:
+    resolved = resolve_baseline(root=baseline_root, runset_id=runset_id, label=label)
+    typer.echo(f"baseline_path={resolved['card_path']}")
+    typer.echo(f"baseline_id={resolved['baseline_id']}")
+    if "label" in resolved:
+        typer.echo(f"label={resolved['label']}")
 
 
 @dataset_app.command("list")

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/baseline.promotions.schema.v1.json",
+  "title": "Research Baseline Promotions v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "promotions_version",
+    "created_utc",
+    "labels"
+  ],
+  "properties": {
+    "promotions_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
