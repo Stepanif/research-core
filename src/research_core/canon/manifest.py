@@ -13,10 +13,7 @@ from research_core.util.time import current_utc_iso8601
 
 def _stable_manifest_path(path: Path) -> str:
     if path.is_absolute():
-        try:
-            return path.relative_to(Path.cwd()).as_posix()
-        except ValueError:
-            return path.name
+        return path.name
     return path.as_posix()
 
 

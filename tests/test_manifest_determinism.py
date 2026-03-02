@@ -6,6 +6,7 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from research_core.cli import app
+from research_core.util.hashing import sha256_file
 
 
 def test_canonical_table_hash_deterministic_across_runs(monkeypatch: object, tmp_path: Path) -> None:
@@ -43,6 +44,7 @@ def test_canonical_table_hash_deterministic_across_runs(monkeypatch: object, tmp
         manifest1["output_files"]["canon.parquet"]["canonical_table_sha256"]
         == manifest2["output_files"]["canon.parquet"]["canonical_table_sha256"]
     )
+    assert sha256_file(run1 / "canon.manifest.json") == sha256_file(run2 / "canon.manifest.json")
 
 
 def test_directory_traversal_stable_order(monkeypatch: object, tmp_path: Path) -> None:

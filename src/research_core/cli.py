@@ -68,10 +68,7 @@ def _stable_source_ref(input_root: Path, file_path: Path) -> str:
     if input_root.is_dir():
         return file_path.relative_to(input_root).as_posix()
     if file_path.is_absolute():
-        try:
-            return file_path.relative_to(Path.cwd()).as_posix()
-        except ValueError:
-            return file_path.name
+        return file_path.name
     return file_path.as_posix()
 
 
