@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/experiment.spec.schema.v1.json",
+  "title": "Research Experiment Spec v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["spec_version", "kind", "params"],
+  "properties": {
+    "spec_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "kind": {
+      "type": "string",
+      "const": "transition_matrix"
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transition_scope"],
+      "properties": {
+        "transition_scope": {
+          "type": "string",
+          "const": "global"
+        },
+        "include_event_bits": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  }
+}
