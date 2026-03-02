@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/drift.report.schema.v1.json",
+  "title": "Research Drift Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "drift_version",
+    "created_utc",
+    "runset_id",
+    "label",
+    "reference",
+    "current",
+    "diff",
+    "checks",
+    "drift_classification",
+    "drift_report_canonical_sha256"
+  ],
+  "properties": {
+    "drift_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_root",
+        "baseline_path",
+        "baseline_id",
+        "baseline_card_canonical_sha256"
+      ],
+      "properties": {
+        "baseline_root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline_card_canonical_sha256": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "current": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_path",
+        "baseline_id",
+        "baseline_card_canonical_sha256"
+      ],
+      "properties": {
+        "baseline_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline_card_canonical_sha256": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "diff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "diff_path",
+        "diff_canonical_sha256",
+        "classification_label",
+        "instability_mean_delta",
+        "worst5_jaccard"
+      ],
+      "properties": {
+        "diff_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "diff_canonical_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification_label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "instability_mean_delta": {
+          "type": "number"
+        },
+        "worst5_jaccard": {
+          "type": "number"
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "per_run_vector_match"
+      ],
+      "properties": {
+        "per_run_vector_match": {
+          "type": "boolean"
+        }
+      }
+    },
+    "drift_classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "rationale"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "NO_DRIFT",
+            "DRIFT"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "drift_report_canonical_sha256": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

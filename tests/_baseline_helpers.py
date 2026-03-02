@@ -130,3 +130,34 @@ def sweep_to_baseline_root(runner: CliRunner, tmp_path: Path, runset_id: str, ba
     card_payload = json.loads(target_card.read_text(encoding="utf-8"))
     baseline_id = str(card_payload["checksums"]["per_run_vector_sha256"])
     return target_card, baseline_id
+
+
+def prepare_promoted_baseline_root(
+    runner: CliRunner,
+    tmp_path: Path,
+    runset_id: str,
+    baseline_root: Path,
+    label: str = "prod",
+) -> tuple[Path, str]:
+    card_path, baseline_id = sweep_to_baseline_root(runner, tmp_path, runset_id, baseline_root)
+
+    refresh = runner.invoke(app, ["baseline", "index", "refresh", "--root", str(baseline_root)])
+    assert refresh.exit_code == 0, refresh.stdout
+
+    promote = runner.invoke(
+        app,
+        [
+            "baseline",
+            "promote",
+            "--root",
+            str(baseline_root),
+            "--runset",
+            runset_id,
+            "--baseline-id",
+            baseline_id,
+            "--label",
+            label,
+        ],
+    )
+    assert promote.exit_code == 0, promote.stdout
+    return card_path, baseline_id
