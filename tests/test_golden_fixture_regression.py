@@ -6,11 +6,13 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
+import research_core.cli as cli_module
 from research_core.cli import app
 
 
 def test_golden_hashes_regression(monkeypatch: object, tmp_path: Path) -> None:
     monkeypatch.setenv("RESEARCH_CREATED_UTC", "2026-01-01T00:00:00+00:00")
+    monkeypatch.setattr(cli_module, "_git_commit_or_unknown", lambda _: "unknown")
     runner = CliRunner()
     run_dir = tmp_path / "run"
     result = runner.invoke(
