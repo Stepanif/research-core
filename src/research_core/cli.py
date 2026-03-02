@@ -11,8 +11,16 @@ import typer
 from research_core.canon.manifest import build_manifest, write_contract_snapshot, write_manifest
 from research_core.canon.normalize import canonicalize_file
 from research_core.canon.writer import write_canon_parquet
+from research_core.observe.profile import build_observe_profile
 from research_core.observe.summarize import build_observe_summary
-from research_core.observe.writer import build_observe_manifest, write_observe_manifest, write_observe_summary
+from research_core.observe.writer import (
+    build_observe_manifest,
+    build_observe_profile_manifest,
+    write_observe_manifest,
+    write_observe_profile,
+    write_observe_profile_manifest,
+    write_observe_summary,
+)
 from research_core.psa.contracts import load_psa_schema_contract
 from research_core.psa.engine import run_psa_v1
 from research_core.psa.writer import build_psa_manifest, write_psa_log, write_psa_manifest, write_psa_parquet
@@ -268,6 +276,30 @@ def observe_summary_command(
 
     observe_manifest_payload = build_observe_manifest(run_dir=run_dir, observe_summary_path=summary_path)
     write_observe_manifest(observe_dir / "observe.summary.manifest.json", observe_manifest_payload)
+
+
+@observe_app.command("profile")
+def observe_profile_command(
+    run_dir: Path = typer.Option(..., "--run"),
+) -> None:
+    required_inputs = [
+        run_dir / "psa.parquet",
+        run_dir / "psa.manifest.json",
+        run_dir / "canon.manifest.json",
+    ]
+    missing = [str(path) for path in required_inputs if not path.exists()]
+    if missing:
+        raise ResearchError(f"Missing required observe profile input files: {missing}")
+
+    observe_dir = run_dir / "observe"
+    ensure_dir(observe_dir)
+
+    profile_payload, _ = build_observe_profile(run_dir=run_dir, top_n=25)
+    profile_path = observe_dir / "observe.profile.json"
+    write_observe_profile(profile_path, profile_payload)
+
+    profile_manifest = build_observe_profile_manifest(run_dir=run_dir, observe_profile_path=profile_path)
+    write_observe_profile_manifest(observe_dir / "observe.profile.manifest.json", profile_manifest)
 
 
 @validate_app.command("canon")

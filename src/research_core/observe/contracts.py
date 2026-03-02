@@ -18,6 +18,10 @@ BIT_NAMES: dict[int, str] = {
 }
 
 
+def ordered_bit_names() -> list[str]:
+    return [BIT_NAMES[index] for index in sorted(BIT_NAMES.keys())]
+
+
 def require_manifest_field(payload: dict[str, Any], key: str) -> Any:
     if key not in payload:
         raise ValidationError(f"Missing required manifest field: {key}")
