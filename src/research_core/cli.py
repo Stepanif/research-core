@@ -43,6 +43,7 @@ from research_core.observe.writer import (
     write_observe_summary,
 )
 from research_core.lineage.build_lineage import build_lineage_for_run
+from research_core.runsets.catalog import create_runset, list_runsets, show_runset, validate_runset
 from research_core.plan.build import build_plan
 from research_core.plan.execute import execute_plan
 from research_core.psa.contracts import load_psa_schema_contract
@@ -70,6 +71,7 @@ plan_app = typer.Typer(no_args_is_help=True)
 dataset_app = typer.Typer(no_args_is_help=True)
 dataset_register_app = typer.Typer(no_args_is_help=True)
 lineage_app = typer.Typer(no_args_is_help=True)
+runset_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
@@ -81,6 +83,7 @@ app.add_typer(verify_app, name="verify")
 app.add_typer(plan_app, name="plan")
 app.add_typer(dataset_app, name="dataset")
 app.add_typer(lineage_app, name="lineage")
+app.add_typer(runset_app, name="runset")
 project_app.add_typer(project_index_app, name="index")
 dataset_app.add_typer(dataset_register_app, name="register")
 
@@ -576,6 +579,54 @@ def lineage_build_command(
         canon_dataset_id=canon_dataset_id,
     )
     typer.echo(f"LINEAGE_BUILT run_ref={payload['run_ref']['run_dir_ref']} hash={payload['lineage_canonical_sha256']}")
+
+
+@runset_app.command("create")
+def runset_create_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    spec_path: Path = typer.Option(..., "--spec"),
+) -> None:
+    payload = create_runset(catalog_root=catalog_dir, spec_path=spec_path)
+    typer.echo(f"RUNSET_CREATED runset_id={payload['runset_id']}")
+
+
+@runset_app.command("list")
+def runset_list_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+) -> None:
+    rows = list_runsets(catalog_root=catalog_dir)
+    if not rows:
+        typer.echo("RUNSETS 0")
+        return
+    typer.echo(f"RUNSETS {len(rows)}")
+    for row in rows:
+        typer.echo(f"{row['runset_id']} {row['created_utc']} {row['entry_path']}")
+
+
+@runset_app.command("show")
+def runset_show_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    runset_id: str = typer.Option(..., "--id"),
+) -> None:
+    payload = show_runset(catalog_root=catalog_dir, runset_id=runset_id)
+    typer.echo(f"RUNSET {payload['runset_id']}")
+    typer.echo(f"created_utc={payload['created_utc']}")
+    if "name" in payload:
+        typer.echo(f"name={payload['name']}")
+    typer.echo(f"datasets={len(payload['datasets'])}")
+    typer.echo(f"runs={len(payload['runs'])}")
+    typer.echo(f"runset_entry_canonical_sha256={payload['runset_entry_canonical_sha256']}")
+
+
+@runset_app.command("validate")
+def runset_validate_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    runset_id: str = typer.Option(..., "--id"),
+) -> None:
+    ok, text = validate_runset(catalog_root=catalog_dir, runset_id=runset_id)
+    typer.echo(text)
+    if not ok:
+        raise typer.Exit(code=1)
 
 
 @dataset_app.command("list")
