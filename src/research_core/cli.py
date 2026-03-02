@@ -45,6 +45,7 @@ from research_core.observe.writer import (
 from research_core.lineage.build_lineage import build_lineage_for_run
 from research_core.runsets.catalog import create_runset, list_runsets, show_runset, validate_runset
 from research_core.runsets.materialize import materialize_runset
+from research_core.risk.sweep import run_risk_sweep
 from research_core.risk.runset_agg import compute_runset_risk
 from research_core.risk.writer import write_risk_artifacts
 from research_core.plan.build import build_plan
@@ -670,6 +671,20 @@ def risk_runset_command(
     typer.echo(f"RISK_RUNSET_COMPLETED runset_id={runset_id}")
     typer.echo(f"summary={result['summary_path']}")
     typer.echo(f"manifest={result['manifest_path']}")
+
+
+@risk_app.command("sweep")
+def risk_sweep_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    runset_id: str = typer.Option(..., "--runset"),
+    out_dir: Path = typer.Option(..., "--out"),
+) -> None:
+    result = run_risk_sweep(catalog_dir=catalog_dir, runset_id=runset_id, out_dir=out_dir)
+    typer.echo(f"RISK_SWEEP_COMPLETED runset_id={runset_id}")
+    typer.echo(f"summary={result['summary_path']}")
+    typer.echo(f"runset_manifest={result['runset_manifest_path']}")
+    typer.echo(f"baseline_card={result['baseline_card_path']}")
+    typer.echo(f"baseline_card_manifest={result['baseline_card_manifest_path']}")
 
 
 @dataset_app.command("list")

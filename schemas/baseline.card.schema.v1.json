@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/baseline.card.schema.v1.json",
+  "title": "Research Baseline Card v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "card_version",
+    "created_utc",
+    "runset_id",
+    "inputs",
+    "key_metrics",
+    "checksums",
+    "baseline_card_canonical_sha256"
+  ],
+  "properties": {
+    "card_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runset_entry_canonical_sha256",
+        "dataset_to_runs_index_canonical_sha256",
+        "risk_runset_manifest_canonical_sha256"
+      ],
+      "properties": {
+        "runset_entry_canonical_sha256": {"type": "string", "minLength": 1},
+        "dataset_to_runs_index_canonical_sha256": {"type": "string", "minLength": 1},
+        "risk_runset_manifest_canonical_sha256": {"type": "string", "minLength": 1}
+      }
+    },
+    "key_metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_count",
+        "instability_mean",
+        "instability_median",
+        "instability_p10",
+        "instability_p90",
+        "top_5_worst"
+      ],
+      "properties": {
+        "run_count": {"type": "integer", "minimum": 0},
+        "instability_mean": {"type": "number"},
+        "instability_median": {"type": "number"},
+        "instability_p10": {"type": "number"},
+        "instability_p90": {"type": "number"},
+        "state_entropy_mean": {"type": "number"},
+        "transition_entropy_mean": {"type": "number"},
+        "top_5_worst": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["dataset_id", "run_ref", "canon_table_sha256", "instability_score"],
+            "properties": {
+              "dataset_id": {"type": "string", "minLength": 1},
+              "run_ref": {"type": "string", "minLength": 1},
+              "canon_table_sha256": {"type": "string", "minLength": 1},
+              "instability_score": {"type": "number"}
+            }
+          }
+        }
+      }
+    },
+    "checksums": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["per_run_vector_sha256"],
+      "properties": {
+        "per_run_vector_sha256": {"type": "string", "minLength": 1}
+      }
+    },
+    "baseline_card_canonical_sha256": {"type": "string", "minLength": 1}
+  }
+}
