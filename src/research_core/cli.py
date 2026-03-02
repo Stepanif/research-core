@@ -15,6 +15,8 @@ from research_core.experiments.report import compute_experiments_report
 from research_core.experiments.report_writer import build_report_manifest, write_report_artifacts
 from research_core.experiments.registry import list_experiment_ids, show_experiment_summary
 from research_core.experiments.runner import run_experiment_from_spec_path
+from research_core.projects.index import list_projects, refresh_projects_index, show_project_index_entry
+from research_core.projects.promotions import promote_project
 from research_core.projects.runner import report_project, run_project
 from research_core.canon.manifest import build_manifest, write_contract_snapshot, write_manifest
 from research_core.canon.normalize import canonicalize_file
@@ -47,12 +49,14 @@ observe_app = typer.Typer(no_args_is_help=True)
 bundle_app = typer.Typer(no_args_is_help=True)
 experiment_app = typer.Typer(no_args_is_help=True)
 project_app = typer.Typer(no_args_is_help=True)
+project_index_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
 app.add_typer(bundle_app, name="bundle")
 app.add_typer(experiment_app, name="experiment")
 app.add_typer(project_app, name="project")
+project_app.add_typer(project_index_app, name="index")
 
 
 def _discover_input_files(input_path: Path) -> list[Path]:
@@ -389,6 +393,39 @@ def project_report_command(
     project_path: Path = typer.Option(..., "--project"),
 ) -> None:
     report_project(project_path=project_path)
+
+
+@project_index_app.command("refresh")
+def project_index_refresh_command(
+    output_dir: Path = typer.Option(..., "--output-dir"),
+) -> None:
+    refresh_projects_index(output_dir=output_dir)
+
+
+@project_index_app.command("show")
+def project_index_show_command(
+    output_dir: Path = typer.Option(..., "--output-dir"),
+    project_id: str = typer.Option(..., "--id"),
+) -> None:
+    payload = show_project_index_entry(output_dir=output_dir, project_id=project_id)
+    typer.echo(json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
+
+
+@project_app.command("list")
+def project_list_command(
+    output_dir: Path = typer.Option(..., "--output-dir"),
+) -> None:
+    payload = {"project_ids": list_projects(output_dir=output_dir)}
+    typer.echo(json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
+
+
+@project_app.command("promote")
+def project_promote_command(
+    output_dir: Path = typer.Option(..., "--output-dir"),
+    project_id: str = typer.Option(..., "--id"),
+    label: str = typer.Option(..., "--label"),
+) -> None:
+    promote_project(output_dir=output_dir, project_id=project_id, label=label)
 
 
 @validate_app.command("canon")
