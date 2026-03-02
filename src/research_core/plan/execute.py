@@ -11,6 +11,7 @@ from research_core.plan.contracts import PLAN_TASK_KIND_EXPERIMENT_BATCH, PLAN_V
 from research_core.plan.env import ensure_env_fingerprint
 from research_core.plan.io import read_plan_json
 from research_core.plan.logs import write_task_logs
+from research_core.util.buildmeta import get_created_utc
 from research_core.util.types import ValidationError
 
 
@@ -32,10 +33,7 @@ def _repo_root() -> Path:
 
 
 def _require_created_utc() -> str:
-    created_utc = os.environ.get(REQUIRED_ENV_VAR_CREATED_UTC)
-    if not isinstance(created_utc, str) or not created_utc:
-        raise ValidationError("Plan execute requires RESEARCH_CREATED_UTC for deterministic execution")
-    return created_utc
+    return get_created_utc(required=True, error_message="Plan execute requires RESEARCH_CREATED_UTC for deterministic execution")
 
 
 def _require_string(payload: dict[str, Any], key: str) -> str:

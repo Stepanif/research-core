@@ -9,16 +9,14 @@ from research_core.projects.materialize import materialize_project
 from research_core.runsets.catalog import show_runset, validate_runset
 from research_core.runsets.contracts import REQUIRED_ENV_VAR_CREATED_UTC
 from research_core.runsets.io import canonical_hash, canonical_json_bytes, read_json, write_canonical_json
+from research_core.util.buildmeta import get_created_utc
 from research_core.util.hashing import sha256_bytes, sha256_file
 
 from research_core.util.types import ValidationError
 
 
 def _require_created_utc() -> str:
-    value = os.environ.get(REQUIRED_ENV_VAR_CREATED_UTC)
-    if not isinstance(value, str) or not value:
-        raise ValidationError("runset materialize requires RESEARCH_CREATED_UTC")
-    return value
+    return get_created_utc(required=True, error_message="runset materialize requires RESEARCH_CREATED_UTC")
 
 
 def _links_index_path(catalog_dir: Path) -> Path:

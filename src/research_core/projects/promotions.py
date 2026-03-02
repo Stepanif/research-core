@@ -6,6 +6,7 @@ from typing import Any
 
 from research_core.projects.index import projects_index_path
 from research_core.projects.registry_io import read_json_file, write_canonical_json
+from research_core.util.buildmeta import get_created_utc
 from research_core.util.types import ValidationError
 
 
@@ -14,10 +15,7 @@ def projects_promotions_path(output_dir: Path) -> Path:
 
 
 def _require_created_utc() -> str:
-    created_utc = os.environ.get("RESEARCH_CREATED_UTC")
-    if not isinstance(created_utc, str) or not created_utc:
-        raise ValidationError("Project promote requires RESEARCH_CREATED_UTC for deterministic created_utc")
-    return created_utc
+    return get_created_utc(required=True, error_message="Project promote requires RESEARCH_CREATED_UTC for deterministic created_utc")
 
 
 def _project_exists_in_index(output_dir: Path, project_id: str) -> bool:

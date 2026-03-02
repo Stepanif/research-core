@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from statistics import mean
 from typing import Any
 
 from research_core.risk.runset_agg import compute_runset_risk
 from research_core.runsets.io import canonical_hash, canonical_json_bytes, read_json, write_canonical_json
+from research_core.util.buildmeta import get_created_utc
 from research_core.util.hashing import sha256_bytes, sha256_file
 from research_core.util.types import ValidationError
 
@@ -16,10 +16,7 @@ REQUIRED_ENV_VAR_CREATED_UTC = "RESEARCH_CREATED_UTC"
 
 
 def _require_created_utc() -> str:
-    value = os.environ.get(REQUIRED_ENV_VAR_CREATED_UTC)
-    if not isinstance(value, str) or not value:
-        raise ValidationError("Risk operations require RESEARCH_CREATED_UTC")
-    return value
+    return get_created_utc(required=True, error_message="Risk operations require RESEARCH_CREATED_UTC")
 
 
 def _hash_with_optional_self_field(payload: dict[str, Any], self_field: str) -> str:

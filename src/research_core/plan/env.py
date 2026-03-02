@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from research_core.plan.io import canonical_json_bytes
+from research_core.util.buildmeta import get_git_commit
 from research_core.util.hashing import sha256_bytes
 from research_core.util.types import ValidationError
 
@@ -19,17 +20,7 @@ def _canonical_hash_without_self(payload: dict[str, Any], self_key: str) -> str:
 
 
 def _git_commit_or_unknown(repo_root: Path) -> str:
-    try:
-        result = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            cwd=str(repo_root),
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return result.stdout.strip() or "unknown"
-    except Exception:  # noqa: BLE001
-        return "unknown"
+    return get_git_commit(repo_root)
 
 
 def _pip_freeze_sha256() -> str:

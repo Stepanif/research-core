@@ -6,16 +6,14 @@ from typing import Any
 
 from research_core.runsets.contracts import DEFAULT_POLICY, DEFAULT_REQUIRED_ARTIFACTS, REQUIRED_ENV_VAR_CREATED_UTC, RUNSET_VERSION
 from research_core.runsets.io import canonical_hash, read_json
+from research_core.util.buildmeta import get_created_utc
 from research_core.util.types import ValidationError
 
 DEFAULT_RUNSET_SCHEMA_PATH = Path("schemas/runset.schema.v1.json")
 
 
 def _require_created_utc() -> str:
-    value = os.environ.get(REQUIRED_ENV_VAR_CREATED_UTC)
-    if not isinstance(value, str) or not value:
-        raise ValidationError("RunSet operations require RESEARCH_CREATED_UTC")
-    return value
+    return get_created_utc(required=True, error_message="RunSet operations require RESEARCH_CREATED_UTC")
 
 
 def _require_string(payload: dict[str, Any], key: str) -> str:

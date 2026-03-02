@@ -21,15 +21,13 @@ from research_core.datasets.fingerprint import (
     stable_root_ref,
 )
 from research_core.datasets.io import canonical_json_bytes, read_json, write_canonical_json
+from research_core.util.buildmeta import get_created_utc
 from research_core.util.hashing import sha256_bytes
 from research_core.util.types import ValidationError
 
 
 def _require_created_utc() -> str:
-    value = os.environ.get(REQUIRED_ENV_VAR_CREATED_UTC)
-    if not isinstance(value, str) or not value:
-        raise ValidationError("Dataset catalog operations require RESEARCH_CREATED_UTC")
-    return value
+    return get_created_utc(required=True, error_message="Dataset catalog operations require RESEARCH_CREATED_UTC")
 
 
 def _catalog_paths(catalog_root: Path) -> tuple[Path, Path]:

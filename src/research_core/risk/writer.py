@@ -9,15 +9,13 @@ import pandas as pd
 from research_core.risk.compute import compute_risk_metrics
 from research_core.risk.contracts import REQUIRED_ENV_VAR_CREATED_UTC, RISK_MANIFEST_VERSION, RISK_VERSION
 from research_core.runsets.io import canonical_hash, canonical_json_bytes, read_json, write_canonical_json
+from research_core.util.buildmeta import get_created_utc
 from research_core.util.hashing import sha256_bytes, sha256_file
 from research_core.util.types import ValidationError
 
 
 def _require_created_utc() -> str:
-    value = os.environ.get(REQUIRED_ENV_VAR_CREATED_UTC)
-    if not isinstance(value, str) or not value:
-        raise ValidationError("Risk operations require RESEARCH_CREATED_UTC")
-    return value
+    return get_created_utc(required=True, error_message="Risk operations require RESEARCH_CREATED_UTC")
 
 
 def _load_psa_manifest(run_dir: Path) -> dict[str, Any]:

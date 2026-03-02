@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess
 from pathlib import Path
 from typing import Any
 
 from research_core.datasets.catalog import show_dataset
 from research_core.lineage.contracts import LINEAGE_VERSION, REQUIRED_ENV_VAR_CREATED_UTC
 from research_core.lineage.writer import canonical_hash, canonical_json_bytes, update_dataset_to_runs_index, write_lineage_artifacts
+from research_core.util.buildmeta import get_created_utc, get_git_commit
 from research_core.util.hashing import sha256_bytes, sha256_file
 from research_core.util.types import ValidationError
 
@@ -21,10 +21,7 @@ def _read_json(path: Path) -> dict[str, Any]:
 
 
 def _require_created_utc() -> str:
-    value = os.environ.get(REQUIRED_ENV_VAR_CREATED_UTC)
-    if not isinstance(value, str) or not value:
-        raise ValidationError("Lineage build requires RESEARCH_CREATED_UTC")
-    return value
+    return get_created_utc(required=True, error_message="Lineage build requires RESEARCH_CREATED_UTC")
 
 
 def _repo_root() -> Path:
@@ -32,17 +29,7 @@ def _repo_root() -> Path:
 
 
 def _git_commit_or_unknown(repo_root: Path) -> str:
-    try:
-        result = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            cwd=str(repo_root),
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return result.stdout.strip() or "unknown"
-    except Exception:  # noqa: BLE001
-        return "unknown"
+    return get_git_commit(repo_root)
 
 
 def _run_dir_ref(run_dir: Path) -> str:

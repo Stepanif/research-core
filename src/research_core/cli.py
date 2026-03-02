@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -59,6 +58,7 @@ from research_core.registry.dataset_registry import build_dataset_registry
 from research_core.registry.run_index import build_run_index
 from research_core.util.hashing import sha256_bytes
 from research_core.util.io import ensure_dir
+from research_core.util.buildmeta import get_git_commit
 from research_core.util.types import ResearchError
 from research_core.validate.canon_checks import validate_canon_file
 
@@ -108,18 +108,12 @@ def _discover_input_files(input_path: Path) -> list[Path]:
     raise ResearchError(f"Input path does not exist: {input_path}")
 
 
-def _git_commit_or_unknown(cwd: Path) -> str:
-    try:
-        result = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            cwd=str(cwd),
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return result.stdout.strip() or "unknown"
-    except Exception:  # noqa: BLE001
-        return "unknown"
+def _repo_root() -> Path:
+    return Path(__file__).resolve().parents[2]
+
+
+def _git_commit_or_unknown(_: Path) -> str:
+    return get_git_commit(_repo_root())
 
 
 def _run_subdir_name(dataset_root: Path, file_path: Path) -> str:
@@ -272,7 +266,7 @@ def canon_command(
             session_policy=session_policy,
             rth_start=rth_start,
             rth_end=rth_end,
-            git_commit=_git_commit_or_unknown(Path(__file__).resolve().parents[2]),
+            git_commit=_git_commit_or_unknown(_repo_root()),
         )
         write_manifest(run_dir / "canon.manifest.json", manifest)
 
@@ -317,7 +311,7 @@ def psa_command(
         parquet_hashes=parquet_hashes,
         psa_version=psa_schema_payload["psa_version"],
         session_metadata=session_metadata,
-        git_commit=_git_commit_or_unknown(Path(__file__).resolve().parents[2]),
+        git_commit=_git_commit_or_unknown(_repo_root()),
     )
     write_psa_manifest(out_path / "psa.manifest.json", manifest)
 

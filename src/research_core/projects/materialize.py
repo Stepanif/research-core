@@ -10,6 +10,7 @@ from research_core.doctor.run_doctor import doctor_run_text
 from research_core.datasets.catalog import show_dataset
 from research_core.projects.contracts import PROJECT_TOOL_VERSION, canonical_json_bytes, canonical_json_sha256
 from research_core.projects.spec import load_project_spec
+from research_core.util.buildmeta import get_created_utc
 from research_core.util.hashing import sha256_bytes, sha256_file
 from research_core.util.types import ValidationError
 
@@ -28,10 +29,7 @@ def _display_label(abs_path: Path, base_dir: Path, original_label: str) -> str:
 
 
 def _require_created_utc() -> str:
-    created_utc = os.environ.get("RESEARCH_CREATED_UTC")
-    if not isinstance(created_utc, str) or not created_utc:
-        raise ValidationError("Project materialize requires RESEARCH_CREATED_UTC for deterministic created_utc")
-    return created_utc
+    return get_created_utc(required=True, error_message="Project materialize requires RESEARCH_CREATED_UTC for deterministic created_utc")
 
 
 def _repo_root() -> Path:

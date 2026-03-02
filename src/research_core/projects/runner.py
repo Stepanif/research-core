@@ -17,6 +17,7 @@ from research_core.projects.contracts import (
 )
 from research_core.projects.spec import load_project_spec
 from research_core.projects.writer import build_project_manifest, write_project_manifest, write_project_readme, write_project_summary
+from research_core.util.buildmeta import get_created_utc
 from research_core.util.hashing import sha256_bytes, sha256_file, sha256_json
 from research_core.util.io import read_json
 from research_core.util.types import ValidationError
@@ -30,10 +31,7 @@ def _resolve_path(path_value: str, base_dir: Path) -> Path:
 
 
 def _require_created_utc() -> str:
-    created_utc = os.environ.get("RESEARCH_CREATED_UTC")
-    if not isinstance(created_utc, str) or not created_utc:
-        raise ValidationError("Project runner requires RESEARCH_CREATED_UTC for deterministic created_utc")
-    return created_utc
+    return get_created_utc(required=True, error_message="Project runner requires RESEARCH_CREATED_UTC for deterministic created_utc")
 
 
 def _project_id(project_spec: dict[str, Any]) -> str:
