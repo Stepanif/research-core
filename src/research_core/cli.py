@@ -24,6 +24,7 @@ from research_core.observe.writer import (
 from research_core.psa.contracts import load_psa_schema_contract
 from research_core.psa.engine import run_psa_v1
 from research_core.psa.writer import build_psa_manifest, write_psa_log, write_psa_manifest, write_psa_parquet
+from research_core.registry.observe_registry import refresh_registry_for_run, show_registry_run
 from research_core.registry.dataset_registry import build_dataset_registry
 from research_core.registry.run_index import build_run_index
 from research_core.util.hashing import sha256_bytes
@@ -330,6 +331,21 @@ def registry_index_runs_command(
 ) -> None:
     ensure_dir(out_path.parent)
     build_run_index(runs_root=runs_root, out_path=out_path)
+
+
+@registry_app.command("refresh")
+def registry_refresh_command(
+    run_dir: Path = typer.Option(..., "--run"),
+) -> None:
+    refresh_registry_for_run(run_dir=run_dir)
+
+
+@registry_app.command("show")
+def registry_show_command(
+    run_dir: Path = typer.Option(..., "--run"),
+) -> None:
+    payload = show_registry_run(run_dir=run_dir)
+    typer.echo(json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
 
 
 def main() -> None:
