@@ -1,0 +1,21 @@
+{
+  "psa_version": "v1",
+  "description": "Research PSA schema v1",
+  "alignment_rule": "A=BULL if close>open, BEAR if close<open, DOJI if close==open",
+  "required_columns": [
+    "ts",
+    "instrument",
+    "tf",
+    "open",
+    "close",
+    "a"
+  ],
+  "types": {
+    "ts": "timestamp[ns, America/New_York]",
+    "instrument": "string",
+    "tf": "string",
+    "open": "float64",
+    "close": "float64",
+    "a": "string"
+  }
+}

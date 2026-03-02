@@ -5,11 +5,15 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+import pandas as pd
 import typer
 
 from research_core.canon.manifest import build_manifest, write_contract_snapshot, write_manifest
 from research_core.canon.normalize import canonicalize_file
 from research_core.canon.writer import write_canon_parquet
+from research_core.psa.contracts import load_psa_schema_contract
+from research_core.psa.engine import run_psa_v1
+from research_core.psa.writer import build_psa_manifest, write_psa_manifest, write_psa_parquet
 from research_core.registry.dataset_registry import build_dataset_registry
 from research_core.registry.run_index import build_run_index
 from research_core.util.hashing import sha256_bytes
@@ -153,6 +157,38 @@ def canon_command(
             git_commit=_git_commit_or_unknown(Path(__file__).resolve().parents[2]),
         )
         write_manifest(run_dir / "canon.manifest.json", manifest)
+
+
+@app.command("psa")
+def psa_command(
+    in_path: Path = typer.Option(..., "--in"),
+    out_path: Path = typer.Option(..., "--out"),
+    schema: Path = typer.Option(Path("schemas/psa.schema.v1.json"), "--schema"),
+) -> None:
+    if not in_path.exists() or not in_path.is_file():
+        raise ResearchError(f"Input canon parquet does not exist: {in_path}")
+
+    if in_path.suffix.lower() != ".parquet":
+        raise ResearchError(f"Input must be a parquet file: {in_path}")
+
+    psa_schema_payload = load_psa_schema_contract(schema)
+    canon_df = pd.read_parquet(in_path)
+    psa_df = run_psa_v1(canon_df, psa_schema_payload)
+
+    ensure_dir(out_path)
+    psa_path = out_path / "psa.parquet"
+    parquet_hashes = write_psa_parquet(psa_df, psa_path)
+
+    manifest = build_psa_manifest(
+        run_dir=out_path,
+        input_files=[in_path],
+        input_root=in_path,
+        psa_df=psa_df,
+        parquet_hashes=parquet_hashes,
+        psa_version=psa_schema_payload["psa_version"],
+        git_commit=_git_commit_or_unknown(Path(__file__).resolve().parents[2]),
+    )
+    write_psa_manifest(out_path / "psa.manifest.json", manifest)
 
 
 @validate_app.command("canon")
