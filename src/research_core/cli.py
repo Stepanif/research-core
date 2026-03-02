@@ -11,6 +11,8 @@ import typer
 from research_core.bundle.exporter import export_bundle
 from research_core.experiments.batch import run_experiment_batch
 from research_core.experiments.promote import promote_experiment_label
+from research_core.experiments.report import compute_experiments_report
+from research_core.experiments.report_writer import build_report_manifest, write_report_artifacts
 from research_core.experiments.registry import list_experiment_ids, show_experiment_summary
 from research_core.experiments.runner import run_experiment_from_spec_path
 from research_core.canon.manifest import build_manifest, write_contract_snapshot, write_manifest
@@ -344,6 +346,15 @@ def experiment_promote_command(
     label: str = typer.Option(..., "--label"),
 ) -> None:
     promote_experiment_label(run_dir=run_dir, exp_id=exp_id, label=label)
+
+
+@experiment_app.command("report")
+def experiment_report_command(
+    run_dir: Path = typer.Option(..., "--run"),
+) -> None:
+    report_payload = compute_experiments_report(run_dir=run_dir)
+    manifest_payload = build_report_manifest(run_dir=run_dir, report_payload=report_payload)
+    write_report_artifacts(run_dir=run_dir, report_payload=report_payload, report_manifest_payload=manifest_payload)
 
 
 @experiment_app.command("list")
