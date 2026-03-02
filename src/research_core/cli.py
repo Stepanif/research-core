@@ -8,6 +8,7 @@ from typing import Any
 import pandas as pd
 import typer
 
+from research_core.bundle.exporter import export_bundle
 from research_core.canon.manifest import build_manifest, write_contract_snapshot, write_manifest
 from research_core.canon.normalize import canonicalize_file
 from research_core.canon.writer import write_canon_parquet
@@ -36,9 +37,11 @@ app = typer.Typer(no_args_is_help=True)
 validate_app = typer.Typer(no_args_is_help=True)
 registry_app = typer.Typer(no_args_is_help=True)
 observe_app = typer.Typer(no_args_is_help=True)
+bundle_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
+app.add_typer(bundle_app, name="bundle")
 
 
 def _discover_input_files(input_path: Path) -> list[Path]:
@@ -301,6 +304,14 @@ def observe_profile_command(
 
     profile_manifest = build_observe_profile_manifest(run_dir=run_dir, observe_profile_path=profile_path)
     write_observe_profile_manifest(observe_dir / "observe.profile.manifest.json", profile_manifest)
+
+
+@bundle_app.command("export")
+def bundle_export_command(
+    run_dir: Path = typer.Option(..., "--run"),
+    out_path: Path = typer.Option(..., "--out"),
+) -> None:
+    export_bundle(run_dir=run_dir, bundle_zip_path=out_path)
 
 
 @validate_app.command("canon")
