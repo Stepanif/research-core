@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
@@ -8,6 +9,15 @@ import pandas as pd
 from research_core.util.hashing import sha256_file
 from research_core.util.io import write_json
 from research_core.util.time import current_utc_iso8601
+
+
+def _stable_manifest_path(path: Path) -> str:
+    if path.is_absolute():
+        try:
+            return path.relative_to(Path.cwd()).as_posix()
+        except ValueError:
+            return path.name
+    return path.as_posix()
 
 
 def write_contract_snapshot(
@@ -54,6 +64,8 @@ def build_manifest(
     contract_path = run_dir / "canon.contract.json"
     log_path = run_dir / "logs" / "canon.log"
 
+    sorted_input_files = sorted(input_files, key=lambda p: _stable_manifest_path(p))
+
     payload: dict[str, Any] = {
         "manifest_version": "v1",
         "created_utc": current_utc_iso8601(),
@@ -63,8 +75,12 @@ def build_manifest(
         "rth_start": rth_start,
         "rth_end": rth_end,
         "input_files": [
-            {"path": str(path), "sha256": sha256_file(path), "bytes": path.stat().st_size}
-            for path in input_files
+            {
+                "bytes": path.stat().st_size,
+                "path": _stable_manifest_path(path),
+                "sha256": sha256_file(path),
+            }
+            for path in sorted_input_files
         ],
         "rowcount": int(len(canon_df)),
         "start_ts": canon_df["ts"].iloc[0].isoformat() if not canon_df.empty else None,
@@ -99,4 +115,10 @@ def build_manifest(
 
 
 def write_manifest(path: Path, payload: dict[str, Any]) -> None:
-    write_json(path, payload)
+    serialized = json.dumps(
+        payload,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ) + "\n"
+    path.write_text(serialized, encoding="utf-8")

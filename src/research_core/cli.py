@@ -64,6 +64,17 @@ def _write_log(log_path: Path, payload: dict[str, Any]) -> None:
         handle.write(json.dumps(payload, sort_keys=True, ensure_ascii=False) + "\n")
 
 
+def _stable_source_ref(input_root: Path, file_path: Path) -> str:
+    if input_root.is_dir():
+        return file_path.relative_to(input_root).as_posix()
+    if file_path.is_absolute():
+        try:
+            return file_path.relative_to(Path.cwd()).as_posix()
+        except ValueError:
+            return file_path.name
+    return file_path.as_posix()
+
+
 @app.command("canon")
 def canon_command(
     in_path: Path = typer.Option(..., "--in"),
@@ -86,6 +97,7 @@ def canon_command(
         ensure_dir(out_path)
 
     for file_path in files:
+        source_ref = _stable_source_ref(in_path, file_path)
         run_dir = out_path
         if is_dir_input:
             run_dir = out_path / _run_subdir_name(in_path, file_path)
@@ -124,7 +136,7 @@ def canon_command(
             log_path,
             {
                 "event": "canon_complete",
-                "input_file": str(file_path),
+                "input_file": source_ref,
                 "rowcount": len(canon_df),
                 "canonical_table_sha256": parquet_hashes["canonical_table_sha256"],
             },
