@@ -11,10 +11,10 @@ from research_core.util.io import write_json
 from research_core.util.time import current_utc_iso8601
 
 
-def _stable_manifest_path(path: Path) -> str:
-    if path.is_absolute():
-        return path.name
-    return path.as_posix()
+def _stable_manifest_path(path: Path, input_root: Path) -> str:
+    if input_root.is_dir():
+        return path.relative_to(input_root).as_posix()
+    return path.name
 
 
 def write_contract_snapshot(
@@ -46,6 +46,7 @@ def write_contract_snapshot(
 def build_manifest(
     run_dir: Path,
     input_files: list[Path],
+    input_root: Path,
     canon_df: pd.DataFrame,
     parquet_hashes: dict[str, Any],
     schema_version: str,
@@ -61,7 +62,7 @@ def build_manifest(
     contract_path = run_dir / "canon.contract.json"
     log_path = run_dir / "logs" / "canon.log"
 
-    sorted_input_files = sorted(input_files, key=lambda p: _stable_manifest_path(p))
+    sorted_input_files = sorted(input_files, key=lambda p: _stable_manifest_path(p, input_root))
 
     payload: dict[str, Any] = {
         "manifest_version": "v1",
@@ -74,7 +75,7 @@ def build_manifest(
         "input_files": [
             {
                 "bytes": path.stat().st_size,
-                "path": _stable_manifest_path(path),
+                "path": _stable_manifest_path(path, input_root),
                 "sha256": sha256_file(path),
             }
             for path in sorted_input_files

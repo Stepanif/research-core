@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
 from typer.testing import CliRunner
 
 from research_core.cli import app
-from research_core.util.hashing import sha256_file
 
 
 def test_golden_hashes_regression(monkeypatch: object, tmp_path: Path) -> None:
@@ -35,7 +35,8 @@ def test_golden_hashes_regression(monkeypatch: object, tmp_path: Path) -> None:
 
     manifest = json.loads((run_dir / "canon.manifest.json").read_text(encoding="utf-8"))
     canonical_hash = manifest["output_files"]["canon.parquet"]["canonical_table_sha256"]
-    manifest_hash = sha256_file(run_dir / "canon.manifest.json")
+    manifest_canonical = json.dumps(manifest, sort_keys=True, separators=(",", ":"))
+    manifest_hash = hashlib.sha256(manifest_canonical.encode("utf-8")).hexdigest()
 
     expected_canonical = Path("tests/golden/canon_small_sample_v1.parquet.sha256").read_text(encoding="utf-8").strip()
     expected_manifest = Path("tests/golden/canon_small_sample_v1.manifest.json.sha256").read_text(encoding="utf-8").strip()

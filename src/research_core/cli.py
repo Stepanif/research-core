@@ -67,9 +67,7 @@ def _write_log(log_path: Path, payload: dict[str, Any]) -> None:
 def _stable_source_ref(input_root: Path, file_path: Path) -> str:
     if input_root.is_dir():
         return file_path.relative_to(input_root).as_posix()
-    if file_path.is_absolute():
-        return file_path.name
-    return file_path.as_posix()
+    return file_path.name
 
 
 @app.command("canon")
@@ -142,6 +140,7 @@ def canon_command(
         manifest = build_manifest(
             run_dir=run_dir,
             input_files=[file_path],
+            input_root=in_path,
             canon_df=canon_df,
             parquet_hashes=parquet_hashes,
             schema_version=schema_payload["schema_version"],
@@ -151,7 +150,7 @@ def canon_command(
             session_policy=session_policy,
             rth_start=rth_start,
             rth_end=rth_end,
-            git_commit=_git_commit_or_unknown(Path.cwd()),
+            git_commit=_git_commit_or_unknown(Path(__file__).resolve().parents[2]),
         )
         write_manifest(run_dir / "canon.manifest.json", manifest)
 
