@@ -35,7 +35,7 @@ def test_golden_hashes_regression(monkeypatch: object, tmp_path: Path) -> None:
 
     manifest = json.loads((run_dir / "canon.manifest.json").read_text(encoding="utf-8"))
     canonical_hash = manifest["output_files"]["canon.parquet"]["canonical_table_sha256"]
-    manifest_canonical = json.dumps(manifest, sort_keys=True, separators=(",", ":"))
+    manifest_canonical = json.dumps(manifest, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     manifest_hash = hashlib.sha256(manifest_canonical.encode("utf-8")).hexdigest()
 
     expected_canonical = Path("tests/golden/canon_small_sample_v1.parquet.sha256").read_text(encoding="utf-8").strip()
