@@ -31,14 +31,21 @@ def _require_string_list(payload: dict[str, Any], key: str) -> list[str]:
 def load_project_spec(spec_path: Path, schema_path: Path = DEFAULT_PROJECT_SCHEMA_PATH) -> dict[str, Any]:
     if not spec_path.exists():
         raise ValidationError(f"Project spec file does not exist: {spec_path}")
-    if not schema_path.exists():
+
+    resolved_schema_path = schema_path
+    if not resolved_schema_path.is_absolute() and not resolved_schema_path.exists():
+        repo_root_schema = (Path(__file__).resolve().parents[3] / resolved_schema_path).resolve()
+        if repo_root_schema.exists():
+            resolved_schema_path = repo_root_schema
+
+    if not resolved_schema_path.exists():
         raise ValidationError(f"Project schema file does not exist: {schema_path}")
 
     payload = read_json(spec_path)
     if not isinstance(payload, dict):
         raise ValidationError("Project spec must be a JSON object")
 
-    allowed = {"project_version", "name", "created_utc", "runs", "spec_dirs", "output_dir", "policy", "notes"}
+    allowed = {"project_version", "name", "created_utc", "runs", "datasets", "spec_dirs", "output_dir", "policy", "notes"}
     unexpected = sorted([key for key in payload.keys() if key not in allowed])
     if unexpected:
         raise ValidationError(f"Project spec contains unsupported fields: {unexpected}")
@@ -48,7 +55,13 @@ def load_project_spec(spec_path: Path, schema_path: Path = DEFAULT_PROJECT_SCHEM
         raise ValidationError(f"Unsupported project_version: {project_version}")
 
     name = _require_string(payload, "name")
-    runs = _require_string_list(payload, "runs")
+    has_runs = "runs" in payload
+    has_datasets = "datasets" in payload
+    if has_runs == has_datasets:
+        raise ValidationError("Project spec must include exactly one of runs or datasets")
+
+    runs = _require_string_list(payload, "runs") if has_runs else None
+    datasets_raw = payload.get("datasets") if has_datasets else None
     spec_dirs = _require_string_list(payload, "spec_dirs")
     output_dir = _require_string(payload, "output_dir")
 
@@ -73,10 +86,75 @@ def load_project_spec(spec_path: Path, schema_path: Path = DEFAULT_PROJECT_SCHEM
     if notes is not None and not isinstance(notes, str):
         raise ValidationError("Project spec notes must be string when provided")
 
-    return {
+    datasets: list[dict[str, Any]] | None = None
+    if has_datasets:
+        if not isinstance(datasets_raw, list) or not datasets_raw:
+            raise ValidationError("Project spec datasets must be a non-empty list")
+        datasets = []
+        for item in datasets_raw:
+            if not isinstance(item, dict):
+                raise ValidationError("Project spec datasets contains non-object entry")
+
+            allowed_dataset = {
+                "dataset_id",
+                "instrument",
+                "tf",
+                "session_policy",
+                "rth_start",
+                "rth_end",
+                "schema_path",
+                "colmap_path",
+                "note",
+            }
+            unexpected_dataset = sorted([key for key in item.keys() if key not in allowed_dataset])
+            if unexpected_dataset:
+                raise ValidationError(f"Project dataset ref contains unsupported fields: {unexpected_dataset}")
+
+            dataset_id = _require_string(item, "dataset_id")
+            instrument = _require_string(item, "instrument")
+            tf = _require_string(item, "tf")
+            session_policy = _require_string(item, "session_policy")
+            if session_policy not in {"full", "rth", "eth"}:
+                raise ValidationError(f"Project dataset ref has unsupported session_policy: {session_policy}")
+
+            schema_path_value = _require_string(item, "schema_path")
+            colmap_path_value = _require_string(item, "colmap_path")
+
+            dataset_entry: dict[str, Any] = {
+                "dataset_id": dataset_id,
+                "instrument": instrument,
+                "tf": tf,
+                "session_policy": session_policy,
+                "schema_path": Path(schema_path_value).as_posix(),
+                "colmap_path": Path(colmap_path_value).as_posix(),
+            }
+
+            if session_policy == "rth":
+                dataset_entry["rth_start"] = _require_string(item, "rth_start")
+                dataset_entry["rth_end"] = _require_string(item, "rth_end")
+            else:
+                if "rth_start" in item:
+                    rth_start = item.get("rth_start")
+                    if not isinstance(rth_start, str) or not rth_start:
+                        raise ValidationError("Project dataset ref rth_start must be non-empty string when provided")
+                    dataset_entry["rth_start"] = rth_start
+                if "rth_end" in item:
+                    rth_end = item.get("rth_end")
+                    if not isinstance(rth_end, str) or not rth_end:
+                        raise ValidationError("Project dataset ref rth_end must be non-empty string when provided")
+                    dataset_entry["rth_end"] = rth_end
+
+            note = item.get("note")
+            if note is not None:
+                if not isinstance(note, str):
+                    raise ValidationError("Project dataset ref note must be string when provided")
+                dataset_entry["note"] = note
+
+            datasets.append(dataset_entry)
+
+    result = {
         "project_version": "v1",
         "name": name,
-        "runs": [Path(item).as_posix() for item in runs],
         "spec_dirs": [Path(item).as_posix() for item in spec_dirs],
         "output_dir": Path(output_dir).as_posix(),
         "policy": {
@@ -85,3 +163,8 @@ def load_project_spec(spec_path: Path, schema_path: Path = DEFAULT_PROJECT_SCHEM
         },
         **({"notes": notes} if isinstance(notes, str) else {}),
     }
+    if runs is not None:
+        result["runs"] = [Path(item).as_posix() for item in runs]
+    if datasets is not None:
+        result["datasets"] = datasets
+    return result

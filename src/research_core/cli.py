@@ -26,6 +26,7 @@ from research_core.experiments.report_writer import build_report_manifest, write
 from research_core.experiments.registry import list_experiment_ids, show_experiment_summary
 from research_core.experiments.runner import run_experiment_from_spec_path
 from research_core.projects.index import list_projects, refresh_projects_index, show_project_index_entry
+from research_core.projects.materialize import materialize_project
 from research_core.projects.promotions import promote_project
 from research_core.projects.runner import report_project, run_project
 from research_core.canon.manifest import build_manifest, write_contract_snapshot, write_manifest
@@ -265,7 +266,7 @@ def canon_command(
         )
         write_manifest(run_dir / "canon.manifest.json", manifest)
 
-        if catalog_dir is not None:
+        if catalog_dir is not None and (run_dir / "psa.manifest.json").exists():
             build_lineage_for_run(
                 run_dir=run_dir,
                 catalog_dir=catalog_dir,
@@ -426,6 +427,16 @@ def project_run_command(
     project_path: Path = typer.Option(..., "--project"),
 ) -> None:
     run_project(project_path=project_path)
+
+
+@project_app.command("materialize")
+def project_materialize_command(
+    project_path: Path = typer.Option(..., "--project"),
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    runs_root: Path = typer.Option(..., "--runs-root"),
+) -> None:
+    result = materialize_project(project_path=project_path, catalog_dir=catalog_dir, runs_root=runs_root)
+    typer.echo(f"MATERIALIZED project_id={result['project_id']}")
 
 
 @project_app.command("report")

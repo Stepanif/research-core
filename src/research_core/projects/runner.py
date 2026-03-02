@@ -162,6 +162,8 @@ def _validate_existing_batch(summary_path: Path, manifest_path: Path) -> dict[st
 def run_project(project_path: Path) -> dict[str, Any]:
     created_utc = _require_created_utc()
     project_spec = load_project_spec(project_path)
+    if "runs" not in project_spec:
+        raise ValidationError("project run requires explicit runs in project spec; use project materialize for datasets mode")
 
     base_dir = project_path.parent.resolve()
     runs_data = [
@@ -317,6 +319,8 @@ def run_project(project_path: Path) -> dict[str, Any]:
 def report_project(project_path: Path) -> dict[str, Any]:
     created_utc = _require_created_utc()
     project_spec = load_project_spec(project_path)
+    if "runs" not in project_spec:
+        raise ValidationError("project report requires explicit runs in project spec")
 
     base_dir = project_path.parent.resolve()
     runs_data = [
