@@ -46,6 +46,12 @@ Registration procedure:
 2. Register that root with `dataset register raw`.
 3. Use returned `dataset_id` in project/runset pilot configs.
 
+Deterministic bulk registration script (writes to `catalog_dir=exec_outputs/catalog`):
+
+```powershell
+pwsh -File docs/scripts/register_g_raw_datasets.ps1
+```
+
 ### 0) Pin deterministic build timestamp
 
 ```powershell
