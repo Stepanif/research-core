@@ -67,7 +67,9 @@ from research_core.prune.executor import execute_plan as execute_prune_plan
 from research_core.prune.formatting import format_prune_report
 from research_core.prune.planner import build_prune_plan
 from research_core.prune.policy import load_prune_policy
+from research_core.release.draft import write_release_draft
 from research_core.release.notes import generate_release_notes
+from research_core.release.url import build_new_release_url
 from research_core.util.hashing import sha256_bytes
 from research_core.util.io import ensure_dir
 from research_core.util.buildmeta import get_git_commit
@@ -836,6 +838,31 @@ def release_notes_command(
         output_format=output_format,
     )
     typer.echo(notes, nl=False)
+
+
+@release_app.command("url")
+def release_url_command(
+    tag: str = typer.Option(..., "--tag"),
+) -> None:
+    url = build_new_release_url(repo_root=_repo_root(), tag=tag)
+    typer.echo(url)
+
+
+@release_app.command("draft")
+def release_draft_command(
+    from_ref: str = typer.Option(..., "--from"),
+    to_ref: str = typer.Option(..., "--to"),
+    out_path: Path = typer.Option(..., "--out"),
+    title: str | None = typer.Option(None, "--title"),
+) -> None:
+    path = write_release_draft(
+        repo_root=_repo_root(),
+        from_ref=from_ref,
+        to_ref=to_ref,
+        out_path=out_path,
+        title=title,
+    )
+    typer.echo(path.as_posix())
 
 
 def _run_prune(*, mode: str, root: Path, policy_path: Path, dry_run: bool, confirm: str | None) -> None:
