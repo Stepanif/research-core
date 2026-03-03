@@ -1,0 +1,25 @@
+{
+  "catalog_dir": "exec_outputs/catalog",
+  "datasets": [
+    {
+      "instrument": "ES",
+      "tf": "1min",
+      "dataset_id": "e6360336856ccab1e970824dc4008f134e6ce50d2aa12a3219894c365b627105"
+    },
+    {
+      "instrument": "ES",
+      "tf": "5min",
+      "dataset_id": "ccda34c3058cb80bec553da0c00cd6aa4e114dad08e8f476967e6ec7c0d6f831"
+    },
+    {
+      "instrument": "ES",
+      "tf": "15min",
+      "dataset_id": "38a76f0199ad197ed2b0696b9f2c60f940721f421a7701aaad557d4c5bea4b1f"
+    },
+    {
+      "instrument": "ES",
+      "tf": "60min",
+      "dataset_id": "710aca28155ea428343831d34fc77d1fc596b4e2c11497f7e761104fb0d7e454"
+    }
+  ]
+}

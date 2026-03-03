@@ -127,3 +127,9 @@ Promote a runset to `prod` only when all conditions hold:
 6. `ci doctor` passes under `configs/pilot/doctor.pilot.json`.
 
 If any gate fails, do not move `prod`; investigate and regenerate artifacts deterministically from corrected inputs.
+
+## Appendix: Locked Pilot Dataset Mapping
+
+- Authoritative pilot dataset mapping: `configs/pilot/datasets.pilot.json`
+- Catalog target for mapping: `exec_outputs/catalog`
+- Pilot dataset IDs are locked as metadata in Git; raw files remain external (`G:\Raw CSVs`).

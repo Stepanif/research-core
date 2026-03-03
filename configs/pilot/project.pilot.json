@@ -7,9 +7,42 @@
   "output_dir": "exec_outputs/pilot/projects",
   "datasets": [
     {
-      "dataset_id": "DATASET_ID",
+      "dataset_id": "e6360336856ccab1e970824dc4008f134e6ce50d2aa12a3219894c365b627105",
       "instrument": "ES",
       "tf": "1min",
+      "session_policy": "rth",
+      "rth_start": "09:30",
+      "rth_end": "16:00",
+      "schema_path": "schemas/canon.schema.v1.json",
+      "colmap_path": "schemas/colmap.raw_vendor_v1.json",
+      "note": "RAW_VENDOR_V1_YEARS_2019_2025"
+    },
+    {
+      "dataset_id": "ccda34c3058cb80bec553da0c00cd6aa4e114dad08e8f476967e6ec7c0d6f831",
+      "instrument": "ES",
+      "tf": "5min",
+      "session_policy": "rth",
+      "rth_start": "09:30",
+      "rth_end": "16:00",
+      "schema_path": "schemas/canon.schema.v1.json",
+      "colmap_path": "schemas/colmap.raw_vendor_v1.json",
+      "note": "RAW_VENDOR_V1_YEARS_2019_2025"
+    },
+    {
+      "dataset_id": "38a76f0199ad197ed2b0696b9f2c60f940721f421a7701aaad557d4c5bea4b1f",
+      "instrument": "ES",
+      "tf": "15min",
+      "session_policy": "rth",
+      "rth_start": "09:30",
+      "rth_end": "16:00",
+      "schema_path": "schemas/canon.schema.v1.json",
+      "colmap_path": "schemas/colmap.raw_vendor_v1.json",
+      "note": "RAW_VENDOR_V1_YEARS_2019_2025"
+    },
+    {
+      "dataset_id": "710aca28155ea428343831d34fc77d1fc596b4e2c11497f7e761104fb0d7e454",
+      "instrument": "ES",
+      "tf": "60min",
       "session_policy": "rth",
       "rth_start": "09:30",
       "rth_end": "16:00",
@@ -22,5 +55,5 @@
     "fail_fast": true,
     "require_observe": false
   },
-  "notes": "Replace DATASET_ID and EXPERIMENT_SPECS_DIR before project materialize"
+  "notes": "Dataset IDs are locked via configs/pilot/datasets.pilot.json; set EXPERIMENT_SPECS_DIR before project materialize"
 }
