@@ -1,0 +1,25 @@
+{
+  "runset_version": "v1",
+  "name": "PILOT_RUNSET_ES_1MIN_RTH_2019_2025",
+  "datasets": [
+    "DATASET_ID"
+  ],
+  "runs": [
+    {
+      "run_ref": "RUN_REF_OPTIONAL",
+      "dataset_id": "DATASET_ID",
+      "canon_table_sha256": "CANON_TABLE_SHA256_OPTIONAL",
+      "required_artifacts": {
+        "canon": true,
+        "psa": true,
+        "observe": true,
+        "experiments": false
+      }
+    }
+  ],
+  "policy": {
+    "allow_materialize_missing": false,
+    "require_lineage_links": true,
+    "require_bidirectional": true
+  }
+}

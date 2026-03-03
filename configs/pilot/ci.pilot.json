@@ -1,0 +1,10 @@
+{
+  "ci_version": "v1",
+  "catalog_dir": "catalog",
+  "baseline_root": "baselines/prod",
+  "runsets_path": "configs/pilot/runsets.pilot.json",
+  "out_dir": "exec_outputs/pilot/ci",
+  "label": "prod",
+  "fail_on_drift": true,
+  "fail_on_checksum_mismatch": true
+}

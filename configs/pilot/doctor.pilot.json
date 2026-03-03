@@ -1,0 +1,15 @@
+{
+  "doctor_version": "v1",
+  "catalog_dir": "catalog",
+  "baseline_root": "baselines/prod",
+  "runsets_path": "configs/pilot/runsets.pilot.json",
+  "out_dir": "exec_outputs/pilot/doctor",
+  "label": "prod",
+  "checks": {
+    "verify_baseline_root": true,
+    "verify_promotions": true,
+    "verify_runsets": true,
+    "verify_bundles": false,
+    "verify_dashboard": false
+  }
+}

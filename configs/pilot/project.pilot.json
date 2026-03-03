@@ -1,0 +1,26 @@
+{
+  "project_version": "v1",
+  "name": "PILOT_COHORT_ES_1MIN_RTH_2019_2025",
+  "spec_dirs": [
+    "EXPERIMENT_SPECS_DIR"
+  ],
+  "output_dir": "exec_outputs/pilot/projects",
+  "datasets": [
+    {
+      "dataset_id": "DATASET_ID",
+      "instrument": "ES",
+      "tf": "1min",
+      "session_policy": "rth",
+      "rth_start": "09:30",
+      "rth_end": "16:00",
+      "schema_path": "schemas/canon.schema.v1.json",
+      "colmap_path": "schemas/colmap.raw_vendor_v1.json",
+      "note": "RAW_VENDOR_V1_YEARS_2019_2025"
+    }
+  ],
+  "policy": {
+    "fail_fast": true,
+    "require_observe": false
+  },
+  "notes": "Replace DATASET_ID and EXPERIMENT_SPECS_DIR before project materialize"
+}
