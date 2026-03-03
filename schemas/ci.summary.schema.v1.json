@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/ci.summary.schema.v1.json",
+  "title": "Research CI Summary v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ci_summary_version",
+    "created_utc",
+    "inputs",
+    "outputs",
+    "results",
+    "pointers",
+    "ci_summary_canonical_sha256"
+  ],
+  "properties": {
+    "ci_summary_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "config_sha256",
+        "runsets_sha256",
+        "baseline_index_canonical_sha256"
+      ],
+      "properties": {
+        "config_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runsets_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline_index_canonical_sha256": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dashboard_summary_sha256",
+        "dashboard_manifest_canonical_sha256"
+      ],
+      "properties": {
+        "dashboard_summary_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dashboard_manifest_canonical_sha256": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "drift_count",
+        "checksum_mismatch_count",
+        "fail_on_drift",
+        "fail_on_checksum_mismatch"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL"
+          ]
+        },
+        "drift_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "checksum_mismatch_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fail_on_drift": {
+          "type": "boolean"
+        },
+        "fail_on_checksum_mismatch": {
+          "type": "boolean"
+        }
+      }
+    },
+    "pointers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dashboard_dir"
+      ],
+      "properties": {
+        "dashboard_dir": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "ci_summary_canonical_sha256": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

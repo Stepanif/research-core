@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/ci.config.schema.v1.json",
+  "title": "Research CI Config v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ci_version",
+    "catalog_dir",
+    "baseline_root",
+    "runsets_path",
+    "out_dir"
+  ],
+  "properties": {
+    "ci_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "catalog_dir": {
+      "type": "string",
+      "minLength": 1
+    },
+    "baseline_root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runsets_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "out_dir": {
+      "type": "string",
+      "minLength": 1
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "default": "prod"
+    },
+    "fail_on_drift": {
+      "type": "boolean",
+      "default": true
+    },
+    "fail_on_checksum_mismatch": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

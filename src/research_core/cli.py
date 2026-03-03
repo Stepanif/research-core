@@ -7,6 +7,7 @@ from typing import Any
 import pandas as pd
 import typer
 
+from research_core.ci.runner import run_ci_pipeline
 from research_core.bundle.exporter import export_bundle
 from research_core.baselines.index import refresh_baseline_index, show_baseline_index
 from research_core.baselines.promotions import promote_baseline
@@ -85,6 +86,7 @@ runset_app = typer.Typer(no_args_is_help=True)
 risk_app = typer.Typer(no_args_is_help=True)
 baseline_app = typer.Typer(no_args_is_help=True)
 baseline_index_app = typer.Typer(no_args_is_help=True)
+ci_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
@@ -99,6 +101,7 @@ app.add_typer(lineage_app, name="lineage")
 app.add_typer(runset_app, name="runset")
 app.add_typer(risk_app, name="risk")
 app.add_typer(baseline_app, name="baseline")
+app.add_typer(ci_app, name="ci")
 project_app.add_typer(project_index_app, name="index")
 dataset_app.add_typer(dataset_register_app, name="register")
 baseline_app.add_typer(baseline_index_app, name="index")
@@ -766,6 +769,20 @@ def risk_dashboard_command(
     typer.echo(f"RISK_DASHBOARD_COMPLETED runsets={result['runset_count']}")
     typer.echo(f"summary={result['summary_path']}")
     typer.echo(f"manifest={result['manifest_path']}")
+
+
+@ci_app.command("run")
+def ci_run_command(
+    config_path: Path = typer.Option(..., "--config"),
+) -> None:
+    result = run_ci_pipeline(config_path=config_path)
+    typer.echo(f"CI_RUN_COMPLETED status={result['status']}")
+    typer.echo(f"drift_count={result['drift_count']}")
+    typer.echo(f"checksum_mismatch_count={result['checksum_mismatch_count']}")
+    typer.echo(f"summary={result['summary_path']}")
+    typer.echo(f"manifest={result['manifest_path']}")
+    if result["should_fail"]:
+        raise typer.Exit(code=1)
 
 
 @baseline_index_app.command("refresh")
