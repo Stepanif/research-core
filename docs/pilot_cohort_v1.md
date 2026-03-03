@@ -12,7 +12,7 @@
 
 Use this layout consistently for the pilot:
 
-- `CATALOG_DIR = catalog`
+- `CATALOG_DIR = exec_outputs/catalog`
 - `BASELINE_ROOT = baselines/prod`
 - `RUNS_ROOT = exec_outputs/pilot/runs_root`
 - `OUT_DIR = exec_outputs/pilot`
@@ -29,6 +29,23 @@ Config files in repo:
 
 All commands below are deterministic when `RESEARCH_CREATED_UTC` is pinned.
 
+## Data Lake (Option A)
+
+- External raw data lake root: `G:\Raw CSVs`
+- Raw files must remain outside the repository.
+- Do not copy raw CSVs into repo paths.
+- Do not commit CSVs or raw archives.
+
+Recommended path pattern:
+
+- `G:\Raw CSVs\<INSTRUMENT>\<TF>\...`
+
+Registration procedure:
+
+1. Select instrument/timeframe directory in the external data lake.
+2. Register that root with `dataset register raw`.
+3. Use returned `dataset_id` in project/runset pilot configs.
+
 ### 0) Pin deterministic build timestamp
 
 ```powershell
@@ -38,7 +55,7 @@ $env:RESEARCH_CREATED_UTC = "2026-03-02T00:00:00+00:00"
 ### 1) Register raw dataset
 
 ```powershell
-python -m research_core.cli dataset register raw --catalog catalog --root DATA_RAW/ES_1MIN_2019_2025 --desc "pilot ES 1min rth 2019-2025"
+python -m research_core.cli dataset register raw --catalog exec_outputs/catalog --root "G:\Raw CSVs\ES\1min" --desc "pilot ES 1min rth 2019-2025"
 ```
 
 Capture printed `dataset_id` and replace `DATASET_ID` in `configs/pilot/project.pilot.json` and `configs/pilot/runset.pilot.json`.
@@ -46,14 +63,14 @@ Capture printed `dataset_id` and replace `DATASET_ID` in `configs/pilot/project.
 ### 2) Materialize project runs (datasets mode)
 
 ```powershell
-python -m research_core.cli project materialize --project configs/pilot/project.pilot.json --catalog catalog --runs-root exec_outputs/pilot/runs_root
+python -m research_core.cli project materialize --project configs/pilot/project.pilot.json --catalog exec_outputs/catalog --runs-root exec_outputs/pilot/runs_root
 ```
 
 ### 3) Create and validate runset
 
 ```powershell
-python -m research_core.cli runset create --catalog catalog --spec configs/pilot/runset.pilot.json
-python -m research_core.cli runset validate --catalog catalog --id RUNSET_ID
+python -m research_core.cli runset create --catalog exec_outputs/catalog --spec configs/pilot/runset.pilot.json
+python -m research_core.cli runset validate --catalog exec_outputs/catalog --id RUNSET_ID
 ```
 
 Capture printed `RUNSET_ID` and replace it in `configs/pilot/runsets.pilot.json`.
@@ -61,7 +78,7 @@ Capture printed `RUNSET_ID` and replace it in `configs/pilot/runsets.pilot.json`
 ### 4) Generate baseline card from runset
 
 ```powershell
-python -m research_core.cli risk sweep --catalog catalog --runset RUNSET_ID --out exec_outputs/pilot/risk
+python -m research_core.cli risk sweep --catalog exec_outputs/catalog --runset RUNSET_ID --out exec_outputs/pilot/risk
 ```
 
 ### 5) Refresh baseline index and promote to prod
@@ -76,8 +93,8 @@ python -m research_core.cli baseline promote --root baselines/prod --runset RUNS
 ### 6) Drift and dashboard checks
 
 ```powershell
-python -m research_core.cli risk drift --catalog catalog --root baselines/prod --runset RUNSET_ID --label prod --out exec_outputs/pilot/drift
-python -m research_core.cli risk dashboard --catalog catalog --root baselines/prod --runsets configs/pilot/runsets.pilot.json --out exec_outputs/pilot/dashboard --label prod
+python -m research_core.cli risk drift --catalog exec_outputs/catalog --root baselines/prod --runset RUNSET_ID --label prod --out exec_outputs/pilot/drift
+python -m research_core.cli risk dashboard --catalog exec_outputs/catalog --root baselines/prod --runsets configs/pilot/runsets.pilot.json --out exec_outputs/pilot/dashboard --label prod
 ```
 
 ### 7) CI pipeline gate

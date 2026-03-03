@@ -8,3 +8,9 @@ build/
 
 data_raw/
 exec_outputs/
+data/raw/
+raw/
+*.csv
+*.zip
+!tests/fixtures/*.csv
+!tests/fixtures/*.zip

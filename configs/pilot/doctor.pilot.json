@@ -1,6 +1,6 @@
 {
   "doctor_version": "v1",
-  "catalog_dir": "catalog",
+  "catalog_dir": "exec_outputs/catalog",
   "baseline_root": "baselines/prod",
   "runsets_path": "configs/pilot/runsets.pilot.json",
   "out_dir": "exec_outputs/pilot/doctor",
