@@ -1,0 +1,66 @@
+name: research-ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Set deterministic build metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "RESEARCH_GIT_COMMIT=${GITHUB_SHA}" >> "$GITHUB_ENV"
+          echo "RESEARCH_CREATED_UTC=$(git show -s --format=%cI "$GITHUB_SHA")" >> "$GITHUB_ENV"
+
+      - name: Show runtime metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python --version
+          echo "RESEARCH_CREATED_UTC=${RESEARCH_CREATED_UTC}"
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          pip install -e .[dev]
+
+      - name: Gate 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          pytest -q
+
+      - name: Gate 2
+        shell: bash
+        run: |
+          set -euo pipefail
+          pytest -q
+
+      - name: CI smoke run
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p exec_outputs/gha_smoke/{catalog,baseline_root,out}
+          python -m research_core.cli ci run --config .github/ci/ci.github.json
+
+      - name: Upload smoke artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-ci-artifacts
+          path: exec_outputs/gha_smoke/
