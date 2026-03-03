@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/dashboard.summary.schema.v1.json",
+  "title": "Research Drift Dashboard Summary v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "dashboard_version",
+    "created_utc",
+    "label",
+    "runset_count",
+    "entries",
+    "aggregates",
+    "dashboard_canonical_sha256"
+  ],
+  "properties": {
+    "dashboard_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runset_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "runset_id",
+          "status",
+          "instability_mean_delta",
+          "worst5_jaccard",
+          "per_run_vector_match",
+          "reference_baseline_id",
+          "current_baseline_id",
+          "diff_classification_label",
+          "drift_report_sha256",
+          "drift_manifest_canonical_sha256"
+        ],
+        "properties": {
+          "runset_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NO_DRIFT",
+              "DRIFT"
+            ]
+          },
+          "instability_mean_delta": {
+            "type": "number"
+          },
+          "worst5_jaccard": {
+            "type": "number"
+          },
+          "per_run_vector_match": {
+            "type": "boolean"
+          },
+          "reference_baseline_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "current_baseline_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "diff_classification_label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "drift_report_sha256": {
+            "type": "string",
+            "minLength": 1
+          },
+          "drift_manifest_canonical_sha256": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "aggregates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "counts",
+        "checksum_mismatch_count",
+        "top_abs_instability_delta_5",
+        "lowest_jaccard_5"
+      ],
+      "properties": {
+        "counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "DRIFT",
+            "NO_DRIFT"
+          ],
+          "properties": {
+            "DRIFT": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "NO_DRIFT": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "checksum_mismatch_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "top_abs_instability_delta_5": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "runset_id",
+              "instability_mean_delta"
+            ],
+            "properties": {
+              "runset_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "instability_mean_delta": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "lowest_jaccard_5": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "runset_id",
+              "worst5_jaccard"
+            ],
+            "properties": {
+              "runset_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "worst5_jaccard": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "dashboard_canonical_sha256": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

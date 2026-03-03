@@ -68,12 +68,85 @@ def build_small_run_with_dataset(runner: CliRunner, tmp_path: Path) -> tuple[str
     return dataset_id, run_dir, canon_hash
 
 
+def build_small_run_with_dataset_at(
+    runner: CliRunner,
+    tmp_path: Path,
+    *,
+    run_dir_name: str,
+    raw_root_name: str | None = None,
+    raw_dataset_id: str | None = None,
+    instrument: str = "ES",
+    tf: str = "1min",
+) -> tuple[str, Path, str]:
+    repo_root = Path(__file__).parent.parent
+    fixture_path = repo_root / "tests" / "fixtures" / "raw_small_sample.txt"
+    schema_path = repo_root / "schemas" / "canon.schema.v1.json"
+    colmap_path = repo_root / "schemas" / "colmap.raw_vendor_v1.json"
+    psa_schema_path = repo_root / "schemas" / "psa.schema.v1.json"
+
+    if raw_dataset_id is None:
+        if not isinstance(raw_root_name, str) or not raw_root_name:
+            raise AssertionError("build_small_run_with_dataset_at requires raw_root_name when raw_dataset_id is not provided")
+        raw_root = tmp_path / raw_root_name
+        raw_root.mkdir(parents=True, exist_ok=True)
+        (raw_root / "sample.txt").write_text(fixture_path.read_text(encoding="utf-8"), encoding="utf-8")
+
+        reg = runner.invoke(
+            app,
+            [
+                "dataset",
+                "register",
+                "raw",
+                "--catalog",
+                "catalog",
+                "--root",
+                raw_root_name,
+                "--desc",
+                "raw-source",
+            ],
+        )
+        assert reg.exit_code == 0, reg.stdout
+        dataset_id = extract_dataset_id(reg.stdout)
+    else:
+        dataset_id = raw_dataset_id
+
+    run_dir = tmp_path / run_dir_name
+    for args in [
+        [
+            "canon",
+            "--in",
+            str(fixture_path),
+            "--out",
+            run_dir_name,
+            "--instrument",
+                instrument,
+            "--tf",
+                tf,
+            "--schema",
+            str(schema_path),
+            "--colmap",
+            str(colmap_path),
+        ],
+        ["psa", "--in", str(run_dir / "canon.parquet"), "--out", run_dir_name, "--schema", str(psa_schema_path)],
+        ["observe", "summary", "--run", run_dir_name],
+        ["observe", "profile", "--run", run_dir_name],
+        ["lineage", "build", "--run", run_dir_name, "--catalog", "catalog", "--raw-dataset-id", dataset_id],
+    ]:
+        result = runner.invoke(app, args)
+        assert result.exit_code == 0, result.stdout
+
+    canon_manifest = json.loads((run_dir / "canon.manifest.json").read_text(encoding="utf-8"))
+    canon_hash = str(canon_manifest["output_files"]["canon.parquet"]["canonical_table_sha256"])
+    return dataset_id, run_dir, canon_hash
+
+
 def create_runset(
     runner: CliRunner,
     tmp_path: Path,
     dataset_id: str,
     canon_hash: str,
     runset_name: str,
+    run_ref: str = "run",
     allow_materialize_missing: bool = False,
 ) -> str:
     runset_spec = tmp_path / f"{runset_name}.json"
@@ -85,7 +158,7 @@ def create_runset(
                 "datasets": [dataset_id],
                 "runs": [
                     {
-                        "run_ref": "run",
+                        "run_ref": run_ref,
                         "dataset_id": dataset_id,
                         "canon_table_sha256": canon_hash,
                     }

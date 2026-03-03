@@ -1,5 +1,6 @@
 from research_core.risk.diff import compare_baseline_cards
 from research_core.risk.diff_writer import write_baseline_diff_artifacts
+from research_core.risk.dashboard import run_risk_dashboard
 from research_core.risk.drift import run_risk_drift
 from research_core.risk.runset_agg import compute_runset_risk
 from research_core.risk.sweep import run_risk_sweep
@@ -13,4 +14,5 @@ __all__ = [
 	"compare_baseline_cards",
 	"write_baseline_diff_artifacts",
 	"run_risk_drift",
+	"run_risk_dashboard",
 ]

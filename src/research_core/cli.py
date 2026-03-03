@@ -48,6 +48,7 @@ from research_core.lineage.build_lineage import build_lineage_for_run
 from research_core.runsets.catalog import create_runset, list_runsets, show_runset, validate_runset
 from research_core.runsets.materialize import materialize_runset
 from research_core.risk.diff_writer import write_baseline_diff_artifacts
+from research_core.risk.dashboard import run_risk_dashboard
 from research_core.risk.drift import run_risk_drift
 from research_core.risk.sweep import run_risk_sweep
 from research_core.risk.runset_agg import compute_runset_risk
@@ -745,6 +746,26 @@ def risk_drift_command(
     typer.echo(f"RISK_DRIFT_COMPLETED runset_id={runset_id}")
     typer.echo(f"report={drift['report_path']}")
     typer.echo(f"manifest={drift['manifest_path']}")
+
+
+@risk_app.command("dashboard")
+def risk_dashboard_command(
+    catalog_dir: Path = typer.Option(..., "--catalog"),
+    baseline_root: Path = typer.Option(..., "--root"),
+    runsets_path: Path = typer.Option(..., "--runsets"),
+    out_dir: Path = typer.Option(..., "--out"),
+    label: str = typer.Option("prod", "--label"),
+) -> None:
+    result = run_risk_dashboard(
+        catalog_dir=catalog_dir,
+        baseline_root=baseline_root,
+        runsets_path=runsets_path,
+        out_dir=out_dir,
+        label=label,
+    )
+    typer.echo(f"RISK_DASHBOARD_COMPLETED runsets={result['runset_count']}")
+    typer.echo(f"summary={result['summary_path']}")
+    typer.echo(f"manifest={result['manifest_path']}")
 
 
 @baseline_index_app.command("refresh")
