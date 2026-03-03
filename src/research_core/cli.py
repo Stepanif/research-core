@@ -62,6 +62,10 @@ from research_core.psa.writer import build_psa_manifest, write_psa_log, write_ps
 from research_core.registry.observe_registry import refresh_registry_for_run, show_registry_run
 from research_core.registry.dataset_registry import build_dataset_registry
 from research_core.registry.run_index import build_run_index
+from research_core.prune.executor import execute_plan as execute_prune_plan
+from research_core.prune.formatting import format_prune_report
+from research_core.prune.planner import build_prune_plan
+from research_core.prune.policy import load_prune_policy
 from research_core.release.notes import generate_release_notes
 from research_core.util.hashing import sha256_bytes
 from research_core.util.io import ensure_dir
@@ -89,6 +93,7 @@ baseline_app = typer.Typer(no_args_is_help=True)
 baseline_index_app = typer.Typer(no_args_is_help=True)
 ci_app = typer.Typer(no_args_is_help=True)
 release_app = typer.Typer(no_args_is_help=True)
+prune_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
@@ -105,6 +110,7 @@ app.add_typer(risk_app, name="risk")
 app.add_typer(baseline_app, name="baseline")
 app.add_typer(ci_app, name="ci")
 app.add_typer(release_app, name="release")
+app.add_typer(prune_app, name="prune")
 project_app.add_typer(project_index_app, name="index")
 dataset_app.add_typer(dataset_register_app, name="register")
 baseline_app.add_typer(baseline_index_app, name="index")
@@ -801,6 +807,44 @@ def release_notes_command(
         output_format=output_format,
     )
     typer.echo(notes, nl=False)
+
+
+def _run_prune(*, mode: str, root: Path, policy_path: Path, dry_run: bool, confirm: str | None) -> None:
+    policy = load_prune_policy(policy_path)
+    plan = build_prune_plan(mode=mode, root=root, policy=policy)
+
+    if not dry_run and policy["safety"]["require_dry_run_first"]:
+        if not isinstance(confirm, str) or not confirm:
+            raise ResearchError("prune execute requires --confirm <plan_sha256> when policy.safety.require_dry_run_first=true")
+        if confirm != plan["plan_sha256"]:
+            raise ResearchError("prune execute confirm hash mismatch")
+
+    if dry_run:
+        typer.echo(format_prune_report(plan=plan, result="DRY_RUN"), nl=False)
+        return
+
+    execute_prune_plan(plan=plan)
+    typer.echo(format_prune_report(plan=plan, result="EXECUTED"), nl=False)
+
+
+@prune_app.command("run")
+def prune_run_command(
+    run_dir: Path = typer.Option(..., "--run"),
+    policy_path: Path = typer.Option(..., "--policy"),
+    dry_run: bool = typer.Option(False, "--dry-run"),
+    confirm: str | None = typer.Option(None, "--confirm"),
+) -> None:
+    _run_prune(mode="run", root=run_dir, policy_path=policy_path, dry_run=dry_run, confirm=confirm)
+
+
+@prune_app.command("out")
+def prune_out_command(
+    root_dir: Path = typer.Option(..., "--root"),
+    policy_path: Path = typer.Option(..., "--policy"),
+    dry_run: bool = typer.Option(False, "--dry-run"),
+    confirm: str | None = typer.Option(None, "--confirm"),
+) -> None:
+    _run_prune(mode="out", root=root_dir, policy_path=policy_path, dry_run=dry_run, confirm=confirm)
 
 
 @baseline_index_app.command("refresh")

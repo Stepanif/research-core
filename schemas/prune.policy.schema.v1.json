@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/prune.policy.schema.v1.json",
+  "title": "Research Prune Policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "policy_version",
+    "keep",
+    "delete",
+    "safety"
+  ],
+  "properties": {
+    "policy_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "keep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifests",
+        "contracts",
+        "goldens",
+        "baselines"
+      ],
+      "properties": {
+        "manifests": {
+          "type": "boolean",
+          "const": true
+        },
+        "contracts": {
+          "type": "boolean"
+        },
+        "goldens": {
+          "type": "boolean"
+        },
+        "baselines": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "promoted_only",
+            "keep_index"
+          ],
+          "properties": {
+            "promoted_only": {
+              "type": "boolean",
+              "const": true
+            },
+            "keep_index": {
+              "type": "boolean",
+              "const": true
+            }
+          }
+        },
+        "ci_outputs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "keep_latest_n"
+          ],
+          "properties": {
+            "keep_latest_n": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "delete": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_intermediates",
+        "plan_logs"
+      ],
+      "properties": {
+        "run_intermediates": {
+          "type": "boolean"
+        },
+        "plan_logs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "keep_latest_n"
+          ],
+          "properties": {
+            "keep_latest_n": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "require_dry_run_first",
+        "refuse_if_unrecognized_paths"
+      ],
+      "properties": {
+        "require_dry_run_first": {
+          "type": "boolean",
+          "const": true
+        },
+        "refuse_if_unrecognized_paths": {
+          "type": "boolean",
+          "const": true
+        }
+      }
+    }
+  }
+}
