@@ -140,3 +140,46 @@ If any gate fails, do not move `prod`; investigate and regenerate artifacts dete
 - Authoritative pilot dataset mapping: `configs/pilot/datasets.pilot.json`
 - Catalog target for mapping: `exec_outputs/catalog`
 - Pilot dataset IDs are locked as metadata in Git; raw files remain external (`G:\Raw CSVs`).
+
+## Option C: Explicit RunSet (deterministic from dataset_to_runs index)
+
+Use this flow when you want explicit `runs` entries in the runset spec generated from lineage links instead of hand-edited run refs.
+
+### C1) Rebuild linkage index
+
+```powershell
+python -m research_core.cli registry refresh --run exec_outputs/runs/runs/*
+```
+
+### C2) Generate explicit runset spec deterministically
+
+```powershell
+python docs/scripts/gen_explicit_runset_from_index.py --catalog exec_outputs/catalog --datasets configs/pilot/datasets.pilot.json --out configs/pilot/runset.pilot.explicit.json
+```
+
+### C3) Create and validate explicit runset
+
+```powershell
+python -m research_core.cli runset create --catalog exec_outputs/catalog --spec configs/pilot/runset.pilot.explicit.json
+python -m research_core.cli runset validate --catalog exec_outputs/catalog --id RUNSET_ID
+```
+
+### C4) Update pilot runset list lock
+
+```powershell
+python -m json.tool configs/pilot/runsets.pilot.json
+```
+
+Set `configs/pilot/runsets.pilot.json` to the new explicit `RUNSET_ID`.
+
+### C5) Continue standard gates
+
+```powershell
+python -m research_core.cli risk sweep --catalog exec_outputs/catalog --runset RUNSET_ID --out exec_outputs/baselines
+python -m research_core.cli baseline index refresh --root exec_outputs/baselines
+python -m research_core.cli baseline promote --root exec_outputs/baselines --runset RUNSET_ID --baseline-id BASELINE_ID --label prod
+python -m research_core.cli risk drift --catalog exec_outputs/catalog --root exec_outputs/baselines --runset RUNSET_ID --label prod --out exec_outputs/pilot_out
+python -m research_core.cli risk dashboard --catalog exec_outputs/catalog --root exec_outputs/baselines --runsets configs/pilot/runsets.pilot.json --out exec_outputs/pilot_out --label prod
+python -m research_core.cli ci run --config configs/pilot/ci.pilot.json
+python -m research_core.cli ci doctor --config configs/pilot/doctor.pilot.json
+```

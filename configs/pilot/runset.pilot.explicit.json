@@ -1,0 +1,37 @@
+{
+  "runset_version": "v1",
+  "name": "PILOT_RUNSET_ES_EXPLICIT_FROM_INDEX",
+  "datasets": [
+    "e6360336856ccab1e970824dc4008f134e6ce50d2aa12a3219894c365b627105",
+    "ccda34c3058cb80bec553da0c00cd6aa4e114dad08e8f476967e6ec7c0d6f831",
+    "38a76f0199ad197ed2b0696b9f2c60f940721f421a7701aaad557d4c5bea4b1f",
+    "710aca28155ea428343831d34fc77d1fc596b4e2c11497f7e761104fb0d7e454"
+  ],
+  "runs": [
+    {
+      "dataset_id": "e6360336856ccab1e970824dc4008f134e6ce50d2aa12a3219894c365b627105",
+      "run_ref": "exec_outputs/runs/runs/006d5b0f30bb139fc8bdf42e42af7da9ebe3d84c2653d479e120bee8e72cefab",
+      "canon_table_sha256": "457c85db709615b2993ff3e26362c3ffb5e314fe71ed1a25e620a6ce140531b9"
+    },
+    {
+      "dataset_id": "ccda34c3058cb80bec553da0c00cd6aa4e114dad08e8f476967e6ec7c0d6f831",
+      "run_ref": "exec_outputs/runs/runs/0add4f74aa8da7e2eb3880132defa45b05a8a6fcfe65a7d5d808a27c8fd3c138",
+      "canon_table_sha256": "1f33b34f1e8cdb6751b4df2102cf23ef3e3f4fc3011224d8996bf778a33ae34a"
+    },
+    {
+      "dataset_id": "38a76f0199ad197ed2b0696b9f2c60f940721f421a7701aaad557d4c5bea4b1f",
+      "run_ref": "exec_outputs/runs/runs/e860bae8c03a412342ecf8646f97fea7bd0dcd3d66e66c1d5c29510ebf33bd55",
+      "canon_table_sha256": "3ca35d31f11f1eee8a7299d7138825fd003ea4a9d1792db15bb01f15f87dbfbf"
+    },
+    {
+      "dataset_id": "710aca28155ea428343831d34fc77d1fc596b4e2c11497f7e761104fb0d7e454",
+      "run_ref": "exec_outputs/runs/runs/0a66d1c3e85edca4a1ea130366f4511f9c4d8f39cf61392611fd78e8b7c1256d",
+      "canon_table_sha256": "9c4f421abd7bc854a78bdafd7f047f4efd7756261a5a719abf14b6ebaea74fa2"
+    }
+  ],
+  "policy": {
+    "allow_materialize_missing": false,
+    "require_lineage_links": true,
+    "require_bidirectional": true
+  }
+}
