@@ -8,6 +8,13 @@ Option A keeps raw market files outside Git and registers them into the dataset 
 
 - `G:\Raw CSVs`
 
+## Environment variables (required for materialize on this machine)
+
+- `RESEARCH_DATA_LAKE_ROOT=G:\`
+	- Resolves relative catalog `source_root` values such as `Raw CSVs/...` to absolute paths on this machine (for example `G:\Raw CSVs/...`).
+- `RESEARCH_CREATED_UTC`
+	- Pins created timestamps for deterministic ops runs.
+
 Recommended folder convention:
 
 - `G:\Raw CSVs\Futures\<CATEGORY>\<INSTRUMENT>\<DATASET_DIR>`

@@ -66,6 +66,13 @@ python -m research_core.cli dataset register raw --catalog exec_outputs/catalog 
 
 Capture printed `dataset_id` and replace `DATASET_ID` in `configs/pilot/project.pilot.json` and `configs/pilot/runset.pilot.json`.
 
+### Ops env setup
+
+```powershell
+$env:RESEARCH_DATA_LAKE_ROOT="G:\"
+$env:RESEARCH_CREATED_UTC="2026-01-01T00:00:00+00:00"
+```
+
 ### 2) Materialize project runs (datasets mode)
 
 ```powershell
