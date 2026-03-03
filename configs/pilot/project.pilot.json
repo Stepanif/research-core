@@ -13,8 +13,8 @@
       "session_policy": "rth",
       "rth_start": "09:30",
       "rth_end": "16:00",
-      "schema_path": "schemas/canon.schema.v1.json",
-      "colmap_path": "schemas/colmap.raw_vendor_v1.json",
+      "schema_path": "../../schemas/canon.schema.v1.json",
+      "colmap_path": "../../schemas/colmap.raw_vendor_v1.json",
       "note": "RAW_VENDOR_V1_YEARS_2019_2025"
     },
     {
@@ -24,8 +24,8 @@
       "session_policy": "rth",
       "rth_start": "09:30",
       "rth_end": "16:00",
-      "schema_path": "schemas/canon.schema.v1.json",
-      "colmap_path": "schemas/colmap.raw_vendor_v1.json",
+      "schema_path": "../../schemas/canon.schema.v1.json",
+      "colmap_path": "../../schemas/colmap.raw_vendor_v1.json",
       "note": "RAW_VENDOR_V1_YEARS_2019_2025"
     },
     {
@@ -35,8 +35,8 @@
       "session_policy": "rth",
       "rth_start": "09:30",
       "rth_end": "16:00",
-      "schema_path": "schemas/canon.schema.v1.json",
-      "colmap_path": "schemas/colmap.raw_vendor_v1.json",
+      "schema_path": "../../schemas/canon.schema.v1.json",
+      "colmap_path": "../../schemas/colmap.raw_vendor_v1.json",
       "note": "RAW_VENDOR_V1_YEARS_2019_2025"
     },
     {
@@ -46,8 +46,8 @@
       "session_policy": "rth",
       "rth_start": "09:30",
       "rth_end": "16:00",
-      "schema_path": "schemas/canon.schema.v1.json",
-      "colmap_path": "schemas/colmap.raw_vendor_v1.json",
+      "schema_path": "../../schemas/canon.schema.v1.json",
+      "colmap_path": "../../schemas/colmap.raw_vendor_v1.json",
       "note": "RAW_VENDOR_V1_YEARS_2019_2025"
     }
   ],
