@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/pilot.run.summary.schema.v1.json",
+  "title": "Research Pilot Run Summary v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pilot_run_version",
+    "created_utc",
+    "label",
+    "runset_id",
+    "baseline_id",
+    "artifacts",
+    "results",
+    "checksums"
+  ],
+  "properties": {
+    "pilot_run_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "baseline_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_card_path",
+        "drift_report_path",
+        "doctor_summary_path"
+      ],
+      "properties": {
+        "baseline_card_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "drift_report_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "doctor_summary_path": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "failures"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL"
+          ]
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "stage",
+              "detail"
+            ],
+            "properties": {
+              "stage": {
+                "type": "string",
+                "minLength": 1
+              },
+              "detail": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "checksums": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generated_runset_spec_canonical_sha256",
+        "pilot_run_canonical_sha256"
+      ],
+      "properties": {
+        "generated_runset_spec_canonical_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pilot_run_canonical_sha256": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

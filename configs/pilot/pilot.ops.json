@@ -1,0 +1,12 @@
+{
+  "pilot_ops_version": "v1",
+  "catalog_dir": "exec_outputs/catalog",
+  "datasets_path": "configs/pilot/datasets.pilot.json",
+  "baseline_root": "exec_outputs/baselines",
+  "label": "prod",
+  "out_dir": "exec_outputs/pilot/run",
+  "runset_kind": "explicit_from_index",
+  "require_promoted_baseline": true,
+  "doctor_out_subdir": "doctor",
+  "drift_out_subdir": "drift"
+}

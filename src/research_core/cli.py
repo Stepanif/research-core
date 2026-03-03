@@ -9,6 +9,7 @@ import typer
 
 from research_core.ci_doctor.runner import run_ci_doctor
 from research_core.ci.runner import run_ci_pipeline
+from research_core.pilot.runner import run_pilot
 from research_core.bundle.exporter import export_bundle
 from research_core.baselines.index import refresh_baseline_index, show_baseline_index
 from research_core.baselines.promotions import promote_baseline
@@ -97,6 +98,7 @@ baseline_index_app = typer.Typer(no_args_is_help=True)
 ci_app = typer.Typer(no_args_is_help=True)
 release_app = typer.Typer(no_args_is_help=True)
 prune_app = typer.Typer(no_args_is_help=True)
+pilot_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
@@ -114,6 +116,7 @@ app.add_typer(baseline_app, name="baseline")
 app.add_typer(ci_app, name="ci")
 app.add_typer(release_app, name="release")
 app.add_typer(prune_app, name="prune")
+app.add_typer(pilot_app, name="pilot")
 project_app.add_typer(project_index_app, name="index")
 dataset_app.add_typer(dataset_register_app, name="register")
 baseline_app.add_typer(baseline_index_app, name="index")
@@ -822,6 +825,27 @@ def ci_doctor_command(
     typer.echo(f"manifest={result['manifest_path']}")
     typer.echo(f"CI_DOCTOR_RESULT status={result['status']}")
     if result["status"] != "PASS":
+        raise typer.Exit(code=1)
+
+
+@pilot_app.command("run")
+def pilot_run_command(
+    config_path: Path = typer.Option(..., "--config"),
+) -> None:
+    result = run_pilot(config_path=config_path)
+
+    typer.echo(f"PILOT_RUN status={result['status']}")
+    typer.echo(f"runset_id={result['runset_id']}")
+    typer.echo(f"baseline_id={result['baseline_id']}")
+    typer.echo(f"drift_report={result['drift_report']}")
+    typer.echo(f"doctor_summary={result['doctor_summary']}")
+    typer.echo(f"summary={result['summary_path']}")
+    typer.echo(f"manifest={result['manifest_path']}")
+
+    if result["status"] != "PASS":
+        failure_detail = str(result.get("failure_detail", "")).strip()
+        if failure_detail:
+            typer.echo(f"failure={failure_detail}")
         raise typer.Exit(code=1)
 
 
