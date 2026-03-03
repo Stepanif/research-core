@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/ci.doctor.summary.schema.v1.json",
+  "title": "Research CI Doctor Summary v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ci_doctor_version",
+    "created_utc",
+    "label",
+    "runset_count",
+    "results",
+    "checks",
+    "pointers",
+    "ci_doctor_canonical_sha256"
+  ],
+  "properties": {
+    "ci_doctor_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runset_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "failures"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL"
+          ]
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "check",
+              "detail"
+            ],
+            "properties": {
+              "check": {
+                "type": "string",
+                "minLength": 1
+              },
+              "runset_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "detail": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_root_ok",
+        "promotions_ok",
+        "runsets_ok",
+        "bundles_ok",
+        "dashboard_ok"
+      ],
+      "properties": {
+        "baseline_root_ok": {
+          "type": "boolean"
+        },
+        "promotions_ok": {
+          "type": "boolean"
+        },
+        "runsets_ok": {
+          "type": "boolean"
+        },
+        "bundles_ok": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "dashboard_ok": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "pointers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_root",
+        "catalog_dir"
+      ],
+      "properties": {
+        "baseline_root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "catalog_dir": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "ci_doctor_canonical_sha256": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

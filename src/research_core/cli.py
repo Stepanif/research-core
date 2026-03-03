@@ -7,6 +7,7 @@ from typing import Any
 import pandas as pd
 import typer
 
+from research_core.ci_doctor.runner import run_ci_doctor
 from research_core.ci.runner import run_ci_pipeline
 from research_core.bundle.exporter import export_bundle
 from research_core.baselines.index import refresh_baseline_index, show_baseline_index
@@ -791,6 +792,34 @@ def ci_run_command(
     typer.echo(f"summary={result['summary_path']}")
     typer.echo(f"manifest={result['manifest_path']}")
     if result["should_fail"]:
+        raise typer.Exit(code=1)
+
+
+@ci_app.command("doctor")
+def ci_doctor_command(
+    config_path: Path = typer.Option(..., "--config"),
+) -> None:
+    result = run_ci_doctor(config_path=config_path)
+
+    checks = result["checks"]
+    ordered = [
+        ("baseline_root_ok", checks.get("baseline_root_ok")),
+        ("promotions_ok", checks.get("promotions_ok")),
+        ("runsets_ok", checks.get("runsets_ok")),
+        ("bundles_ok", checks.get("bundles_ok")),
+        ("dashboard_ok", checks.get("dashboard_ok")),
+    ]
+    for key, value in ordered:
+        if isinstance(value, bool):
+            typer.echo(f"{key}={'PASS' if value else 'FAIL'}")
+        else:
+            typer.echo(f"{key}=N/A")
+
+    typer.echo(f"failures={len(result['failures'])}")
+    typer.echo(f"summary={result['summary_path']}")
+    typer.echo(f"manifest={result['manifest_path']}")
+    typer.echo(f"CI_DOCTOR_RESULT status={result['status']}")
+    if result["status"] != "PASS":
         raise typer.Exit(code=1)
 
 
