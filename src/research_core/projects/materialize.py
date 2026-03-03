@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
@@ -68,6 +69,29 @@ def _resolve_dataset_root(root_ref: str, catalog_dir: Path, project_base_dir: Pa
     for candidate in candidates:
         if candidate.exists():
             return candidate
+
+    raw_map = os.environ.get("RESEARCH_DATA_ROOT_MAP_JSON")
+    if raw_map:
+        try:
+            root_map = json.loads(raw_map)
+        except json.JSONDecodeError as exc:
+            raise ValidationError("RESEARCH_DATA_ROOT_MAP_JSON is invalid JSON") from exc
+        if not isinstance(root_map, dict):
+            raise ValidationError("RESEARCH_DATA_ROOT_MAP_JSON is invalid JSON")
+
+        if "/" in root_ref:
+            parts = [part for part in root_ref.split("/") if part]
+            if parts:
+                prefix = parts[0]
+                mapped_base_raw = root_map.get(prefix)
+                if mapped_base_raw is not None:
+                    mapped_base = Path(str(mapped_base_raw))
+                    if not mapped_base.is_absolute():
+                        raise ValidationError(f"Mapped base for prefix {prefix} must be absolute")
+                    mapped_candidate = (mapped_base / Path(*parts[1:])).resolve()
+                    if mapped_candidate.exists():
+                        return mapped_candidate
+
     raise ValidationError(f"Dataset source root could not be resolved for materialize: {root_ref}")
 
 
