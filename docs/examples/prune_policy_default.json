@@ -1,0 +1,1 @@
+{"policy_version":"v1","keep":{"manifests":true,"contracts":true,"goldens":true,"baselines":{"promoted_only":true,"keep_index":true}},"delete":{"run_intermediates":true,"plan_logs":{"keep_latest_n":3}},"safety":{"require_dry_run_first":true,"refuse_if_unrecognized_paths":true}}
