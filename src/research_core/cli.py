@@ -62,6 +62,7 @@ from research_core.psa.writer import build_psa_manifest, write_psa_log, write_ps
 from research_core.registry.observe_registry import refresh_registry_for_run, show_registry_run
 from research_core.registry.dataset_registry import build_dataset_registry
 from research_core.registry.run_index import build_run_index
+from research_core.release.notes import generate_release_notes
 from research_core.util.hashing import sha256_bytes
 from research_core.util.io import ensure_dir
 from research_core.util.buildmeta import get_git_commit
@@ -87,6 +88,7 @@ risk_app = typer.Typer(no_args_is_help=True)
 baseline_app = typer.Typer(no_args_is_help=True)
 baseline_index_app = typer.Typer(no_args_is_help=True)
 ci_app = typer.Typer(no_args_is_help=True)
+release_app = typer.Typer(no_args_is_help=True)
 app.add_typer(validate_app, name="validate")
 app.add_typer(registry_app, name="registry")
 app.add_typer(observe_app, name="observe")
@@ -102,6 +104,7 @@ app.add_typer(runset_app, name="runset")
 app.add_typer(risk_app, name="risk")
 app.add_typer(baseline_app, name="baseline")
 app.add_typer(ci_app, name="ci")
+app.add_typer(release_app, name="release")
 project_app.add_typer(project_index_app, name="index")
 dataset_app.add_typer(dataset_register_app, name="register")
 baseline_app.add_typer(baseline_index_app, name="index")
@@ -783,6 +786,21 @@ def ci_run_command(
     typer.echo(f"manifest={result['manifest_path']}")
     if result["should_fail"]:
         raise typer.Exit(code=1)
+
+
+@release_app.command("notes")
+def release_notes_command(
+    from_ref: str = typer.Option(..., "--from"),
+    to_ref: str = typer.Option(..., "--to"),
+    output_format: str = typer.Option("markdown", "--format"),
+) -> None:
+    notes = generate_release_notes(
+        repo_root=_repo_root(),
+        from_ref=from_ref,
+        to_ref=to_ref,
+        output_format=output_format,
+    )
+    typer.echo(notes, nl=False)
 
 
 @baseline_index_app.command("refresh")
