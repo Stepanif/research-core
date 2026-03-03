@@ -2,7 +2,7 @@
   "project_version": "v1",
   "name": "PILOT_COHORT_ES_1MIN_RTH_2019_2025",
   "spec_dirs": [
-    "configs/pilot/specs"
+    "specs"
   ],
   "output_dir": "exec_outputs/pilot/projects",
   "datasets": [
