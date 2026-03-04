@@ -4,11 +4,11 @@ Generated from docs/reference/artifacts/catalog.v1.yml by tools/docs/gen_artifac
 
 | Stage | Name | Outputs | Page |
 |---|---|---:|---|
-| `baseline` | Baseline | 1 | [baseline.md](baseline.md) |
-| `drift` | Drift | 1 | [drift.md](drift.md) |
+| `baseline` | Baseline | 3 | [baseline.md](baseline.md) |
+| `drift` | Drift | 4 | [drift.md](drift.md) |
 | `lineage` | Lineage | 2 | [lineage.md](lineage.md) |
-| `risk` | Risk | 1 | [risk.md](risk.md) |
-| `stage0_canon` | Stage 0 Canon | 2 | [stage0_canon.md](stage0_canon.md) |
+| `risk` | Risk | 2 | [risk.md](risk.md) |
+| `stage0_canon` | Stage 0 Canon | 5 | [stage0_canon.md](stage0_canon.md) |
 | `stage1_diagnostics` | Stage 1 Diagnostics | 1 | [stage1_diagnostics.md](stage1_diagnostics.md) |
 | `stage2_occupancy` | Stage 2 Occupancy | 0 | [stage2_occupancy.md](stage2_occupancy.md) |
 | `stage3_streams` | Stage 3 Streams | 0 | [stage3_streams.md](stage3_streams.md) |

@@ -9,6 +9,15 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.highlight
+not_in_nav: |
+    /reference/contracts/v1/*.md
+    /reference/cli/*.md
+    /reference/schemas/*.md
+    /*_spec_v1.md
+    /README_ANALYSIS_ES5M.md
+    /phase0_gates_v1.md
+    /pilot_cohort_v1.md
+    /prune_playbook.md
 nav:
   - Home: index.md
   - Getting started:

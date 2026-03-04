@@ -2,7 +2,10 @@ stages:
   - stage: baseline
     name: Baseline
     tools:
-      - cli: "TODO: confirm exact baseline CLI invocation from canonical user docs"
+      - cli: python -m research_core.cli risk sweep --catalog exec_outputs/catalog --runset RUNSET_ID --out exec_outputs/pilot/risk
+      - cli: python -m research_core.cli baseline index refresh --root baselines/prod
+      - cli: python -m research_core.cli baseline promote --root baselines/prod --runset RUNSET_ID --baseline-id BASELINE_ID --label prod
+      - cli: python -m research_core.cli risk diff --a <baseline.card.json> --b <baseline.card.json> --out <dir>
     outputs:
       - id: baseline.card.json
         path_template: baselines/prod/<runset_id>/baseline.card.json
@@ -13,25 +16,67 @@ stages:
           - File exists after promote_es5m_baseline workflow completes.
         verification:
           - Check baselines/prod/<runset_id>/baseline.card.json exists.
-    todos:
-      - "TODO: confirm baseline diff/index/promotions artifact paths from contract sources."
+      - id: baseline.diff.json
+        path_template: <out>/baseline.diff.json
+        type: json
+        schema: "TODO: schema link not yet confirmed"
+        description: Deterministic baseline diff output from risk diff.
+        invariants:
+          - Baseline diff classification uses fixed v1 instability thresholds.
+        verification:
+          - Check <out>/baseline.diff.json exists after risk diff.
+      - id: baseline.diff.manifest.json
+        path_template: <out>/baseline.diff.manifest.json
+        type: json
+        schema: "TODO: schema link not yet confirmed"
+        description: Manifest for baseline.diff.json with input and output hashes.
+        invariants:
+          - Manifest includes byte hashes for both baseline card inputs and diff output.
+        verification:
+          - Check <out>/baseline.diff.manifest.json exists after risk diff.
 
   - stage: drift
     name: Drift
     tools:
-      - cli: "TODO: confirm drift CLI command entrypoints"
+      - cli: python -m research_core.cli risk drift --catalog exec_outputs/catalog --root baselines/prod --runset RUNSET_ID --label prod --out exec_outputs/pilot/drift
+      - cli: python -m research_core.cli risk dashboard --catalog exec_outputs/catalog --root baselines/prod --runsets configs/pilot/runsets.pilot.json --out exec_outputs/pilot/dashboard --label prod
     outputs:
       - id: dashboard.summary.json
-        path_template: exec_outputs/analysis/es_5m/dashboard/dashboard.summary.json
+        path_template: <out>/dashboard.summary.json
         type: json
         schema: ../schemas/dashboard.summary.schema.v1.md
-        description: Dashboard summary listed as primary ES5M analysis output.
+        description: Deterministic dashboard summary generated from runset drift reports.
         invariants:
-          - File exists when dashboard verification reports success.
+          - Dashboard summary is written only when all listed runsets succeed.
         verification:
-          - Run docs/scripts/verify_es5m_dashboard.ps1 and confirm DASHBOARD OK.
-    todos:
-      - "TODO: confirm dedicated drift.report output path for this workflow."
+          - Check <out>/dashboard.summary.json exists after risk dashboard.
+      - id: dashboard.summary.manifest.json
+        path_template: <out>/dashboard.summary.manifest.json
+        type: json
+        schema: "TODO: schema link not yet confirmed"
+        description: Manifest for dashboard summary with runsets and drift report inputs.
+        invariants:
+          - Manifest includes sorted input hashes and dashboard output hash.
+        verification:
+          - Check <out>/dashboard.summary.manifest.json exists after risk dashboard.
+      - id: drift.report.json
+        path_template: <out>/drift/<runset_id>/drift.report.json
+        type: json
+        schema: ../schemas/drift.report.schema.v1.md
+        description: Deterministic drift classification report for one runset.
+        invariants:
+          - Drift status is DRIFT iff abs(instability_mean_delta) >= 5.0 or worst5_jaccard <= 0.40.
+        verification:
+          - Check <out>/drift/<runset_id>/drift.report.json exists after risk dashboard.
+      - id: drift.report.manifest.json
+        path_template: <out>/drift/<runset_id>/drift.report.manifest.json
+        type: json
+        schema: "TODO: schema link not yet confirmed"
+        description: Manifest for drift report with baseline, runset, and diff inputs.
+        invariants:
+          - Manifest includes drift report output hash and sorted input hashes.
+        verification:
+          - Check <out>/drift/<runset_id>/drift.report.manifest.json exists after risk dashboard.
 
   - stage: lineage
     name: Lineage
@@ -63,15 +108,24 @@ stages:
     tools:
       - cli: research risk runset
     outputs:
-      - id: risk.runset.summary.json
-        path_template: exec_outputs/analysis/es_5m/risk_runset/<runset_id>/risk.runset.summary.json
+      - id: risk.runset.manifest.json
+        path_template: <out>/<runset_id>/risk.runset.manifest.json
         type: json
         schema: "TODO: schema link not yet confirmed"
-        description: Runset risk summary output listed in ES5M analysis docs.
+        description: Manifest for runset risk summary including runset and per-run inputs.
+        invariants:
+          - Manifest includes runset risk summary output hash and deterministic input list.
+        verification:
+          - Check <out>/<runset_id>/risk.runset.manifest.json exists.
+      - id: risk.runset.summary.json
+        path_template: <out>/<runset_id>/risk.runset.summary.json
+        type: json
+        schema: "TODO: schema link not yet confirmed"
+        description: Deterministic runset-level risk summary from risk runset.
         invariants:
           - File exists for each analyzed runset_id.
         verification:
-          - Check exec_outputs/analysis/es_5m/risk_runset/<runset_id>/risk.runset.summary.json exists.
+          - Check <out>/<runset_id>/risk.runset.summary.json exists.
 
   - stage: stage0_canon
     name: Stage 0 Canon
@@ -79,6 +133,15 @@ stages:
       - cli: research canon
       - cli: research validate canon
     outputs:
+      - id: canon.manifest.json
+        path_template: <run_dir>/canon.manifest.json
+        type: json
+        schema: "TODO: schema link not yet confirmed"
+        description: Canon generation manifest required by phase0 gates.
+        invariants:
+          - Canonicalization gate requires canon.manifest.json to exist per run.
+        verification:
+          - Check <run_dir>/canon.manifest.json exists.
       - id: canon.contract.json
         path_template: exec_outputs/runs/sample/canon.contract.json
         type: json
@@ -98,6 +161,24 @@ stages:
           - Timestamps are monotonic and duplicate timestamps are forbidden.
         verification:
           - Check exec_outputs/runs/sample/canon.parquet exists.
+      - id: canon_validate.json
+        path_template: <run_dir>/validate/canon_validate.json
+        type: json
+        schema: "TODO: schema link not yet confirmed"
+        description: Validate canon report required by phase0 gates.
+        invariants:
+          - Validate gate requires validate/canon_validate.json to exist.
+        verification:
+          - Check <run_dir>/validate/canon_validate.json exists.
+      - id: canon.log
+        path_template: <run_dir>/logs/canon.log
+        type: "TODO: confirm type"
+        schema: "TODO: not schema-driven"
+        description: Canonicalization log file required by phase0 gates.
+        invariants:
+          - Canon gate requires logs/canon.log to exist per run.
+        verification:
+          - Check <run_dir>/logs/canon.log exists.
 
   - stage: stage1_diagnostics
     name: Stage 1 Diagnostics

@@ -10,7 +10,16 @@ Generated from docs/reference/artifacts/catalog.v1.yml by tools/docs/gen_artifac
 
 | Output ID | Path Template | Type | Schema | Description |
 |---|---|---|---|---|
-| risk.runset.summary.json | exec_outputs/analysis/es_5m/risk_runset/<runset_id>/risk.runset.summary.json | json | TODO: schema link not yet confirmed | Runset risk summary output listed in ES5M analysis docs. |
+| risk.runset.manifest.json | <out>/<runset_id>/risk.runset.manifest.json | json | TODO: schema link not yet confirmed | Manifest for runset risk summary including runset and per-run inputs. |
+| risk.runset.summary.json | <out>/<runset_id>/risk.runset.summary.json | json | TODO: schema link not yet confirmed | Deterministic runset-level risk summary from risk runset. |
+
+## Invariants: risk.runset.manifest.json
+
+- Manifest includes runset risk summary output hash and deterministic input list.
+
+## Verification: risk.runset.manifest.json
+
+- Check <out>/<runset_id>/risk.runset.manifest.json exists.
 
 ## Invariants: risk.runset.summary.json
 
@@ -18,4 +27,4 @@ Generated from docs/reference/artifacts/catalog.v1.yml by tools/docs/gen_artifac
 
 ## Verification: risk.runset.summary.json
 
-- Check exec_outputs/analysis/es_5m/risk_runset/<runset_id>/risk.runset.summary.json exists.
+- Check <out>/<runset_id>/risk.runset.summary.json exists.
