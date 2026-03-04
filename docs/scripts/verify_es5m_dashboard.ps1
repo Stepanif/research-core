@@ -26,6 +26,13 @@ if (-not (Test-Path $runsetsPath -PathType Leaf)) {
     exit 2
 }
 
+$payload = Get-Content -Raw $runsetsPath | ConvertFrom-Json
+if (-not $payload.PSObject.Properties.Name.Contains("runset_ids") -or @($payload.runset_ids).Count -eq 0) {
+    Write-Host "runsets file contains no runset_ids" -ForegroundColor Red
+    Write-Host "Path: $runsetsPath" -ForegroundColor Yellow
+    exit 2
+}
+
 $dashboardOutDir = "exec_outputs/analysis/es_5m/dashboard"
 $dashboardSummaryPath = "$dashboardOutDir/dashboard.summary.json"
 $dashboardCommand = "python -m research_core.cli risk dashboard --catalog exec_outputs/catalog --root baselines/prod --runsets `"$runsetsPath`" --out $dashboardOutDir --label prod"
@@ -33,7 +40,7 @@ $dashboardCommand = "python -m research_core.cli risk dashboard --catalog exec_o
 Write-Host "Runsets path: $runsetsPath"
 Write-Host "Dashboard out dir: $dashboardOutDir"
 
-python -m research_core.cli risk dashboard --catalog exec_outputs/catalog --root baselines/prod --runsets $runsetsPath --out $dashboardOutDir --label prod
+python -m research_core.cli risk dashboard --catalog exec_outputs/catalog --root baselines/prod --runsets "$runsetsPath" --out $dashboardOutDir --label prod
 
 if (-not (Test-Path $dashboardSummaryPath -PathType Leaf)) {
     Write-Host "dashboard.summary.json not found" -ForegroundColor Red
