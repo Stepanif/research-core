@@ -1,0 +1,13 @@
+{
+  "doctor_version": "v1",
+  "catalog_dir": "exec_outputs/catalog",
+  "baseline_root": "baselines/prod",
+  "runsets_path": "configs/analysis/runsets.es_5m.json",
+  "out_dir": "exec_outputs/analysis/es_5m/doctor",
+  "label": "prod",
+  "checks": {
+    "verify_baseline_root": true,
+    "verify_promotions": true,
+    "verify_runsets": true
+  }
+}
