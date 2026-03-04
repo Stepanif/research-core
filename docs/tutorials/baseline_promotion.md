@@ -42,7 +42,7 @@ $env:RESEARCH_CREATED_UTC = "2026-03-02T00:00:00+00:00"
 python -m research_core.cli runset validate --catalog exec_outputs/catalog --id RUNSET_ID
 ```
 
-### 3. Generate baseline card from runset
+### 3. Run `risk sweep` (produces baseline card + sweep outputs)
 
 ```powershell
 python -m research_core.cli risk sweep --catalog exec_outputs/catalog --runset RUNSET_ID --out exec_outputs/pilot/risk
