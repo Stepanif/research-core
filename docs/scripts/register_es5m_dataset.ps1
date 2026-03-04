@@ -12,9 +12,8 @@ if ($PSVersionTable.PSVersion.Major -ge 7) {
 $env:RESEARCH_CREATED_UTC = (git show -s --format=%cI HEAD).Trim()
 
 $catalogDir = "exec_outputs/catalog"
-$datasetIdPath = "configs/analysis/_es5m_dataset_id.txt"
-$datasetsConfigPath = "configs/analysis/datasets.es_5m.json"
-$projectConfigPath = "configs/analysis/project.es_5m.json"
+$localDir = "configs/analysis/local"
+$datasetIdPath = Join-Path $localDir "_es5m_dataset_id.txt"
 
 function Write-Utf8NoBom {
     param(
@@ -90,34 +89,6 @@ function Resolve-Es5mRoot {
     return $matches[0].FullName
 }
 
-function Update-Es5mConfigs {
-    param(
-        [string]$DatasetId
-    )
-
-    $datasetsPayload = Get-Content -Raw $datasetsConfigPath | ConvertFrom-Json
-    if (-not $datasetsPayload.datasets -or $datasetsPayload.datasets.Count -eq 0) {
-        Write-Host "ERROR: Invalid datasets config shape in '$datasetsConfigPath'." -ForegroundColor Red
-        Write-Host "Next action: restore datasets.es_5m.json to include at least one datasets[] row." -ForegroundColor Yellow
-        exit 2
-    }
-    $datasetsPayload.datasets[0].dataset_id = $DatasetId
-    $datasetsPayload.datasets[0].instrument = "ES"
-    $datasetsPayload.datasets[0].tf = "5m"
-    Write-Utf8NoBom -Path $datasetsConfigPath -Content ($datasetsPayload | ConvertTo-Json -Depth 8)
-
-    $projectPayload = Get-Content -Raw $projectConfigPath | ConvertFrom-Json
-    if (-not $projectPayload.datasets -or $projectPayload.datasets.Count -eq 0) {
-        Write-Host "ERROR: Invalid project config shape in '$projectConfigPath'." -ForegroundColor Red
-        Write-Host "Next action: restore project.es_5m.json to include at least one datasets[] row." -ForegroundColor Yellow
-        exit 2
-    }
-    $projectPayload.datasets[0].dataset_id = $DatasetId
-    $projectPayload.datasets[0].instrument = "ES"
-    $projectPayload.datasets[0].tf = "5m"
-    Write-Utf8NoBom -Path $projectConfigPath -Content ($projectPayload | ConvertTo-Json -Depth 12)
-}
-
 function Convert-ToRelativePath {
     param(
         [Parameter(Mandatory = $true)]
@@ -141,6 +112,10 @@ function Convert-ToRelativePath {
         return "."
     }
     return $relativePath
+}
+
+if (-not (Test-Path $localDir -PathType Container)) {
+    New-Item -ItemType Directory -Path $localDir -Force | Out-Null
 }
 
 function Find-ExistingEs5mDatasetId {
@@ -236,12 +211,12 @@ if ([string]::IsNullOrWhiteSpace($datasetId)) {
 }
 
 Write-Utf8NoBom -Path $datasetIdPath -Content $datasetId
-Update-Es5mConfigs -DatasetId $datasetId
 
 Write-Host "Registered ES5m dataset_id: $datasetId" -ForegroundColor Green
 Write-Host "- dataset_root_rel: $registerRoot"
 Write-Host "- $datasetIdPath"
-Write-Host "- $datasetsConfigPath"
-Write-Host "- $projectConfigPath"
+Write-Host "Tracked configs remain unchanged:"
+Write-Host "- configs/analysis/datasets.es_5m.json"
+Write-Host "- configs/analysis/project.es_5m.json"
 
 $global:LASTEXITCODE = 0

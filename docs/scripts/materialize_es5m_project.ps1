@@ -14,10 +14,16 @@ function Write-Utf8NoBom {
 
 $env:RESEARCH_CREATED_UTC = (git show -s --format=%cI HEAD).Trim()
 
-$datasetIdPath = "configs/analysis/_es5m_dataset_id.txt"
+$localDir = "configs/analysis/local"
+$datasetIdPath = Join-Path $localDir "_es5m_dataset_id.txt"
 $projectPath = "configs/analysis/project.es_5m.json"
+$generatedProjectPath = Join-Path $localDir "project.es_5m.generated.json"
 $catalogDir = "exec_outputs/catalog"
 $runsRoot = "exec_outputs/runs"
+
+if (-not (Test-Path $localDir -PathType Container)) {
+    New-Item -ItemType Directory -Path $localDir -Force | Out-Null
+}
 
 if (-not (Test-Path $datasetIdPath -PathType Leaf)) {
     Write-Host "ERROR: Missing dataset_id file '$datasetIdPath'." -ForegroundColor Red
@@ -47,11 +53,11 @@ if (-not $projectPayload.datasets -or $projectPayload.datasets.Count -eq 0) {
 $projectPayload.datasets[0].dataset_id = $datasetId
 $projectPayload.datasets[0].instrument = "ES"
 $projectPayload.datasets[0].tf = "5m"
-Write-Utf8NoBom -Path $projectPath -Content ($projectPayload | ConvertTo-Json -Depth 12)
+Write-Utf8NoBom -Path $generatedProjectPath -Content ($projectPayload | ConvertTo-Json -Depth 12)
 
 $previousErrorAction = $ErrorActionPreference
 $ErrorActionPreference = "Continue"
-$materializeOutput = python -m research_core.cli project materialize --project $projectPath --catalog $catalogDir --runs-root $runsRoot 2>&1
+$materializeOutput = python -m research_core.cli project materialize --project $generatedProjectPath --catalog $catalogDir --runs-root $runsRoot 2>&1
 $materializeExitCode = $LASTEXITCODE
 $ErrorActionPreference = $previousErrorAction
 

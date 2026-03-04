@@ -42,10 +42,10 @@ Invoke-Step "[4/5] Promote ES5m baseline" {
 }
 
 Invoke-Step "[5/5] Run ES5m analysis gates" {
-    & "./docs/scripts/run_analysis_es_5m.ps1"
+    & "./docs/scripts/run_analysis_es_5m.ps1" -Runsets "configs/analysis/local/runsets.es_5m.generated.json"
 }
 
-$runsetsPayload = Get-Content -Raw "configs/analysis/runsets.es_5m.json" | ConvertFrom-Json
+$runsetsPayload = Get-Content -Raw "configs/analysis/local/runsets.es_5m.generated.json" | ConvertFrom-Json
 $runsetIds = @($runsetsPayload.runset_ids)
 
 Write-Host ""

@@ -15,34 +15,51 @@ function Write-Utf8NoBom {
 $env:RESEARCH_CREATED_UTC = (git show -s --format=%cI HEAD).Trim()
 
 $catalogDir = "exec_outputs/catalog"
-$datasetsPath = "configs/analysis/datasets.es_5m.json"
-$generatedSpecPath = "configs/analysis/runset.es_5m.generated.json"
-$finalSpecPath = "configs/analysis/runset.es_5m.json"
-$runsetsPath = "configs/analysis/runsets.es_5m.json"
+$datasetsTemplatePath = "configs/analysis/datasets.es_5m.json"
+$localDir = "configs/analysis/local"
+$datasetIdPath = Join-Path $localDir "_es5m_dataset_id.txt"
+$generatedDatasetsPath = Join-Path $localDir "datasets.es_5m.generated.json"
+$generatedSpecPath = Join-Path $localDir "runset.es_5m.generated.json"
+$runsetsPath = Join-Path $localDir "runsets.es_5m.generated.json"
 $runsRoot = "exec_outputs/runs/runs"
 
-if (-not (Test-Path $datasetsPath -PathType Leaf)) {
-    Write-Host "ERROR: Missing datasets file '$datasetsPath'." -ForegroundColor Red
+if (-not (Test-Path $localDir -PathType Container)) {
+    New-Item -ItemType Directory -Path $localDir -Force | Out-Null
+}
+
+if (-not (Test-Path $datasetsTemplatePath -PathType Leaf)) {
+    Write-Host "ERROR: Missing datasets template '$datasetsTemplatePath'." -ForegroundColor Red
     Write-Host "Next action: run .\docs\scripts\register_es5m_dataset.ps1 first." -ForegroundColor Yellow
     exit 2
 }
 
-$datasetsPayload = Get-Content -Raw $datasetsPath | ConvertFrom-Json
+$datasetsPayload = Get-Content -Raw $datasetsTemplatePath | ConvertFrom-Json
 if (-not $datasetsPayload.datasets -or $datasetsPayload.datasets.Count -eq 0) {
-    Write-Host "ERROR: datasets file has no datasets rows: '$datasetsPath'." -ForegroundColor Red
-    Write-Host "Next action: ensure datasets.es_5m.json has one ES 5m dataset row with dataset_id." -ForegroundColor Yellow
+    Write-Host "ERROR: datasets template has no datasets rows: '$datasetsTemplatePath'." -ForegroundColor Red
+    Write-Host "Next action: ensure datasets.es_5m.json has one ES 5m dataset row." -ForegroundColor Yellow
     exit 2
 }
-$datasetId = [string]$datasetsPayload.datasets[0].dataset_id
+
+if (-not (Test-Path $datasetIdPath -PathType Leaf)) {
+    Write-Host "ERROR: Missing dataset_id file '$datasetIdPath'." -ForegroundColor Red
+    Write-Host "Next action: run .\docs\scripts\register_es5m_dataset.ps1 first." -ForegroundColor Yellow
+    exit 2
+}
+$datasetId = (Get-Content -Raw $datasetIdPath).Trim()
 if ($datasetId -notmatch '^[a-f0-9]{64}$') {
-    Write-Host "ERROR: datasets.es_5m.json dataset_id is missing/invalid: '$datasetId'." -ForegroundColor Red
+    Write-Host "ERROR: local dataset_id is missing/invalid in '$datasetIdPath': '$datasetId'." -ForegroundColor Red
     Write-Host "Next action: run .\docs\scripts\register_es5m_dataset.ps1 to populate dataset_id." -ForegroundColor Yellow
     exit 2
 }
 
+$datasetsPayload.datasets[0].dataset_id = $datasetId
+$datasetsPayload.datasets[0].instrument = "ES"
+$datasetsPayload.datasets[0].tf = "5m"
+Write-Utf8NoBom -Path $generatedDatasetsPath -Content ($datasetsPayload | ConvertTo-Json -Depth 8)
+
 $previousErrorAction = $ErrorActionPreference
 $ErrorActionPreference = "Continue"
-$genOutput = python docs/scripts/gen_explicit_runset_from_index.py --catalog $catalogDir --datasets $datasetsPath --out $generatedSpecPath 2>&1
+$genOutput = python docs/scripts/gen_explicit_runset_from_index.py --catalog $catalogDir --datasets $generatedDatasetsPath --out $generatedSpecPath 2>&1
 $genExitCode = $LASTEXITCODE
 $ErrorActionPreference = $previousErrorAction
 
@@ -109,18 +126,18 @@ foreach ($runRow in $runs) {
 }
 
 $specPayload.name = "ANALYSIS_RUNSET_ES_5M_EXPLICIT_FROM_INDEX"
-Write-Utf8NoBom -Path $finalSpecPath -Content ($specPayload | ConvertTo-Json -Depth 12)
+Write-Utf8NoBom -Path $generatedSpecPath -Content ($specPayload | ConvertTo-Json -Depth 12)
 
 $previousErrorAction = $ErrorActionPreference
 $ErrorActionPreference = "Continue"
-$createOutput = python -m research_core.cli runset create --catalog $catalogDir --spec $finalSpecPath 2>&1
+$createOutput = python -m research_core.cli runset create --catalog $catalogDir --spec $generatedSpecPath 2>&1
 $createExitCode = $LASTEXITCODE
 $ErrorActionPreference = $previousErrorAction
 
 if ($createExitCode -ne 0) {
     Write-Host "ERROR: runset create failed." -ForegroundColor Red
     $createOutput | ForEach-Object { Write-Host $_ }
-    Write-Host "Next action: inspect '$finalSpecPath' and catalog consistency, then rerun." -ForegroundColor Yellow
+    Write-Host "Next action: inspect '$generatedSpecPath' and catalog consistency, then rerun." -ForegroundColor Yellow
     exit 2
 }
 
@@ -149,5 +166,5 @@ if ($validateExitCode -ne 0) {
 }
 
 Write-Host "Created ES5m runset_id: $runsetId" -ForegroundColor Green
-Write-Host "- $finalSpecPath"
+Write-Host "- $generatedSpecPath"
 Write-Host "- $runsetsPath"

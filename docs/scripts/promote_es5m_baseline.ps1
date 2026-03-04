@@ -5,7 +5,7 @@ $env:RESEARCH_CREATED_UTC = (git show -s --format=%cI HEAD).Trim()
 
 $catalogDir = "exec_outputs/catalog"
 $baselineRoot = "baselines/prod"
-$runsetsPath = "configs/analysis/runsets.es_5m.json"
+$runsetsPath = "configs/analysis/local/runsets.es_5m.generated.json"
 
 if (-not (Test-Path $baselineRoot -PathType Container)) {
     Write-Host "ERROR: Missing baseline root '$baselineRoot'." -ForegroundColor Red
