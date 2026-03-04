@@ -1,0 +1,60 @@
+site_name: Research Platform
+site_description: Research in-repo documentation wiki
+theme:
+  name: material
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+nav:
+  - Home: index.md
+  - Getting started:
+      - getting-started/quickstart.md
+      - getting-started/repo-tour.md
+      - getting-started/concepts-map.md
+  - Tutorials:
+      - tutorials/es5m_end_to_end.md
+      - tutorials/run_vs_run_compare.md
+      - tutorials/risk_runset_analysis.md
+      - tutorials/drift_review_workflow.md
+      - tutorials/baseline_promotion.md
+  - How-to:
+      - how-to/add_new_cli_command.md
+      - how-to/add_new_artifact_writer.md
+      - how-to/add_new_schema.md
+      - how-to/add_new_stage.md
+      - how-to/update_goldens_safely.md
+      - how-to/run_ci_locally.md
+      - how-to/prune_runs_safely.md
+  - Reference:
+      - CLI:
+          - reference/cli/index.md
+      - Artifacts:
+          - reference/artifacts/index.md
+          - reference/artifacts/stage0_canon.md
+          - reference/artifacts/stage1_diagnostics.md
+          - reference/artifacts/stage2_occupancy.md
+          - reference/artifacts/stage3_streams.md
+          - reference/artifacts/stage4_corridors.md
+          - reference/artifacts/stage5_flow_harness.md
+          - reference/artifacts/stage6_observer.md
+          - reference/artifacts/risk.md
+          - reference/artifacts/drift.md
+          - reference/artifacts/baseline.md
+          - reference/artifacts/lineage.md
+      - Schemas:
+          - reference/schemas/index.md
+      - Contracts:
+          - reference/contracts/index.md
+  - Troubleshooting:
+      - troubleshooting/stale_goldens.md
+      - troubleshooting/determinism_failures.md
+      - troubleshooting/missing_artifacts.md
+      - troubleshooting/performance.md
+  - Contributing:
+      - contributing/docs_style_guide.md
+      - contributing/definitions.md
+      - contributing/release_process.md

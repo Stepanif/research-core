@@ -1,0 +1,36 @@
+name: docs
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'tools/docs/**'
+      - 'mkdocs.yml'
+      - 'requirements-docs.txt'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'tools/docs/**'
+      - 'mkdocs.yml'
+      - 'requirements-docs.txt'
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install project
+        run: python -m pip install --upgrade pip; python -m pip install -e .
+      - name: Install docs dependencies
+        run: python -m pip install -r requirements-docs.txt
+      - name: Generate docs
+        run: python tools/docs/gen_cli_ref.py; python tools/docs/gen_schema_ref.py
+      - name: Verify generated docs
+        run: python tools/docs/verify_generated_docs_clean.py
+      - name: Build docs site
+        run: mkdocs build
