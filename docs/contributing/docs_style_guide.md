@@ -20,6 +20,13 @@ Enable the committed repo-local hooks path once per clone:
 git config core.hooksPath .githooks
 ```
 
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/dev/bootstrap.ps1
+```
+
+This configures `core.hooksPath` and installs docs dependencies from
+`requirements-docs.txt` when present.
+
 ```bash
 RESEARCH_SKIP_DOCS_HOOK=1 git commit -m "..."
 ```
