@@ -11,7 +11,7 @@ $runsetIds = @($runsetsPayload.runset_ids)
 
 if ($runsetIds.Count -eq 0) {
     Write-Host "ERROR: No ES 5m runset IDs found in '$runsetsPath'." -ForegroundColor Red
-    Write-Host "Next action: update '$runsetsPath' with ES 5m runset IDs (scan exec_outputs/catalog/runsets/runsets.index.json and matching entries/<runset_id>.json where runs[].run_ref contains 'ES' and '5m' or 'run_ES_5m')." -ForegroundColor Yellow
+    Write-Host "Next action: run .\docs\scripts\create_es5m_runset.ps1 to generate and validate an ES5m runset via canon.manifest.json filtering, then rerun this script." -ForegroundColor Yellow
     exit 2
 }
 

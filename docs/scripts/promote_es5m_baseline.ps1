@@ -60,6 +60,14 @@ if ($LASTEXITCODE -ne 0) {
     exit 2
 }
 
+$indexOutput = python -m research_core.cli baseline index refresh --root $baselineRoot 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "ERROR: baseline index refresh failed for root '$baselineRoot'." -ForegroundColor Red
+    $indexOutput | ForEach-Object { Write-Host $_ }
+    Write-Host "Next action: verify '$baselineRoot' permissions and baseline card integrity, then rerun." -ForegroundColor Yellow
+    exit 2
+}
+
 Write-Host "Promoted baseline for ES5m runset." -ForegroundColor Green
 Write-Host "- runset_id: $runsetId"
 Write-Host "- baseline_id: $baselineId"

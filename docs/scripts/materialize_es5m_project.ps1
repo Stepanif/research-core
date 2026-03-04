@@ -1,6 +1,17 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
+function Write-Utf8NoBom {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [Parameter(Mandatory = $true)]
+        [string]$Content
+    )
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($Path, $Content, $utf8NoBom)
+}
+
 $env:RESEARCH_CREATED_UTC = (git show -s --format=%cI HEAD).Trim()
 
 $datasetIdPath = "configs/analysis/_es5m_dataset_id.txt"
@@ -36,10 +47,15 @@ if (-not $projectPayload.datasets -or $projectPayload.datasets.Count -eq 0) {
 $projectPayload.datasets[0].dataset_id = $datasetId
 $projectPayload.datasets[0].instrument = "ES"
 $projectPayload.datasets[0].tf = "5m"
-$projectPayload | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 $projectPath
+Write-Utf8NoBom -Path $projectPath -Content ($projectPayload | ConvertTo-Json -Depth 12)
 
+$previousErrorAction = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
 $materializeOutput = python -m research_core.cli project materialize --project $projectPath --catalog $catalogDir --runs-root $runsRoot 2>&1
-if ($LASTEXITCODE -ne 0) {
+$materializeExitCode = $LASTEXITCODE
+$ErrorActionPreference = $previousErrorAction
+
+if ($materializeExitCode -ne 0) {
     Write-Host "ERROR: project materialize failed." -ForegroundColor Red
     $materializeOutput | ForEach-Object { Write-Host $_ }
     Write-Host "Next action: verify dataset_id '$datasetId' exists in '$catalogDir' and source data root resolves." -ForegroundColor Yellow
@@ -68,7 +84,7 @@ Get-ChildItem -Path $runsDir -Directory | ForEach-Object {
     $instrument = [string]$manifest.instrument
     $tf = [string]$manifest.tf
 
-    if ($created.StartsWith($todayUtc) -and $instrument -eq "ES" -and $tf -match '^(5m|300s|00:05)$') {
+    if ($created.StartsWith($todayUtc) -and $instrument -eq "ES" -and $tf -match '^(5m|5min|300s|00:05)$') {
         $newHashes += $_.Name
     }
 }

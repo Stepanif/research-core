@@ -1,5 +1,13 @@
+param(
+    [string]$DatasetRoot,
+    [string]$PythonExe = "python"
+)
+
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
+if ($PSVersionTable.PSVersion.Major -ge 7) {
+    $PSNativeCommandUseErrorActionPreference = $false
+}
 
 $env:RESEARCH_CREATED_UTC = (git show -s --format=%cI HEAD).Trim()
 
@@ -7,6 +15,17 @@ $catalogDir = "exec_outputs/catalog"
 $datasetIdPath = "configs/analysis/_es5m_dataset_id.txt"
 $datasetsConfigPath = "configs/analysis/datasets.es_5m.json"
 $projectConfigPath = "configs/analysis/project.es_5m.json"
+
+function Write-Utf8NoBom {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [Parameter(Mandatory = $true)]
+        [string]$Content
+    )
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($Path, $Content, $utf8NoBom)
+}
 
 function Resolve-Es5mRoot {
     param(
@@ -85,7 +104,7 @@ function Update-Es5mConfigs {
     $datasetsPayload.datasets[0].dataset_id = $DatasetId
     $datasetsPayload.datasets[0].instrument = "ES"
     $datasetsPayload.datasets[0].tf = "5m"
-    $datasetsPayload | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 $datasetsConfigPath
+    Write-Utf8NoBom -Path $datasetsConfigPath -Content ($datasetsPayload | ConvertTo-Json -Depth 8)
 
     $projectPayload = Get-Content -Raw $projectConfigPath | ConvertFrom-Json
     if (-not $projectPayload.datasets -or $projectPayload.datasets.Count -eq 0) {
@@ -96,15 +115,70 @@ function Update-Es5mConfigs {
     $projectPayload.datasets[0].dataset_id = $DatasetId
     $projectPayload.datasets[0].instrument = "ES"
     $projectPayload.datasets[0].tf = "5m"
-    $projectPayload | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 $projectConfigPath
+    Write-Utf8NoBom -Path $projectConfigPath -Content ($projectPayload | ConvertTo-Json -Depth 12)
 }
 
-param(
-    [string]$DatasetRoot,
-    [string]$PythonExe = "python"
-)
+function Convert-ToRelativePath {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$FromPath,
+        [Parameter(Mandatory = $true)]
+        [string]$ToPath
+    )
+
+    $fromUri = New-Object System.Uri((Resolve-Path $FromPath).Path.TrimEnd('\\') + "\\")
+    $toUri = New-Object System.Uri((Resolve-Path $ToPath).Path)
+
+    if ($fromUri.Scheme -ne $toUri.Scheme) {
+        Write-Host "ERROR: Cannot compute relative path across different schemes/drives." -ForegroundColor Red
+        Write-Host "Next action: run from a workspace on the same drive as raw data or supply a relative dataset path." -ForegroundColor Yellow
+        exit 2
+    }
+
+    $relativeUri = $fromUri.MakeRelativeUri($toUri)
+    $relativePath = [System.Uri]::UnescapeDataString($relativeUri.ToString()).Replace('/', '\\')
+    if ([string]::IsNullOrWhiteSpace($relativePath)) {
+        return "."
+    }
+    return $relativePath
+}
+
+function Find-ExistingEs5mDatasetId {
+    param(
+        [string]$CatalogRoot
+    )
+
+    $entriesDir = Join-Path $CatalogRoot "entries"
+    if (-not (Test-Path $entriesDir -PathType Container)) {
+        return $null
+    }
+
+    $candidateIds = @()
+    Get-ChildItem -Path $entriesDir -Filter "*.json" -File | ForEach-Object {
+        try {
+            $entry = Get-Content -Raw $_.FullName | ConvertFrom-Json
+            $kind = [string]$entry.kind
+            $root = [string]$entry.source.root
+            if ($kind -eq "raw_vendor_v1" -and $root -match 'ES\s+(5m|5min|300s|00:05)') {
+                $id = [string]$entry.dataset_id
+                if ($id -match '^[a-f0-9]{64}$') {
+                    $candidateIds += $id
+                }
+            }
+        }
+        catch {
+        }
+    }
+
+    $candidateIds = @($candidateIds | Sort-Object -Unique)
+    if ($candidateIds.Count -eq 1) {
+        return $candidateIds[0]
+    }
+    return $null
+}
 
 $es5mRoot = Resolve-Es5mRoot -DatasetRoot $DatasetRoot
+$registerRoot = Convert-ToRelativePath -FromPath (Get-Location).Path -ToPath $es5mRoot
 
 $rawFiles = @(Get-ChildItem -Path $es5mRoot -File | Where-Object { $_.Extension -in @('.txt', '.csv') })
 if ($rawFiles.Count -eq 0) {
@@ -114,33 +188,60 @@ if ($rawFiles.Count -eq 0) {
 }
 
 $desc = "raw_vendor_v1 ES 5m ANALYSIS_ES_5MIN"
-$registerOutput = & $PythonExe -m research_core.cli dataset register raw --catalog $catalogDir --root $es5mRoot --desc $desc 2>&1
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "ERROR: dataset register raw failed." -ForegroundColor Red
-    $registerOutput | ForEach-Object { Write-Host $_ }
-    Write-Host "Next action: confirm catalog path '$catalogDir' exists and '$es5mRoot' is readable." -ForegroundColor Yellow
-    exit 2
+$previousErrorAction = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
+$registerOutput = & $PythonExe -m research_core.cli dataset register raw --catalog $catalogDir --root $registerRoot --desc $desc 2>&1
+$registerExitCode = $LASTEXITCODE
+$ErrorActionPreference = $previousErrorAction
+$datasetId = $null
+
+if ($registerExitCode -ne 0) {
+    $outText = (@($registerOutput) -join "`n")
+    if ($outText -match 'Immutable dataset entry conflict') {
+        $idCandidates = [regex]::Matches($outText, '([a-f0-9]{64})')
+        if ($idCandidates.Count -gt 0) {
+            $datasetId = $idCandidates[$idCandidates.Count - 1].Groups[1].Value
+        }
+        if ([string]::IsNullOrWhiteSpace($datasetId)) {
+            $datasetId = Find-ExistingEs5mDatasetId -CatalogRoot $catalogDir
+        }
+        if (-not [string]::IsNullOrWhiteSpace($datasetId)) {
+            Write-Host "Dataset already registered; reusing existing dataset_id: $datasetId" -ForegroundColor Yellow
+        }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($datasetId)) {
+        Write-Host "ERROR: dataset register raw failed." -ForegroundColor Red
+        $registerOutput | ForEach-Object { Write-Host $_ }
+        Write-Host "Next action: confirm catalog path '$catalogDir' exists and relative root '$registerRoot' resolves to '$es5mRoot'." -ForegroundColor Yellow
+        exit 2
+    }
+}
+else {
+    $datasetIdLine = @($registerOutput | Where-Object { $_ -match '^REGISTERED dataset_id=([a-f0-9]{64})$' } | Select-Object -Last 1)
+    if ($datasetIdLine.Count -eq 0) {
+        Write-Host "ERROR: Could not parse dataset_id from dataset register output." -ForegroundColor Red
+        $registerOutput | ForEach-Object { Write-Host $_ }
+        Write-Host "Next action: rerun command manually and ensure output includes 'REGISTERED dataset_id=<64-hex>'." -ForegroundColor Yellow
+        exit 2
+    }
+
+    $datasetId = ([regex]::Match([string]$datasetIdLine[0], '^REGISTERED dataset_id=([a-f0-9]{64})$')).Groups[1].Value
 }
 
-$datasetIdLine = @($registerOutput | Where-Object { $_ -match '^REGISTERED dataset_id=([a-f0-9]{64})$' } | Select-Object -Last 1)
-if ($datasetIdLine.Count -eq 0) {
-    Write-Host "ERROR: Could not parse dataset_id from dataset register output." -ForegroundColor Red
-    $registerOutput | ForEach-Object { Write-Host $_ }
-    Write-Host "Next action: rerun command manually and ensure output includes 'REGISTERED dataset_id=<64-hex>'." -ForegroundColor Yellow
-    exit 2
-}
-
-$datasetId = ([regex]::Match([string]$datasetIdLine[0], '^REGISTERED dataset_id=([a-f0-9]{64})$')).Groups[1].Value
 if ([string]::IsNullOrWhiteSpace($datasetId)) {
     Write-Host "ERROR: Parsed dataset_id was empty." -ForegroundColor Red
     Write-Host "Next action: rerun registration and inspect command output for dataset_id." -ForegroundColor Yellow
     exit 2
 }
 
-Set-Content -Encoding UTF8 $datasetIdPath $datasetId
+Write-Utf8NoBom -Path $datasetIdPath -Content $datasetId
 Update-Es5mConfigs -DatasetId $datasetId
 
 Write-Host "Registered ES5m dataset_id: $datasetId" -ForegroundColor Green
+Write-Host "- dataset_root_rel: $registerRoot"
 Write-Host "- $datasetIdPath"
 Write-Host "- $datasetsConfigPath"
 Write-Host "- $projectConfigPath"
+
+$global:LASTEXITCODE = 0

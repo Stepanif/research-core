@@ -1,6 +1,17 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
+function Write-Utf8NoBom {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [Parameter(Mandatory = $true)]
+        [string]$Content
+    )
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($Path, $Content, $utf8NoBom)
+}
+
 $env:RESEARCH_CREATED_UTC = (git show -s --format=%cI HEAD).Trim()
 
 $catalogDir = "exec_outputs/catalog"
@@ -29,8 +40,13 @@ if ($datasetId -notmatch '^[a-f0-9]{64}$') {
     exit 2
 }
 
+$previousErrorAction = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
 $genOutput = python docs/scripts/gen_explicit_runset_from_index.py --catalog $catalogDir --datasets $datasetsPath --out $generatedSpecPath 2>&1
-if ($LASTEXITCODE -ne 0) {
+$genExitCode = $LASTEXITCODE
+$ErrorActionPreference = $previousErrorAction
+
+if ($genExitCode -ne 0) {
     Write-Host "ERROR: explicit runset generation failed." -ForegroundColor Red
     $genOutput | ForEach-Object { Write-Host $_ }
     Write-Host "Next action: verify dataset_to_runs index exists and dataset_id '$datasetId' has linked runs." -ForegroundColor Yellow
@@ -85,7 +101,7 @@ foreach ($runRow in $runs) {
     $manifest = Get-Content -Raw $manifestPath | ConvertFrom-Json
     $instrument = [string]$manifest.instrument
     $tf = [string]$manifest.tf
-    if ($instrument -ne "ES" -or $tf -notmatch '^(5m|300s|00:05)$') {
+    if ($instrument -ne "ES" -or $tf -notmatch '^(5m|5min|300s|00:05)$') {
         Write-Host "ERROR: Generated runset includes non-ES5m run_ref '$runRef' (instrument='$instrument', tf='$tf')." -ForegroundColor Red
         Write-Host "Next action: rebuild ES5m materialization and dataset links, then regenerate runset." -ForegroundColor Yellow
         exit 2
@@ -93,10 +109,15 @@ foreach ($runRow in $runs) {
 }
 
 $specPayload.name = "ANALYSIS_RUNSET_ES_5M_EXPLICIT_FROM_INDEX"
-$specPayload | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 $finalSpecPath
+Write-Utf8NoBom -Path $finalSpecPath -Content ($specPayload | ConvertTo-Json -Depth 12)
 
+$previousErrorAction = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
 $createOutput = python -m research_core.cli runset create --catalog $catalogDir --spec $finalSpecPath 2>&1
-if ($LASTEXITCODE -ne 0) {
+$createExitCode = $LASTEXITCODE
+$ErrorActionPreference = $previousErrorAction
+
+if ($createExitCode -ne 0) {
     Write-Host "ERROR: runset create failed." -ForegroundColor Red
     $createOutput | ForEach-Object { Write-Host $_ }
     Write-Host "Next action: inspect '$finalSpecPath' and catalog consistency, then rerun." -ForegroundColor Yellow
@@ -112,10 +133,15 @@ if ($runsetIdLine.Count -eq 0) {
 }
 
 $runsetId = ([regex]::Match([string]$runsetIdLine[0], '^RUNSET_CREATED runset_id=([a-f0-9]{64})$')).Groups[1].Value
-([ordered]@{ runset_ids = @($runsetId) } | ConvertTo-Json -Compress) | Set-Content -Encoding UTF8 $runsetsPath
+Write-Utf8NoBom -Path $runsetsPath -Content (([ordered]@{ runset_ids = @($runsetId) } | ConvertTo-Json -Compress))
 
+$previousErrorAction = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
 $validateOutput = python -m research_core.cli runset validate --catalog $catalogDir --id $runsetId 2>&1
-if ($LASTEXITCODE -ne 0) {
+$validateExitCode = $LASTEXITCODE
+$ErrorActionPreference = $previousErrorAction
+
+if ($validateExitCode -ne 0) {
     Write-Host "ERROR: runset validate failed for runset_id '$runsetId'." -ForegroundColor Red
     $validateOutput | ForEach-Object { Write-Host $_ }
     Write-Host "Next action: fix generated runset spec and rerun create_es5m_runset.ps1." -ForegroundColor Yellow

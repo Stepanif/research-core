@@ -1,26 +1,26 @@
 {
-  "project_version": "v1",
-  "name": "ANALYSIS_ES_5MIN",
-  "spec_dirs": [
-    "specs"
-  ],
-  "output_dir": "exec_outputs/analysis/es_5m/project",
-  "datasets": [
-    {
-      "dataset_id": "REPLACE_WITH_REGISTERED_ES5M_DATASET_ID",
-      "instrument": "ES",
-      "tf": "5m",
-      "session_policy": "rth",
-      "rth_start": "09:30",
-      "rth_end": "16:00",
-      "schema_path": "../../schemas/canon.schema.v1.json",
-      "colmap_path": "../../schemas/colmap.raw_vendor_v1.json",
-      "note": "ANALYSIS_ES_5MIN"
-    }
-  ],
-  "policy": {
-    "fail_fast": true,
-    "require_observe": false
-  },
-  "notes": "Dataset ID is written by docs/scripts/register_es5m_dataset.ps1"
+    "project_version":  "v1",
+    "name":  "ANALYSIS_ES_5MIN",
+    "spec_dirs":  [
+                      "specs"
+                  ],
+    "output_dir":  "exec_outputs/analysis/es_5m/project",
+    "datasets":  [
+                     {
+                         "dataset_id":  "ccda34c3058cb80bec553da0c00cd6aa4e114dad08e8f476967e6ec7c0d6f831",
+                         "instrument":  "ES",
+                         "tf":  "5m",
+                         "session_policy":  "rth",
+                         "rth_start":  "09:30",
+                         "rth_end":  "16:00",
+                         "schema_path":  "../../schemas/canon.schema.v1.json",
+                         "colmap_path":  "../../schemas/colmap.raw_vendor_v1.json",
+                         "note":  "ANALYSIS_ES_5MIN"
+                     }
+                 ],
+    "policy":  {
+                   "fail_fast":  true,
+                   "require_observe":  false
+               },
+    "notes":  "Dataset ID is written by docs/scripts/register_es5m_dataset.ps1"
 }
