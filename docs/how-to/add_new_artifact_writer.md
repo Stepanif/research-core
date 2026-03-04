@@ -4,6 +4,8 @@ In this repo, a "writer" is code that persists deterministic artifacts
 (`*.json`, `*.manifest.json`, parquet/log outputs), including canonical hashes
 and manifest metadata when required by contract.
 
+If you add a new output, update `docs/reference/artifacts/catalog.v1.yml` and regenerate docs.
+
 ## What a writer contract includes here
 
 Use `manifest_spec_v1.md` plus domain contracts as the anchor:

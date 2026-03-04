@@ -4,6 +4,8 @@ In this repo, a "stage" is an artifact-producer layer registered in
 `docs/reference/artifacts/catalog.v1.yml` and rendered to
 `docs/reference/artifacts/*.md` by `tools/docs/gen_artifact_catalog.py`.
 
+If you add a new output, update `docs/reference/artifacts/catalog.v1.yml` and regenerate docs.
+
 ## Stage references in this repo
 
 - [Stage 0 Canon](../reference/artifacts/stage0_canon.md)
