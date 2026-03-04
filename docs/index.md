@@ -11,6 +11,13 @@ Use the sections below to start quickly, run operations, and extend safely.
 - [ES5m End-to-End Tutorial](tutorials/es5m_end_to_end.md) - Walk the full ES5m pipeline and outputs.
 - [Concepts Map](getting-started/concepts-map.md) - Learn core concepts and how artifacts relate.
 
+## Search tips
+
+- Try `baseline promotions` for promotion labels, baseline index, and promotion flows.
+- Try `drift report` for `risk drift` outputs and dashboard-related docs.
+- Try `verify_generated_docs_clean` for docs drift guard workflows.
+- Try `prune policy` for prune safety rules and `plan_sha256` confirmation behavior.
+
 ## Run operations (tutorials)
 
 - [Run vs Run Compare](tutorials/run_vs_run_compare.md) - Compare runsets via baseline diff workflows.
