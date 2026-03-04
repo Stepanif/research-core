@@ -1,0 +1,10 @@
+{
+  "catalog_dir": "exec_outputs/catalog",
+  "datasets": [
+    {
+      "instrument": "ES",
+      "tf": "5m",
+      "dataset_id": "REPLACE_WITH_REGISTERED_ES5M_DATASET_ID"
+    }
+  ]
+}

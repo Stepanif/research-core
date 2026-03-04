@@ -1,36 +1,48 @@
-# ES 5m Analysis Runner
+# ES 5m Build + Analysis Cohort
 
-Run analysis gates from prebuilt artifacts (read-only analysis flow):
+Use this flow when ES5m runs do not already exist and you need to materialize them, build a runset, promote a baseline, and run analysis gates.
 
-Runset discovery for ES 5m must be manifest-driven because `runs[].run_ref` values are hashed run references, not descriptive names.
+Important:
 
-First create/update the ES 5m runset list from canon manifests:
+- `runs[].run_ref` values are hashed paths; do not detect ES5m from run ref text.
+- ES5m detection must be manifest-driven via each run's `canon.manifest.json` (`instrument == "ES"` and `tf` matching `5m|300s|00:05`).
+- All scripts pin `RESEARCH_CREATED_UTC` to `git show -s --format=%cI HEAD` for deterministic timestamps.
 
-```powershell
-./configs/analysis/make_es5m_runset.ps1
-```
-
-This helper reads seed runset `9e0fb70c502a553cdfe23a4ecb3d40e1d1e48d009cf70d99e2e2331e3163078e`, resolves each run ref to `canon.manifest.json`, filters by `instrument == "ES"` and `tf` matching `5m|300s|00:05`, then writes:
-
-- `configs/analysis/runset.es_5m.json`
-- `configs/analysis/runsets.es_5m.json`
+## One-command pipeline
 
 ```powershell
-./docs/scripts/run_analysis_es_5m.ps1
+./docs/scripts/run_full_es5m_pipeline.ps1
 ```
 
-What this executes:
+This runs, in order:
 
-1. `ci doctor` using `configs/analysis/doctor.es_5m.json`
-2. `risk dashboard` across `configs/analysis/runsets.es_5m.json`
-3. `risk runset` for each runset ID in that list
+1. `docs/scripts/register_es5m_dataset.ps1`
+2. `docs/scripts/materialize_es5m_project.ps1`
+3. `docs/scripts/create_es5m_runset.ps1`
+4. `docs/scripts/promote_es5m_baseline.ps1`
+5. `docs/scripts/run_analysis_es_5m.ps1`
 
-Open these outputs first:
+## What each script produces
+
+- `register_es5m_dataset.ps1`
+	- Registers raw ES5m dataset and writes `configs/analysis/_es5m_dataset_id.txt`
+	- Updates `configs/analysis/datasets.es_5m.json` and `configs/analysis/project.es_5m.json`
+- `materialize_es5m_project.ps1`
+	- Materializes using `--runs-root exec_outputs/runs` (actual run dirs under `exec_outputs/runs/runs/<hash>`)
+	- Prints ES5m run hashes created today based on `canon.manifest.json`
+- `create_es5m_runset.ps1`
+	- Generates explicit runset spec from catalog index + `datasets.es_5m.json`
+	- Validates each run via `canon.manifest.json` for ES5m criteria
+	- Writes `configs/analysis/runsets.es_5m.json`
+- `promote_es5m_baseline.ps1`
+	- Runs risk sweep for runset
+	- Promotes baseline into `baselines/prod` with label `prod`
+- `run_analysis_es_5m.ps1`
+	- Runs `ci doctor`, `risk dashboard`, and per-runset `risk runset`
+
+## Open these outputs first
 
 - `exec_outputs/analysis/es_5m/doctor/ci.doctor.summary.json`
 - `exec_outputs/analysis/es_5m/dashboard/dashboard.summary.json`
 - `exec_outputs/analysis/es_5m/risk_runset/<runset_id>/risk.runset.summary.json`
-
-Determinism note:
-
-- The script pins `RESEARCH_CREATED_UTC` to `git show -s --format=%cI HEAD` to prevent timestamp churn across runs.
+- `baselines/prod/<runset_id>/baseline.card.json`
