@@ -34,6 +34,8 @@ nav:
       - how-to/add_new_cli_command.md
       - how-to/add_new_artifact_writer.md
       - how-to/add_new_schema.md
+      - how-to/add_new_artifact_catalog_entry.md
+      - how-to/add_new_test_and_golden.md
       - how-to/add_new_stage.md
       - how-to/update_goldens_safely.md
       - how-to/run_ci_locally.md
