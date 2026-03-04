@@ -1,2 +1,10 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Enforce LF for docs and generated reference assets.
+docs/** text eol=lf
+tools/docs/** text eol=lf
+.githooks/** text eol=lf
+mkdocs.yml text eol=lf
+requirements-docs.txt text eol=lf
+.github/workflows/** text eol=lf

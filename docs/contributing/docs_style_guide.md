@@ -11,3 +11,19 @@
 - Canonical terms for this wiki are: `run`, `runset`, `stage`, `artifact`, `manifest`, `baseline`, `drift`, `risk`, `golden`.
 
 TODO: Add additional style/tone conventions for prose and examples.
+
+## Enable repo hooks
+
+Enable the committed repo-local hooks path once per clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+```bash
+RESEARCH_SKIP_DOCS_HOOK=1 git commit -m "..."
+```
+
+After this is enabled, the `pre-commit` hook will regenerate and stage generated docs
+(`docs/reference/cli`, `docs/reference/schemas`, `docs/reference/artifacts`) when
+staged changes may affect docs outputs.

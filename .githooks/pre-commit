@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -e
+
+if [ "${RESEARCH_SKIP_DOCS_HOOK:-0}" = "1" ]; then
+  echo "[pre-commit] RESEARCH_SKIP_DOCS_HOOK=1, skipping docs hook."
+  exit 0
+fi
+
+# Run docs generators only when staged changes could affect generated docs.
+staged_files="$(git diff --cached --name-only --diff-filter=ACMR)"
+
+if [ -z "$staged_files" ]; then
+  echo "[pre-commit] No staged files. Skipping docs generation."
+  exit 0
+fi
+
+should_regen=0
+while IFS= read -r path; do
+  case "$path" in
+    src/research_core/*|src/research_core/**|src/*|src/**|research_core/*|research_core/**)
+      should_regen=1
+      break
+      ;;
+    cli.py|*/cli.py)
+      should_regen=1
+      break
+      ;;
+    *schema*.json)
+      should_regen=1
+      break
+      ;;
+    docs/reference/artifacts/catalog.v1.yml)
+      should_regen=1
+      break
+      ;;
+    tools/docs/*|tools/docs/**)
+      should_regen=1
+      break
+      ;;
+    mkdocs.yml|requirements-docs.txt)
+      should_regen=1
+      break
+      ;;
+    docs/reference/*|docs/reference/**)
+      should_regen=1
+      break
+      ;;
+  esac
+done <<EOF
+$staged_files
+EOF
+
+if [ "$should_regen" -eq 0 ]; then
+  echo "[pre-commit] No docs-impacting staged files. Skipping docs generation."
+  exit 0
+fi
+
+if [ -x ".venv/Scripts/python.exe" ]; then
+  PYTHON=".venv/Scripts/python.exe"
+elif [ -x ".venv/bin/python" ]; then
+  PYTHON=".venv/bin/python"
+elif command -v python >/dev/null 2>&1; then
+  PYTHON="python"
+else
+  echo "[pre-commit] Could not find a Python interpreter."
+  exit 1
+fi
+
+export NO_MKDOCS_2_WARNING=1
+
+echo "[pre-commit] Using Python: $PYTHON"
+echo "[pre-commit] Regenerating CLI reference..."
+"$PYTHON" tools/docs/gen_cli_ref.py
+
+echo "[pre-commit] Regenerating schema reference..."
+"$PYTHON" tools/docs/gen_schema_ref.py
+
+echo "[pre-commit] Regenerating artifact catalog docs..."
+"$PYTHON" tools/docs/gen_artifact_catalog.py
+
+echo "[pre-commit] Staging generated docs..."
+git add docs/reference/cli docs/reference/schemas docs/reference/artifacts
+
+echo "[pre-commit] Verifying generated docs are clean..."
+"$PYTHON" tools/docs/verify_generated_docs_clean.py
+
+echo "[pre-commit] Docs generation check passed."
