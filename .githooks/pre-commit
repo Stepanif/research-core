@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
+if [ "${RESEARCH_SKIP_DOCS_HOOK:-0}" = "1" ]; then
+  echo "[pre-commit] RESEARCH_SKIP_DOCS_HOOK=1, skipping docs hook."
+  exit 0
+fi
+
 # Run docs generators only when staged changes could affect generated docs.
 staged_files="$(git diff --cached --name-only --diff-filter=ACMR)"
 
@@ -36,7 +41,7 @@ while IFS= read -r path; do
       should_regen=1
       break
       ;;
-    docs/*|docs/**)
+    docs/reference/*|docs/reference/**)
       should_regen=1
       break
       ;;
