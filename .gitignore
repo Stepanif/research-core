@@ -16,3 +16,6 @@ raw/
 !tests/fixtures/*.zip
 
 configs/analysis/local/
+# MkDocs build output
+site/
+
