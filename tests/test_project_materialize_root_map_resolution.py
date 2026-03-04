@@ -31,19 +31,19 @@ def _update_entry_source_root(catalog_dir: Path, dataset_id: str, new_root: str)
     write_canonical_json(entry_path, payload)
 
 
-def _build_project_spec(tmp_path: Path, dataset_id: str) -> Path:
+def _build_project_spec(project_dir: Path, dataset_id: str) -> Path:
     repo_root = Path(__file__).parent.parent
     schema_path = repo_root / "schemas" / "canon.schema.v1.json"
     colmap_path = repo_root / "schemas" / "colmap.raw_vendor_v1.json"
 
-    specs_dir = tmp_path / "specs"
+    specs_dir = project_dir / "specs"
     specs_dir.mkdir(parents=True, exist_ok=True)
     (specs_dir / "spec_01.json").write_text(
         (repo_root / "tests" / "fixtures" / "exp_specs" / "spec_01_global_min.json").read_text(encoding="utf-8"),
         encoding="utf-8",
     )
 
-    project_path = tmp_path / "project.json"
+    project_path = project_dir / "project.json"
     project_path.write_text(
         json.dumps(
             {
@@ -73,7 +73,7 @@ def _build_project_spec(tmp_path: Path, dataset_id: str) -> Path:
     return project_path
 
 
-def _register_dataset_for_root(tmp_path: Path, root_dir: Path) -> str:
+def _register_dataset_for_root(catalog_dir: Path, root_dir: Path) -> str:
     repo_root = Path(__file__).parent.parent
     fixture_path = repo_root / "tests" / "fixtures" / "raw_small_sample.txt"
 
@@ -81,12 +81,12 @@ def _register_dataset_for_root(tmp_path: Path, root_dir: Path) -> str:
     (root_dir / "sample.txt").write_text(fixture_path.read_text(encoding="utf-8"), encoding="utf-8")
 
     runner = CliRunner()
-    reg = runner.invoke(app, ["dataset", "register", "raw", "--catalog", str(tmp_path / "catalog"), "--root", str(root_dir)])
+    reg = runner.invoke(app, ["dataset", "register", "raw", "--catalog", str(catalog_dir), "--root", str(root_dir)])
     assert reg.exit_code == 0, reg.stdout
     return _extract_dataset_id(reg.stdout)
 
 
-def _materialize(runner: CliRunner, tmp_path: Path, project_path: Path):
+def _materialize(runner: CliRunner, project_path: Path, catalog_dir: Path, runs_root: Path):
     return runner.invoke(
         app,
         [
@@ -95,9 +95,9 @@ def _materialize(runner: CliRunner, tmp_path: Path, project_path: Path):
             "--project",
             str(project_path),
             "--catalog",
-            str(tmp_path / "catalog"),
+            str(catalog_dir),
             "--runs-root",
-            str(tmp_path / "runs_root"),
+            str(runs_root),
         ],
     )
 
@@ -110,16 +110,31 @@ def test_materialize_resolver_source_contains_root_map_env() -> None:
 
 
 def test_materialize_relative_root_fails_without_map(monkeypatch: object, tmp_path: Path) -> None:
-    monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv("RESEARCH_DATA_ROOT_MAP_JSON", raising=False)
+    cwd = tmp_path / "cwd_empty"
+    cwd.mkdir(parents=True, exist_ok=True)
+    monkeypatch.chdir(cwd)
+
+    proj_dir = tmp_path / "proj"
+    proj_dir.mkdir(parents=True, exist_ok=True)
+
+    cat_dir = tmp_path / "cat"
+    cat_dir.mkdir(parents=True, exist_ok=True)
+
+    runs_root = tmp_path / "runs_root"
+    runs_root.mkdir(parents=True, exist_ok=True)
+
     relative_root = "Raw CSVs/Futures/Indicies/ES/ES 15min 2015-2025"
 
-    external_root = tmp_path / "external_store" / "Raw CSVs" / "Futures" / "Indicies" / "ES" / "ES 15min 2015-2025"
-    dataset_id = _register_dataset_for_root(tmp_path, external_root)
-    _update_entry_source_root(tmp_path / "catalog", dataset_id, relative_root)
+    monkeypatch.chdir(tmp_path)
+    external_root_rel = Path("external_store") / "seed_root"
+    dataset_id = _register_dataset_for_root(cat_dir, external_root_rel)
+    _update_entry_source_root(cat_dir, dataset_id, relative_root)
+    monkeypatch.chdir(cwd)
 
-    project_path = _build_project_spec(tmp_path, dataset_id)
+    project_path = _build_project_spec(proj_dir, dataset_id)
     runner = CliRunner()
-    result = _materialize(runner, tmp_path, project_path)
+    result = _materialize(runner, project_path, cat_dir, runs_root)
 
     assert result.exit_code != 0
     assert result.exception is not None
@@ -127,19 +142,36 @@ def test_materialize_relative_root_fails_without_map(monkeypatch: object, tmp_pa
 
 
 def test_materialize_relative_root_resolves_with_map(monkeypatch: object, tmp_path: Path) -> None:
-    monkeypatch.chdir(tmp_path)
+    cwd = tmp_path / "cwd_empty"
+    cwd.mkdir(parents=True, exist_ok=True)
+    monkeypatch.chdir(cwd)
+
+    proj_dir = tmp_path / "proj"
+    proj_dir.mkdir(parents=True, exist_ok=True)
+
+    cat_dir = tmp_path / "cat"
+    cat_dir.mkdir(parents=True, exist_ok=True)
+
+    runs_root = tmp_path / "runs_root"
+    runs_root.mkdir(parents=True, exist_ok=True)
+
     relative_root = "Raw CSVs/Futures/Indicies/ES/ES 15min 2015-2025"
 
-    mapped_base = tmp_path / "external_store" / "Raw CSVs"
-    mapped_root = mapped_base / "Futures" / "Indicies" / "ES" / "ES 15min 2015-2025"
-    dataset_id = _register_dataset_for_root(tmp_path, mapped_root)
-    _update_entry_source_root(tmp_path / "catalog", dataset_id, relative_root)
+    base_abs = tmp_path / "lake" / "Raw CSVs"
+    base_abs.mkdir(parents=True, exist_ok=True)
+    remainder = Path(relative_root).relative_to("Raw CSVs")
+    root_rel = Path("lake") / "Raw CSVs" / remainder
 
-    monkeypatch.setenv("RESEARCH_DATA_ROOT_MAP_JSON", json.dumps({"Raw CSVs": str(mapped_base)}))
+    monkeypatch.chdir(tmp_path)
+    dataset_id = _register_dataset_for_root(cat_dir, root_rel)
+    _update_entry_source_root(cat_dir, dataset_id, relative_root)
+    monkeypatch.chdir(cwd)
 
-    project_path = _build_project_spec(tmp_path, dataset_id)
+    monkeypatch.setenv("RESEARCH_DATA_ROOT_MAP_JSON", json.dumps({"Raw CSVs": str(base_abs)}))
+
+    project_path = _build_project_spec(proj_dir, dataset_id)
     runner = CliRunner()
-    result = _materialize(runner, tmp_path, project_path)
+    result = _materialize(runner, project_path, cat_dir, runs_root)
 
     assert result.exit_code == 0, result.stdout
 
@@ -149,14 +181,14 @@ def test_materialize_root_map_invalid_json_fails_loud(monkeypatch: object, tmp_p
     relative_root = "Raw CSVs/Futures/Indicies/ES/ES 15min 2015-2025"
 
     external_root = tmp_path / "external_store" / "Raw CSVs" / "Futures" / "Indicies" / "ES" / "ES 15min 2015-2025"
-    dataset_id = _register_dataset_for_root(tmp_path, external_root)
+    dataset_id = _register_dataset_for_root(tmp_path / "catalog", external_root)
     _update_entry_source_root(tmp_path / "catalog", dataset_id, relative_root)
 
     monkeypatch.setenv("RESEARCH_DATA_ROOT_MAP_JSON", "{invalid")
 
     project_path = _build_project_spec(tmp_path, dataset_id)
     runner = CliRunner()
-    result = _materialize(runner, tmp_path, project_path)
+    result = _materialize(runner, project_path, tmp_path / "catalog", tmp_path / "runs_root")
 
     assert result.exit_code != 0
     assert result.exception is not None
@@ -168,14 +200,14 @@ def test_materialize_root_map_non_absolute_base_fails_loud(monkeypatch: object, 
     relative_root = "Raw CSVs/Futures/Indicies/ES/ES 15min 2015-2025"
 
     external_root = tmp_path / "external_store" / "Raw CSVs" / "Futures" / "Indicies" / "ES" / "ES 15min 2015-2025"
-    dataset_id = _register_dataset_for_root(tmp_path, external_root)
+    dataset_id = _register_dataset_for_root(tmp_path / "catalog", external_root)
     _update_entry_source_root(tmp_path / "catalog", dataset_id, relative_root)
 
     monkeypatch.setenv("RESEARCH_DATA_ROOT_MAP_JSON", json.dumps({"Raw CSVs": "relative/base"}))
 
     project_path = _build_project_spec(tmp_path, dataset_id)
     runner = CliRunner()
-    result = _materialize(runner, tmp_path, project_path)
+    result = _materialize(runner, project_path, tmp_path / "catalog", tmp_path / "runs_root")
 
     assert result.exit_code != 0
     assert result.exception is not None
