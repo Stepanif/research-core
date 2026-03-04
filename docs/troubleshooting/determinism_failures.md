@@ -1,16 +1,28 @@
 # Determinism Failures
 
-Use this page when identical inputs produce different outputs/hashes across runs
-or between local and CI.
+Use this page when identical inputs produce different outputs or hashes across
+runs, or between local and CI.
+
+!!! tip "If you only do one thing"
+    Run the same command twice with the same inputs. If the hashes differ,
+    walk through the checklist below to find the nondeterministic source.
+
+## Quick diagnosis
+
+| What you see | Likely cause |
+|---|---|
+| Different hashes on every run | Uncontrolled timestamp or missing `RESEARCH_CREATED_UTC` |
+| Hashes match locally but differ in CI | Platform line endings or locale |
+| Hashes stable locally, golden test still fails | Stale golden — see [Stale Goldens](stale_goldens.md) |
 
 ## Symptom patterns
 
 - CI or local tests intermittently fail in deterministic/golden suites:
-	- `test_*_golden_fixture_regression.py`
-	- `test_*_determinism.py`
+    - `test_*_golden_fixture_regression.py`
+    - `test_*_determinism.py`
 - Re-running the same command with same inputs yields different hashes.
 - CI checks around manifest/hash invariants fail even though command exit codes
-	are normally zero in local ad-hoc runs.
+  are normally zero in local ad-hoc runs.
 
 Quick repro sweep:
 
@@ -20,43 +32,45 @@ pytest -k "determinism or golden_fixture_regression" -q
 
 ## Determinism checklist (contract-derived)
 
-1. Stable ordering
+Work through each item. A violation in any one can cause nondeterministic output.
+
+### 1. Stable ordering
 
 - Contracts require sorted/stable ordering in multiple places:
-	- CI manifest sorted inputs: `docs/reference/contracts/v1/ci_spec_v1.md`
-	- Dashboard entries/aggregates ordering: `docs/reference/contracts/v1/dashboard_spec_v1.md`
-	- Dataset file listing sorted paths: `docs/reference/contracts/v1/dataset_catalog_spec_v1.md`
+    - CI manifest sorted inputs: `docs/reference/contracts/v1/ci_spec_v1.md`
+    - Dashboard entries/aggregates ordering: `docs/reference/contracts/v1/dashboard_spec_v1.md`
+    - Dataset file listing sorted paths: `docs/reference/contracts/v1/dataset_catalog_spec_v1.md`
 
-2. Newline normalization
+### 2. Newline normalization
 
 - Generated docs writers normalize to `\n` and write with `newline="\n"` in:
-	- `tools/docs/gen_cli_ref.py`
-	- `tools/docs/gen_schema_ref.py`
-	- `tools/docs/gen_artifact_catalog.py`
+    - `tools/docs/gen_cli_ref.py`
+    - `tools/docs/gen_schema_ref.py`
+    - `tools/docs/gen_artifact_catalog.py`
 - Repository `.gitattributes` enforces LF for docs and generated refs.
 
-3. No uncontrolled timestamps
+### 3. No uncontrolled timestamps
 
 - `RESEARCH_CREATED_UTC` is authoritative in CI-related contracts.
 - Dataset catalog determinism explicitly disallows wall-clock timestamps.
 
-4. Hash and manifest rules
+### 4. Hash and manifest rules
 
 - Manifest hashing/source-of-truth rules:
-	- `docs/reference/contracts/v1/manifest_spec_v1.md`
-	- `docs/reference/contracts/v1/ci_spec_v1.md`
-	- `docs/reference/contracts/v1/baseline_diff_spec_v1.md`
+    - `docs/reference/contracts/v1/manifest_spec_v1.md`
+    - `docs/reference/contracts/v1/ci_spec_v1.md`
+    - `docs/reference/contracts/v1/baseline_diff_spec_v1.md`
 
-5. Canonicalization rules
+### 5. Canonicalization rules
 
 - Canonical JSON and deterministic bytes are required in contracts such as:
-	- `docs/reference/contracts/v1/dataset_catalog_spec_v1.md`
-	- `docs/reference/contracts/v1/baseline_diff_spec_v1.md`
-	- `docs/reference/contracts/v1/experiment_spec_v1.md`
+    - `docs/reference/contracts/v1/dataset_catalog_spec_v1.md`
+    - `docs/reference/contracts/v1/baseline_diff_spec_v1.md`
+    - `docs/reference/contracts/v1/experiment_spec_v1.md`
 
 ## Concrete debugging commands
 
-1. Run exactly the same command twice and compare outputs
+### 1. Run exactly the same command twice and compare outputs
 
 Canon command (from `README.md`) to two output directories:
 
@@ -71,13 +85,13 @@ Compare canonical table hashes from manifests:
 python -c "import json, pathlib; a=json.loads(pathlib.Path('exec_outputs/tmp_det_a/canon.manifest.json').read_text(encoding='utf-8')); b=json.loads(pathlib.Path('exec_outputs/tmp_det_b/canon.manifest.json').read_text(encoding='utf-8')); print(a['output_files']['canon.parquet']['canonical_table_sha256']); print(b['output_files']['canon.parquet']['canonical_table_sha256'])"
 ```
 
-2. Diff artifacts directly
+### 2. Diff artifacts directly
 
 ```bash
 git diff --no-index -- exec_outputs/tmp_det_a exec_outputs/tmp_det_b
 ```
 
-3. Verify generated docs determinism and cleanliness
+### 3. Verify generated docs determinism and cleanliness
 
 ```bash
 python tools/docs/gen_cli_ref.py
@@ -88,15 +102,17 @@ python tools/docs/verify_generated_docs_clean.py
 
 ## Identify nondeterministic inputs
 
-- Environment variables:
-	- Ensure `RESEARCH_CREATED_UTC` is pinned to a fixed value for reproducibility.
-- Locale/time parsing:
-	- Canon parsing uses fixed `MM/DD/YYYY` and `HH:MM`; timestamps are localized to
-		`America/New_York` (see canon contract).
-- Random seeds:
-	- TODO: No contract-level random-seed controls are currently documented in
-		`docs/reference/contracts/v1/`; add explicit guidance if stochastic components
-		are introduced.
+- **Environment variables:**
+    Ensure `RESEARCH_CREATED_UTC` is pinned to a fixed value for reproducibility.
+- **Locale/time parsing:**
+    Canon parsing uses fixed `MM/DD/YYYY` and `HH:MM`; timestamps are localized
+    to `America/New_York` (see canon contract).
+- **Random seeds:**
+
+!!! note "TODO"
+    No contract-level random-seed controls are currently documented in
+    `docs/reference/contracts/v1/`; add explicit guidance if stochastic
+    components are introduced.
 
 ## Related pages
 

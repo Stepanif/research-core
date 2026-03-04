@@ -3,21 +3,34 @@
 Use this playbook when a `*_golden_fixture_regression` test fails and you need to
 decide whether `tests/golden/*.sha256` should be updated.
 
+!!! tip "If you only do one thing"
+    Read the **Decision gate** below. If you cannot answer "yes" to every
+    item in the ALLOW column, stop and investigate before touching any golden
+    hash file.
+
+## Quick diagnosis
+
+| What you see | Likely path |
+|---|---|
+| Hash mismatch after an intentional contract change | Follow the workflow below |
+| Intermittent hash mismatch across identical runs | See [Determinism Failures](../troubleshooting/determinism_failures.md) |
+| Hash mismatch with no code changes in your PR | See [Stale Goldens](../troubleshooting/stale_goldens.md) |
+
 ## Decision gate
 
-Allowed to update goldens:
+??? success "ALLOW — all three must be true"
+    1. You intentionally changed deterministic output behavior covered by a
+       contract/spec in `docs/reference/contracts/v1/`.
+    2. You can reproduce the change locally and the change is stable across
+       repeated runs.
+    3. Related checks pass after update (docs generation verification +
+       relevant tests).
 
-- You intentionally changed deterministic output behavior covered by a contract/spec
-	in `docs/reference/contracts/v1/`.
-- You can reproduce the change locally and the change is stable across repeated runs.
-- Related checks pass after update (docs generation verification + relevant tests).
-
-Do NOT update goldens:
-
-- Failure is nondeterministic between identical runs.
-- Failure is caused by environment drift only (for example missing/pinned
-	`RESEARCH_CREATED_UTC`) rather than intentional behavior change.
-- Output diffs include unexplained ordering/newline/hash changes.
+??? danger "STOP — any one of these means do NOT update"
+    - Failure is nondeterministic between identical runs.
+    - Failure is caused by environment drift only (for example missing/pinned
+      `RESEARCH_CREATED_UTC`) rather than intentional behavior change.
+    - Output diffs include unexplained ordering/newline/hash changes.
 
 See also:
 
@@ -26,7 +39,7 @@ See also:
 
 ## Step-by-step workflow
 
-1. Reproduce locally
+### 1. Reproduce locally
 
 Run the failing golden test directly first:
 
@@ -40,14 +53,16 @@ For broader sweep of golden fixture regressions:
 pytest -k golden_fixture_regression -q
 ```
 
-2. Isolate cause: behavior change vs nondeterminism
+### 2. Isolate cause — behavior change vs nondeterminism
 
-- Behavior change candidates:
-	- contract/spec change in `docs/reference/contracts/v1/`
-	- schema/canonicalization change
-- Nondeterminism candidates:
-	- run-to-run hash differences for same inputs
-	- missing deterministic env pin (`RESEARCH_CREATED_UTC`)
+Ask two questions:
+
+- **Is this a behavior change?**
+    - contract/spec change in `docs/reference/contracts/v1/`
+    - schema/canonicalization change
+- **Or is it nondeterminism?**
+    - run-to-run hash differences for same inputs
+    - missing deterministic env pin (`RESEARCH_CREATED_UTC`)
 
 Quick deterministic rerun check using the canon command from `README.md`:
 
@@ -62,7 +77,7 @@ Then compare canonical table hashes (source of truth in manifest contract):
 python -c "import json, pathlib; a=json.loads(pathlib.Path('exec_outputs/tmp_run_a/canon.manifest.json').read_text(encoding='utf-8')); b=json.loads(pathlib.Path('exec_outputs/tmp_run_b/canon.manifest.json').read_text(encoding='utf-8')); print(a['output_files']['canon.parquet']['canonical_table_sha256']); print(b['output_files']['canon.parquet']['canonical_table_sha256'])"
 ```
 
-3. Run verification commands before any golden update
+### 3. Run verification commands before any golden update
 
 Docs generation checks used in CI (`.github/workflows/docs.yml`):
 
@@ -76,33 +91,36 @@ Run the relevant test subset again:
 pytest -k "golden_fixture_regression or determinism" -q
 ```
 
-4. Regenerate goldens (only if allowed)
+### 4. Regenerate goldens (only if the decision gate allows it)
 
 Current truth in this repo:
 
 - Golden tests compare computed hashes to files in `tests/golden/*.sha256`.
 - There is no single documented `regolden` command/script in repository docs.
 
-TODO: Add an official repo-level regolden script that rewrites all affected
-`tests/golden/*.sha256` files in one controlled command.
+!!! note "TODO"
+    Add an official repo-level regolden script that rewrites all affected
+    `tests/golden/*.sha256` files in one controlled command.
 
 Until then, update only the specific `.sha256` files for the failing fixtures,
 in the same PR as the intentional behavior change.
 
-5. Sanity-check diffs before commit
+### 5. Sanity-check diffs before commit
 
-Expected changes:
+**Expected** (safe to merge):
 
 - Targeted files under `tests/golden/*.sha256` tied to the changed behavior.
 - If docs references changed, generated docs under `docs/reference/` only.
 
-Suspicious changes (investigate before merge):
+**Suspicious** (investigate before merge):
 
 - Unrelated golden hashes changing across multiple domains.
 - Pure ordering/noise diffs without corresponding contract update.
 - CRLF/LF-only churn in docs/reference files (see `.gitattributes`).
 
 ## Golden churn anti-patterns
+
+Avoid these mistakes — each one has caused real review pain:
 
 - Updating golden hashes without a linked contract/spec behavior change.
 - Batch-updating many golden files without running focused repro tests first.
