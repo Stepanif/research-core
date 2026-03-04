@@ -60,6 +60,8 @@ from research_core.plan.build import build_plan
 from research_core.plan.execute import execute_plan
 from research_core.psa.contracts import load_psa_schema_contract
 from research_core.psa.engine import run_psa_v1
+from research_core.psa.report import build_psa_report
+from research_core.psa.report_writer import write_psa_report_artifacts
 from research_core.psa.writer import build_psa_manifest, write_psa_log, write_psa_manifest, write_psa_parquet
 from research_core.registry.observe_registry import refresh_registry_for_run, show_registry_run
 from research_core.registry.dataset_registry import build_dataset_registry
@@ -74,7 +76,7 @@ from research_core.release.url import build_new_release_url
 from research_core.util.hashing import sha256_bytes
 from research_core.util.io import ensure_dir
 from research_core.util.buildmeta import get_git_commit
-from research_core.util.types import ResearchError
+from research_core.util.types import ValidationError, ResearchError
 from research_core.validate.canon_checks import validate_canon_file
 
 app = typer.Typer(no_args_is_help=True)
@@ -308,10 +310,32 @@ def canon_command(
 
 @app.command("psa")
 def psa_command(
-    in_path: Path = typer.Option(..., "--in"),
-    out_path: Path = typer.Option(..., "--out"),
+    mode: str | None = typer.Argument(None),
+    run_dir: Path | None = typer.Option(None, "--run"),
+    in_path: Path | None = typer.Option(None, "--in"),
+    out_path: Path | None = typer.Option(None, "--out"),
     schema: Path = typer.Option(Path("schemas/psa.schema.v1.json"), "--schema"),
 ) -> None:
+    if mode == "report":
+        if run_dir is None:
+            raise ResearchError("psa report requires --run <run_dir>")
+        try:
+            report = build_psa_report(run_dir=run_dir)
+            result = write_psa_report_artifacts(run_dir=run_dir, report_payload=report)
+        except ValidationError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from exc
+
+        typer.echo("PSA_REPORT status=PASS")
+        typer.echo(f"report={result['report_path']}")
+        typer.echo(f"manifest={result['manifest_path']}")
+        return
+
+    if mode is not None:
+        raise ResearchError(f"Unsupported psa mode: {mode}")
+    if in_path is None or out_path is None:
+        raise ResearchError("psa requires --in <canon.parquet> and --out <run_dir>")
+
     if not in_path.exists() or not in_path.is_file():
         raise ResearchError(f"Input canon parquet does not exist: {in_path}")
 

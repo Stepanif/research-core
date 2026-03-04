@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research/psa.report.schema.v1.json",
+  "title": "Research PSA Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_version",
+    "created_utc",
+    "run_ref",
+    "inputs",
+    "metrics",
+    "checksums",
+    "psa_report_canonical_sha256"
+  ],
+  "properties": {
+    "report_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "psa_parquet_sha256",
+        "psa_manifest_sha256"
+      ],
+      "properties": {
+        "psa_parquet_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "psa_manifest_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "psa_canonical_table_sha256": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "row_count",
+        "alignment_counts",
+        "alignment_percent",
+        "longest_streaks",
+        "transition_matrix_counts"
+      ],
+      "properties": {
+        "row_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "alignment_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "alignment_percent": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^-?\\d+\\.\\d{6}$"
+          }
+        },
+        "longest_streaks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "transition_matrix_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "checksums": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alignment_vector_sha256"
+      ],
+      "properties": {
+        "alignment_vector_sha256": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "psa_report_canonical_sha256": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
