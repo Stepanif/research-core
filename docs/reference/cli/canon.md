@@ -1,8 +1,9 @@
 # CLI Canon
 
 ```text
-Usage: python -m research_core.cli canon [OPTIONS]                             
-                                                                               
+
+ Usage: python -m research_core.cli canon [OPTIONS]
+
 +- Options -------------------------------------------------------------------+
 | *  --in                    PATH  [required]                                 |
 | *  --out                   PATH  [required]                                 |

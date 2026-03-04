@@ -1,8 +1,9 @@
 # CLI Risk
 
 ```text
-Usage: python -m research_core.cli risk [OPTIONS] COMMAND [ARGS]...            
-                                                                               
+
+ Usage: python -m research_core.cli risk [OPTIONS] COMMAND [ARGS]...
+
 +- Options -------------------------------------------------------------------+
 | --help          Show this message and exit.                                 |
 +-----------------------------------------------------------------------------+

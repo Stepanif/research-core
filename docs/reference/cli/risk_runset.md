@@ -1,8 +1,9 @@
 # CLI Risk Runset
 
 ```text
-Usage: python -m research_core.cli risk runset [OPTIONS]                       
-                                                                               
+
+ Usage: python -m research_core.cli risk runset [OPTIONS]
+
 +- Options -------------------------------------------------------------------+
 | *  --catalog        PATH  [required]                                        |
 | *  --id             TEXT  [required]                                        |

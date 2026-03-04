@@ -1,8 +1,9 @@
 # CLI Overview
 
 ```text
-Usage: python -m research_core.cli [OPTIONS] COMMAND [ARGS]...                 
-                                                                               
+
+ Usage: python -m research_core.cli [OPTIONS] COMMAND [ARGS]...
+
 +- Options -------------------------------------------------------------------+
 | --install-completion          Install completion for the current shell.     |
 | --show-completion             Show completion for the current shell, to     |

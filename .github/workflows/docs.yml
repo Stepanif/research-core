@@ -7,6 +7,7 @@ on:
       - 'tools/docs/**'
       - 'mkdocs.yml'
       - 'requirements-docs.txt'
+      - '.github/workflows/docs.yml'
   push:
     branches:
       - main
@@ -15,6 +16,7 @@ on:
       - 'tools/docs/**'
       - 'mkdocs.yml'
       - 'requirements-docs.txt'
+      - '.github/workflows/docs.yml'
 
 jobs:
   build-docs:
