@@ -1,5 +1,6 @@
 param(
-    [string]$Runsets
+    [string]$Runsets,
+    [switch]$SkipDashboard
 )
 
 $ErrorActionPreference = "Stop"
@@ -47,7 +48,33 @@ $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 
 python -m research_core.cli ci doctor --config $doctorResolvedPath
 
-python -m research_core.cli risk dashboard --catalog exec_outputs/catalog --root baselines/prod --runsets $runsetsPath --out exec_outputs/analysis/es_5m/dashboard --label prod
+$dashboardOutDir = "exec_outputs/analysis/es_5m/dashboard"
+$dashboardSummaryPath = "$dashboardOutDir/dashboard.summary.json"
+$dashboardCommand = "python -m research_core.cli risk dashboard --catalog exec_outputs/catalog --root baselines/prod --runsets `"$runsetsPath`" --out $dashboardOutDir --label prod"
+
+if (-not $SkipDashboard) {
+    python -m research_core.cli risk dashboard --catalog exec_outputs/catalog --root baselines/prod --runsets $runsetsPath --out $dashboardOutDir --label prod
+
+    if (-not (Test-Path $dashboardSummaryPath -PathType Leaf)) {
+        Write-Host "dashboard.summary.json not found" -ForegroundColor Red
+        Write-Host "Expected path: $dashboardSummaryPath" -ForegroundColor Yellow
+        Write-Host "Dashboard command executed:" -ForegroundColor Yellow
+        Write-Host $dashboardCommand -ForegroundColor Yellow
+        Write-Host "Directory listing: $dashboardOutDir" -ForegroundColor Yellow
+        if (Test-Path $dashboardOutDir -PathType Container) {
+            Get-ChildItem $dashboardOutDir | ForEach-Object { Write-Host "- $($_.Name)" }
+        }
+        else {
+            Write-Host "- (directory missing)"
+        }
+        exit 2
+    }
+
+    Write-Host "DASHBOARD OK: $dashboardSummaryPath" -ForegroundColor Green
+}
+else {
+    Write-Host "Dashboard step skipped via -SkipDashboard" -ForegroundColor Yellow
+}
 
 foreach ($runsetId in $runsetIds) {
     python -m research_core.cli risk runset --catalog exec_outputs/catalog --id $runsetId --out exec_outputs/analysis/es_5m/risk_runset
@@ -56,7 +83,9 @@ foreach ($runsetId in $runsetIds) {
 Write-Host ""
 Write-Host "Analysis outputs:" -ForegroundColor Green
 Write-Host "- exec_outputs/analysis/es_5m/doctor/ci.doctor.summary.json"
-Write-Host "- exec_outputs/analysis/es_5m/dashboard/dashboard.summary.json"
+if (-not $SkipDashboard) {
+    Write-Host "- exec_outputs/analysis/es_5m/dashboard/dashboard.summary.json"
+}
 foreach ($runsetId in $runsetIds) {
     Write-Host "- exec_outputs/analysis/es_5m/risk_runset/$runsetId/risk.runset.summary.json"
 }

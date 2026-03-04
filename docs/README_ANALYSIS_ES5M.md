@@ -51,3 +51,20 @@ This runs, in order:
 - `exec_outputs/analysis/es_5m/dashboard/dashboard.summary.json`
 - `exec_outputs/analysis/es_5m/risk_runset/<runset_id>/risk.runset.summary.json`
 - `baselines/prod/<runset_id>/baseline.card.json`
+
+## Verify
+
+Run explicit dashboard verification:
+
+```powershell
+.\docs\scripts\verify_es5m_dashboard.ps1
+```
+
+Success criteria:
+
+- Script prints `DASHBOARD OK`
+- `exec_outputs/analysis/es_5m/dashboard/dashboard.summary.json` exists
+
+Open:
+
+- `exec_outputs/analysis/es_5m/dashboard/dashboard.summary.json`
