@@ -16,9 +16,19 @@ def _run_script(script_name: str) -> None:
 def main() -> int:
     _run_script("gen_cli_ref.py")
     _run_script("gen_schema_ref.py")
+    _run_script("gen_artifact_catalog.py")
 
     diff = subprocess.run(
-        ["git", "diff", "--name-only", "--", "docs/reference/cli", "docs/reference/schemas"],
+        [
+            "git",
+            "diff",
+            "--name-only",
+            "--",
+            "docs/reference/cli",
+            "docs/reference/schemas",
+            "docs/reference/artifacts",
+            ":(exclude)docs/reference/artifacts/catalog.v1.yml",
+        ],
         cwd=ROOT,
         check=True,
         capture_output=True,
