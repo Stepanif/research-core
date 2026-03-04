@@ -1,0 +1,10 @@
+{
+    "catalog_dir":  "exec_outputs/catalog",
+    "datasets":  [
+                     {
+                         "instrument":  "ES",
+                         "tf":  "5m",
+                         "dataset_id":  "ccda34c3058cb80bec553da0c00cd6aa4e114dad08e8f476967e6ec7c0d6f831"
+                     }
+                 ]
+}
