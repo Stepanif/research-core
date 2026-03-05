@@ -19,3 +19,7 @@ configs/analysis/local/
 # MkDocs build output
 site/
 
+
+# Local validation bundles
+_tmp/
+
