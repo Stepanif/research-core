@@ -84,6 +84,21 @@ Capture-HelpIfExists -Name "canon help" -CommandLine "python -m research_core.cl
 Capture-HelpIfExists -Name "risk help"  -CommandLine "python -m research_core.cli risk --help"  -OutFile "$valRoot/cli_help_risk.txt"
 Capture-HelpIfExists -Name "ci help"    -CommandLine "python -m research_core.cli ci --help"    -OutFile "$valRoot/cli_help_ci.txt"
 
+# Catalog layout: dataset_to_runs index is under catalog/links; runsets index is under catalog/runsets.
+$catalogIndexChecks = @(
+  "exec_outputs/catalog/datasets.index.json",
+  "exec_outputs/catalog/links/dataset_to_runs.index.json",
+  "exec_outputs/catalog/runsets/runsets.index.json"
+)
+foreach ($catalogIndexPath in $catalogIndexChecks) {
+  if (Test-Path $catalogIndexPath -PathType Leaf) {
+    "CATALOG INDEX OK: $catalogIndexPath" | Out-File -FilePath "$valRoot/catalog_index_checks.txt" -Append -Encoding utf8
+  } else {
+    "CATALOG INDEX MISSING: $catalogIndexPath" | Out-File -FilePath "$valRoot/catalog_index_checks.txt" -Append -Encoding utf8
+    $failures.Add("Missing catalog index: $catalogIndexPath") | Out-Null
+  }
+}
+
 # 4A) docs/tutorials/es5m_end_to_end.md (exact tutorial commands)
 $logEs5m = "$valRoot/runlog_es5m.txt"
 
@@ -220,6 +235,7 @@ $scan | Out-File -FilePath "$valRoot/scan_expected_artifacts.txt" -Encoding utf8
 # Final status
 $required = @(
   "git_commit.txt","python_version.txt","cli_help_root.txt",
+  "catalog_index_checks.txt",
   "runlog_es5m.txt","runlog_baseline.txt","runlog_risk.txt","runlog_drift.txt","runlog_compare.txt",
   "exec_outputs_files_es5m.txt","exec_outputs_files_after_ops.txt","scan_expected_artifacts.txt"
 )
