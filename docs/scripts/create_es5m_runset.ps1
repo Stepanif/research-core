@@ -22,6 +22,7 @@ $generatedDatasetsPath = Join-Path $localDir "datasets.es_5m.generated.json"
 $generatedSpecPath = Join-Path $localDir "runset.es_5m.generated.json"
 $runsetsPath = Join-Path $localDir "runsets.es_5m.generated.json"
 $runsRoot = "exec_outputs/runs/runs"
+$runsetsCatalogDir = "exec_outputs/catalog/runsets"
 
 if (-not (Test-Path $localDir -PathType Container)) {
     New-Item -ItemType Directory -Path $localDir -Force | Out-Null
@@ -128,6 +129,24 @@ foreach ($runRow in $runs) {
 $specPayload.name = "ANALYSIS_RUNSET_ES_5M_EXPLICIT_FROM_INDEX"
 Write-Utf8NoBom -Path $generatedSpecPath -Content ($specPayload | ConvertTo-Json -Depth 12)
 
+function Invoke-RunsetCreate {
+    param(
+        [string]$CatalogDir,
+        [string]$GeneratedSpecPath
+    )
+
+    $prev = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    $output = python -m research_core.cli runset create --catalog $CatalogDir --spec $GeneratedSpecPath 2>&1
+    $code = $LASTEXITCODE
+    $ErrorActionPreference = $prev
+
+    return [pscustomobject]@{
+        ExitCode = $code
+        Output = @($output)
+    }
+}
+
 $previousErrorAction = $ErrorActionPreference
 $ErrorActionPreference = "Continue"
 $createOutput = python -m research_core.cli runset create --catalog $catalogDir --spec $generatedSpecPath 2>&1
@@ -135,10 +154,40 @@ $createExitCode = $LASTEXITCODE
 $ErrorActionPreference = $previousErrorAction
 
 if ($createExitCode -ne 0) {
-    Write-Host "ERROR: runset create failed." -ForegroundColor Red
-    $createOutput | ForEach-Object { Write-Host $_ }
-    Write-Host "Next action: inspect '$generatedSpecPath' and catalog consistency, then rerun." -ForegroundColor Yellow
-    exit 2
+    $createText = (@($createOutput) -join "`n")
+    if ($createText -match "Immutable RunSet entry conflict") {
+        Write-Host "ERROR: runset create failed because the runset catalog is immutable and an entry with the same runset_id already exists." -ForegroundColor Red
+        Write-Host "Manual fix:" -ForegroundColor Yellow
+        Write-Host "Remove-Item -Recurse -Force exec_outputs\catalog\runsets" -ForegroundColor Yellow
+
+        if ($env:RESEARCH_ALLOW_RUNSETS_RESET -eq "1") {
+            Write-Host "RESEARCH_ALLOW_RUNSETS_RESET=1 detected; resetting '$runsetsCatalogDir' and retrying runset create once." -ForegroundColor Yellow
+            if (Test-Path $runsetsCatalogDir -PathType Container) {
+                Remove-Item -Recurse -Force $runsetsCatalogDir
+            }
+
+            $retryResult = Invoke-RunsetCreate -CatalogDir $catalogDir -GeneratedSpecPath $generatedSpecPath
+            $createExitCode = [int]$retryResult.ExitCode
+            $createOutput = @($retryResult.Output)
+
+            if ($createExitCode -ne 0) {
+                Write-Host "ERROR: runset create failed after reset retry." -ForegroundColor Red
+                $createOutput | ForEach-Object { Write-Host $_ }
+                exit 2
+            }
+        }
+        else {
+            $createOutput | ForEach-Object { Write-Host $_ }
+            Write-Host "Next action: run the manual fix above, or set RESEARCH_ALLOW_RUNSETS_RESET=1 to allow one automatic reset+retry." -ForegroundColor Yellow
+            exit 2
+        }
+    }
+    else {
+        Write-Host "ERROR: runset create failed." -ForegroundColor Red
+        $createOutput | ForEach-Object { Write-Host $_ }
+        Write-Host "Next action: inspect '$generatedSpecPath' and catalog consistency, then rerun." -ForegroundColor Yellow
+        exit 2
+    }
 }
 
 $runsetIdLine = @($createOutput | Where-Object { $_ -match '^RUNSET_CREATED runset_id=([a-f0-9]{64})$' } | Select-Object -Last 1)
