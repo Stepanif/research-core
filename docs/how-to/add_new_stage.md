@@ -25,10 +25,10 @@ If you add a new output, update `docs/reference/artifacts/catalog.v1.yml` and re
 - Add a **read-only observer utility** when you are deriving diagnostics from
 	existing artifacts without mutating baseline/catalog state.
 
-!!! note "TODO: observer boundary detail is not fully specified"
-		`stage6_observer` is currently TODO-driven in artifact catalog docs. Use the
-		closest contract for read-only deterministic behavior when designing
-		observer-like features:
+!!! note "Observer boundary detail is not fully specified"
+		`stage6_observer` is currently placeholder-driven in artifact catalog docs.
+		Blocked by: [Stage 6 Observer](../reference/artifacts/stage6_observer.md)
+		Use the closest read-only deterministic contract until stage6 truth is defined:
 		[Risk Harness Spec v1 (Scope: read-only)](../reference/contracts/v1/risk_spec_v1.md).
 
 ## Contract-first checklist
@@ -40,7 +40,7 @@ Define these fields first (contract + catalog truth):
 - `id` (output ID)
 - `path_template`
 - `type`
-- `schema` link (or explicit TODO if not confirmed)
+- `schema` link (or explicit blocked note if not confirmed)
 - `description`, `invariants`, `verification`
 
 Use existing catalog entries as examples:
