@@ -28,7 +28,16 @@ function Invoke-LoggedStep {
   )
   "=== $Label ===" | Tee-Object -FilePath $LogFile -Append
   $global:LASTEXITCODE = 0
-  & $Command *>&1 | Tee-Object -FilePath $LogFile -Append
+  try {
+    & $Command *>&1 | Tee-Object -FilePath $LogFile -Append
+  }
+  catch {
+    $_ | Out-String | Tee-Object -FilePath $LogFile -Append | Out-Null
+    $msg = "FAILED: $Label (terminating exception)"
+    $msg | Tee-Object -FilePath $LogFile -Append
+    $script:failures.Add($msg) | Out-Null
+    return $false
+  }
   if ($LASTEXITCODE -ne 0) {
     $msg = "FAILED: $Label (exit $LASTEXITCODE)"
     $msg | Tee-Object -FilePath $LogFile -Append
@@ -202,10 +211,10 @@ $patterns = @(
 
 $scan = New-Object System.Collections.Generic.List[string]
 $scan.Add("=== scan in exec_outputs_files_es5m.txt ===") | Out-Null
-$scan.AddRange((Select-String -Path "$valRoot/exec_outputs_files_es5m.txt" -Pattern $patterns -ErrorAction SilentlyContinue | ForEach-Object { $_.Line })) | Out-Null
+$scan.AddRange([string[]](Select-String -Path "$valRoot/exec_outputs_files_es5m.txt" -Pattern $patterns -ErrorAction SilentlyContinue | ForEach-Object { $_.Line })) | Out-Null
 $scan.Add("") | Out-Null
 $scan.Add("=== scan in exec_outputs_files_after_ops.txt ===") | Out-Null
-$scan.AddRange((Select-String -Path "$valRoot/exec_outputs_files_after_ops.txt" -Pattern $patterns -ErrorAction SilentlyContinue | ForEach-Object { $_.Line })) | Out-Null
+$scan.AddRange([string[]](Select-String -Path "$valRoot/exec_outputs_files_after_ops.txt" -Pattern $patterns -ErrorAction SilentlyContinue | ForEach-Object { $_.Line })) | Out-Null
 $scan | Out-File -FilePath "$valRoot/scan_expected_artifacts.txt" -Encoding utf8
 
 # Final status

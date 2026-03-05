@@ -14,6 +14,7 @@ $env:RESEARCH_CREATED_UTC = (git show -s --format=%cI HEAD).Trim()
 $catalogDir = "exec_outputs/catalog"
 $localDir = "configs/analysis/local"
 $datasetIdPath = Join-Path $localDir "_es5m_dataset_id.txt"
+$datasetsTemplatePath = "configs/analysis/datasets.es_5m.json"
 
 function Write-Utf8NoBom {
     param(
@@ -150,6 +151,51 @@ function Find-ExistingEs5mDatasetId {
         return $candidateIds[0]
     }
     return $null
+}
+
+function Find-PinnedEs5mDatasetId {
+    param(
+        [string]$DatasetsTemplatePath,
+        [string]$CatalogRoot
+    )
+
+    if (-not (Test-Path $DatasetsTemplatePath -PathType Leaf)) {
+        return $null
+    }
+
+    try {
+        $datasetsPayload = Get-Content -Raw $DatasetsTemplatePath | ConvertFrom-Json
+    }
+    catch {
+        return $null
+    }
+
+    if (-not $datasetsPayload.datasets -or $datasetsPayload.datasets.Count -eq 0) {
+        return $null
+    }
+
+    $pinnedId = [string]$datasetsPayload.datasets[0].dataset_id
+    if ($pinnedId -notmatch '^[a-f0-9]{64}$') {
+        return $null
+    }
+
+    $entryPath = Join-Path (Join-Path $CatalogRoot "entries") ("$pinnedId.json")
+    if (-not (Test-Path $entryPath -PathType Leaf)) {
+        return $null
+    }
+
+    return $pinnedId
+}
+
+if ([string]::IsNullOrWhiteSpace($DatasetRoot) -and [string]::IsNullOrWhiteSpace($env:RESEARCH_DATA_ROOT_MAP_JSON)) {
+    $pinnedId = Find-PinnedEs5mDatasetId -DatasetsTemplatePath $datasetsTemplatePath -CatalogRoot $catalogDir
+    if (-not [string]::IsNullOrWhiteSpace($pinnedId)) {
+        Write-Utf8NoBom -Path $datasetIdPath -Content $pinnedId
+        Write-Host "Reused pinned ES5m dataset_id from ${datasetsTemplatePath}: $pinnedId" -ForegroundColor Yellow
+        Write-Host "- $datasetIdPath"
+        $global:LASTEXITCODE = 0
+        return
+    }
 }
 
 $es5mRoot = Resolve-Es5mRoot -DatasetRoot $DatasetRoot

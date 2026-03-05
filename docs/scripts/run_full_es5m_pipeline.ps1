@@ -7,6 +7,57 @@ Set-StrictMode -Version Latest
 
 $env:RESEARCH_CREATED_UTC = (git show -s --format=%cI HEAD).Trim()
 
+function Assert-PathExists {
+    param(
+        [string]$Path,
+        [string]$PathType,
+        [string]$Hint
+    )
+
+    if (-not (Test-Path $Path -PathType $PathType)) {
+        throw "Preflight failed: missing $PathType '$Path'. Next action: $Hint"
+    }
+}
+
+function Test-CanReusePinnedEs5mDataset {
+    $datasetsTemplatePath = "configs/analysis/datasets.es_5m.json"
+    $catalogEntriesDir = "exec_outputs/catalog/entries"
+    if (-not (Test-Path $datasetsTemplatePath -PathType Leaf)) {
+        return $false
+    }
+    if (-not (Test-Path $catalogEntriesDir -PathType Container)) {
+        return $false
+    }
+
+    try {
+        $payload = Get-Content -Raw $datasetsTemplatePath | ConvertFrom-Json
+        if (-not $payload.datasets -or $payload.datasets.Count -eq 0) {
+            return $false
+        }
+        $pinnedId = [string]$payload.datasets[0].dataset_id
+        if ($pinnedId -notmatch '^[a-f0-9]{64}$') {
+            return $false
+        }
+        return (Test-Path (Join-Path $catalogEntriesDir "$pinnedId.json") -PathType Leaf)
+    }
+    catch {
+        return $false
+    }
+}
+
+Assert-PathExists -Path "docs/scripts/register_es5m_dataset.ps1" -PathType Leaf -Hint "restore repository docs/scripts files"
+Assert-PathExists -Path "docs/scripts/materialize_es5m_project.ps1" -PathType Leaf -Hint "restore repository docs/scripts files"
+Assert-PathExists -Path "docs/scripts/create_es5m_runset.ps1" -PathType Leaf -Hint "restore repository docs/scripts files"
+Assert-PathExists -Path "docs/scripts/promote_es5m_baseline.ps1" -PathType Leaf -Hint "restore repository docs/scripts files"
+Assert-PathExists -Path "docs/scripts/run_analysis_es_5m.ps1" -PathType Leaf -Hint "restore repository docs/scripts files"
+Assert-PathExists -Path "configs/analysis/datasets.es_5m.json" -PathType Leaf -Hint "restore configs/analysis/datasets.es_5m.json"
+Assert-PathExists -Path "configs/analysis/project.es_5m.json" -PathType Leaf -Hint "restore configs/analysis/project.es_5m.json"
+Assert-PathExists -Path "exec_outputs/catalog" -PathType Container -Hint "create catalog by running bootstrap or ensure exec_outputs/catalog exists"
+
+if ([string]::IsNullOrWhiteSpace($DatasetRoot) -and [string]::IsNullOrWhiteSpace($env:RESEARCH_DATA_ROOT_MAP_JSON) -and -not (Test-CanReusePinnedEs5mDataset)) {
+    throw "Preflight failed: step [1/5] needs either --DatasetRoot, RESEARCH_DATA_ROOT_MAP_JSON, or a reusable pinned ES5m dataset entry in exec_outputs/catalog/entries. Next action: set RESEARCH_DATA_ROOT_MAP_JSON (e.g. {'Raw CSVs':'G:\Raw CSVs'}) or pass -DatasetRoot <ES5m folder>."
+}
+
 function Invoke-Step {
     param(
         [string]$StepLabel,
