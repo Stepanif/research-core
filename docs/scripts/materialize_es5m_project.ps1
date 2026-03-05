@@ -50,9 +50,12 @@ if (-not $projectPayload.datasets -or $projectPayload.datasets.Count -eq 0) {
     Write-Host "Next action: ensure project.es_5m.json includes datasets[0]." -ForegroundColor Yellow
     exit 2
 }
+$projectPayload.spec_dirs = @("../specs")
 $projectPayload.datasets[0].dataset_id = $datasetId
 $projectPayload.datasets[0].instrument = "ES"
 $projectPayload.datasets[0].tf = "5m"
+$projectPayload.datasets[0].schema_path = "../../../schemas/canon.schema.v1.json"
+$projectPayload.datasets[0].colmap_path = "../../../schemas/colmap.raw_vendor_v1.json"
 Write-Utf8NoBom -Path $generatedProjectPath -Content ($projectPayload | ConvertTo-Json -Depth 12)
 
 $previousErrorAction = $ErrorActionPreference
