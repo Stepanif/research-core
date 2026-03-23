@@ -46,6 +46,9 @@ def _run_help(args: list[str]) -> str | None:
     src_path = str(ROOT / "src")
     existing = env.get("PYTHONPATH", "")
     env["PYTHONPATH"] = src_path if not existing else f"{src_path}{os.pathsep}{existing}"
+    env["TERM"] = "dumb"
+    env["NO_COLOR"] = "1"
+    env["COLUMNS"] = "80"
 
     cmd = [sys.executable, *args]
     result = subprocess.run(

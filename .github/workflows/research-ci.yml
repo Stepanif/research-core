@@ -43,13 +43,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          pytest -q
+          python -m pytest -q
 
       - name: Gate 2
         shell: bash
         run: |
           set -euo pipefail
-          pytest -q
+          python -m pytest -q
 
       - name: CI smoke run
         shell: bash
