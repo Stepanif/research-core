@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -29,12 +30,56 @@ MISSING_MARKERS = (
     "No module named",
 )
 
+TABLE_TOP_RE = re.compile(r"^\+- (?P<title>.*?) -+\+$")
+TABLE_BOTTOM_RE = re.compile(r"^\+-+\+$")
+
 
 def _normalize_text(text: str) -> str:
     normalized_lines = [line.rstrip() for line in text.replace("\r\n", "\n").replace("\r", "\n").split("\n")]
     while normalized_lines and normalized_lines[-1] == "":
         normalized_lines.pop()
     return "\n".join(normalized_lines)
+
+
+def _normalize_help_tables(text: str) -> str:
+    lines = text.split("\n")
+    normalized: list[str] = []
+    index = 0
+
+    while index < len(lines):
+        line = lines[index]
+        top_match = TABLE_TOP_RE.match(line)
+        if not top_match:
+            normalized.append(line)
+            index += 1
+            continue
+
+        row_lines: list[str] = []
+        scan_index = index + 1
+        while scan_index < len(lines) and lines[scan_index].startswith("|") and lines[scan_index].endswith("|"):
+            row_content = lines[scan_index][1:-1].rstrip()
+            row_lines.append(f"|{row_content} |")
+            scan_index += 1
+
+        if not row_lines or scan_index >= len(lines) or not TABLE_BOTTOM_RE.match(lines[scan_index]):
+            normalized.append(line)
+            index += 1
+            continue
+
+        title_prefix = f"+- {top_match.group('title')} "
+        target_width = max(
+            max(len(row) for row in row_lines),
+            len(title_prefix) + 2,
+        )
+        top_dashes = "-" * max(1, target_width - len(title_prefix) - 1)
+        bottom_dashes = "-" * max(1, target_width - 2)
+
+        normalized.append(f"{title_prefix}{top_dashes}+")
+        normalized.extend(row_lines)
+        normalized.append(f"+{bottom_dashes}+")
+        index = scan_index + 1
+
+    return "\n".join(normalized)
 
 
 def _write_normalized(path: Path, content: str) -> None:
@@ -61,7 +106,7 @@ def _run_help(args: list[str]) -> str | None:
         env=env,
     )
 
-    combined = _normalize_text("\n".join(part for part in (result.stdout, result.stderr) if part))
+    combined = _normalize_help_tables(_normalize_text("\n".join(part for part in (result.stdout, result.stderr) if part)))
 
     if result.returncode == 0 and combined:
         return combined

@@ -4,16 +4,16 @@
 
  Usage: python -m research_core.cli risk [OPTIONS] COMMAND [ARGS]...
 
-+- Options -------------------------------------------------------------------+
-| --help          Show this message and exit.                                 |
-+-----------------------------------------------------------------------------+
-+- Commands ------------------------------------------------------------------+
-| run                                                                         |
-| runset                                                                      |
-| sweep                                                                       |
-| diff                                                                        |
-| diff-runset                                                                 |
-| drift                                                                       |
-| dashboard                                                                   |
-+-----------------------------------------------------------------------------+
++- Options -----------------------------------+
+| --help          Show this message and exit. |
++---------------------------------------------+
++- Commands --+
+| run |
+| runset |
+| sweep |
+| diff |
+| diff-runset |
+| drift |
+| dashboard |
++-------------+
 ```
