@@ -1,7 +1,7 @@
-# Run from repo root: G:\Research Core\Research Core
+# Run from repo root: repository root
 # Purpose: Docs-v1 <-> Reality validation bundle (no code/docs edits, no commits)
 
-Set-Location "G:\Research Core\Research Core"
+Set-Location (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 
 # 1) Bootstrap on current branch (do not switch branches)
 $branch = (git branch --show-current).Trim()

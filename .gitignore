@@ -1,12 +1,14 @@
 __pycache__/
 .pytest_cache/
 .ruff_cache/
+# Local virtualenvs and installed metadata can embed machine paths and stale package names.
 .venv/
 dist/
 build/
 *.egg-info/
 
 data_raw/
+# Generated local execution artifacts are intentionally excluded from source releases.
 exec_outputs/
 data/raw/
 raw/
@@ -20,6 +22,6 @@ configs/analysis/local/
 site/
 
 
-# Local validation bundles
+# Local validation bundles and scratch outputs
 _tmp/
 
