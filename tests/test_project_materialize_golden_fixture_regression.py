@@ -43,6 +43,11 @@ def test_project_materialize_golden_fixture_regression(monkeypatch: object, tmp_
         encoding="utf-8",
     )
 
+    schema_copy = tmp_path / "canon.schema.v1.json"
+    schema_copy.write_text(schema_path.read_text(encoding="utf-8"), encoding="utf-8")
+    colmap_copy = tmp_path / "colmap.raw_vendor_v1.json"
+    colmap_copy.write_text(colmap_path.read_text(encoding="utf-8"), encoding="utf-8")
+
     project_path = tmp_path / "project.json"
     project_path.write_text(
         json.dumps(
@@ -55,8 +60,8 @@ def test_project_materialize_golden_fixture_regression(monkeypatch: object, tmp_
                         "instrument": "ES",
                         "tf": "1min",
                         "session_policy": "full",
-                        "schema_path": str(schema_path),
-                        "colmap_path": str(colmap_path),
+                        "schema_path": schema_copy.name,
+                        "colmap_path": colmap_copy.name,
                     }
                 ],
                 "spec_dirs": ["specs"],
