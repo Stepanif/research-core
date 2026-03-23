@@ -4,6 +4,7 @@ import os
 import re
 import subprocess
 import sys
+import textwrap
 from pathlib import Path
 
 
@@ -32,6 +33,7 @@ MISSING_MARKERS = (
 
 TABLE_TOP_RE = re.compile(r"^\+- (?P<title>.*?) -+\+$")
 TABLE_BOTTOM_RE = re.compile(r"^\+-+\+$")
+WRAPPED_OPTION_TABLE_WIDTH = 75
 
 
 def _normalize_text(text: str) -> str:
@@ -39,6 +41,47 @@ def _normalize_text(text: str) -> str:
     while normalized_lines and normalized_lines[-1] == "":
         normalized_lines.pop()
     return "\n".join(normalized_lines)
+
+
+def _normalize_wrapped_option_rows(title: str, row_lines: list[str]) -> list[str] | None:
+    if title != "Options":
+        return None
+
+    row_contents = [line[1:-1].rstrip() for line in row_lines]
+    continuation_indents = [
+        len(content) - len(content.lstrip(" "))
+        for content in row_contents
+        if content.strip() and not content.lstrip().startswith(("-", "*"))
+    ]
+    if not continuation_indents:
+        return None
+
+    desc_start = min(continuation_indents)
+    inner_width = WRAPPED_OPTION_TABLE_WIDTH - 2
+    desc_width = inner_width - desc_start
+    if desc_width < 8:
+        return None
+
+    logical_rows: list[list[str]] = []
+    for content in row_contents:
+        left = content[:desc_start].rstrip()
+        right = content[desc_start:].strip()
+        if left.strip():
+            logical_rows.append([left.strip(), right])
+        elif logical_rows and right:
+            logical_rows[-1][1] = f"{logical_rows[-1][1]} {right}".strip()
+        else:
+            return None
+
+    normalized_rows: list[str] = []
+    for left, right in logical_rows:
+        wrapped = textwrap.wrap(right, width=desc_width) or [""]
+        left_segment = f" {left}".ljust(desc_start)
+        normalized_rows.append(f"|{left_segment}{wrapped[0].ljust(desc_width)}|")
+        for continuation in wrapped[1:]:
+            normalized_rows.append(f"|{' ' * desc_start}{continuation.ljust(desc_width)}|")
+
+    return normalized_rows
 
 
 def _normalize_help_tables(text: str) -> str:
@@ -64,6 +107,17 @@ def _normalize_help_tables(text: str) -> str:
         if not row_lines or scan_index >= len(lines) or not TABLE_BOTTOM_RE.match(lines[scan_index]):
             normalized.append(line)
             index += 1
+            continue
+
+        normalized_option_rows = _normalize_wrapped_option_rows(top_match.group("title"), row_lines)
+        if normalized_option_rows is not None:
+            title_prefix = f"+- {top_match.group('title')} "
+            top_dashes = "-" * max(1, WRAPPED_OPTION_TABLE_WIDTH - len(title_prefix) - 1)
+            bottom_dashes = "-" * max(1, WRAPPED_OPTION_TABLE_WIDTH - 2)
+            normalized.append(f"{title_prefix}{top_dashes}+")
+            normalized.extend(normalized_option_rows)
+            normalized.append(f"+{bottom_dashes}+")
+            index = scan_index + 1
             continue
 
         title_prefix = f"+- {top_match.group('title')} "
