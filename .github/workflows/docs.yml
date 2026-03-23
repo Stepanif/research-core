@@ -32,8 +32,13 @@ jobs:
         run: python -m pip install --upgrade pip; python -m pip install -e .
       - name: Install docs dependencies
         run: python -m pip install -r requirements-docs.txt
+      - name: Show docs environment
+        run: python --version; pip --version; python -m pip show typer click rich shellingham
       - name: Generate docs
         run: python tools/docs/gen_cli_ref.py; python tools/docs/gen_schema_ref.py; python tools/docs/gen_artifact_catalog.py
+      - name: Show CLI docs diff
+        if: always()
+        run: git diff -- docs/reference/cli/canon.md; git diff -- docs/reference/cli/overview.md; git diff -- docs/reference/cli/risk.md; git diff -- docs/reference/cli/risk_run.md; git diff -- docs/reference/cli/risk_runset.md
       - name: Verify generated docs
         run: python tools/docs/verify_generated_docs_clean.py
       - name: Build docs site
