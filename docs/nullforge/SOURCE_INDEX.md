@@ -15,6 +15,7 @@ This index links only to repo-local files that exist. Incoming package sources t
 | [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after PF-T002 audit disposition. |
 | [Decision Ledger](DECISION_LEDGER.md) | Seed decision and pending ADR ledger. | Active NullForge decision tracking after PF-T002 audit disposition. |
 | [Archive Policy](ARCHIVE_POLICY.md) | Source authority, archive, quarantine, and prompt policy. | Active NullForge governance baseline after PF-T002 audit disposition. |
+| [ADR-T001 - Name/platform/stack/engine](adr/ADR-T001-name-platform-stack-engine.md) | Records working product name, first platform, default desktop stack direction, and ResearchCore Engine boundary. | Active NullForge decision record after ADR-T001 audit `PASS`; not implementation proof. |
 | [PF-T000 Import Plan](import/PF-T000_IMPORT_PLAN.md) | Bounded import and source-of-truth plan. | Active PF-T000 source after audit `PASS`. |
 | [PF-T000 Repo Inventory](import/PF-T000_REPO_INVENTORY.md) | Repo inventory and ResearchCore boundary context. | Active PF-T000 source after audit `PASS`. |
 | [PF-T000 Conflicts And Gates](import/PF-T000_CONFLICTS_AND_GATES.md) | Conflict and gate register. | Active PF-T000 source after audit `PASS`. |
@@ -38,22 +39,25 @@ This index links only to repo-local files that exist. Incoming package sources t
 
 | Source | Purpose | Status |
 |---|---|---|
-| [PF-T002 Context Bundle](../../plans/nullforge/PF-T002/CONTEXT_BUNDLE.md) | Curated active context for PF-T002. | Repo-local plan artifact. |
-| [PF-T002 Context Bundle Manifest](../../plans/nullforge/PF-T002/CONTEXT_BUNDLE_MANIFEST.md) | Context source list and exclusions. | Repo-local plan artifact. |
-| [PF-T002 Plan](../../plans/nullforge/PF-T002/PLAN.md) | Bounded implementation plan. | Repo-local plan artifact. |
-| [PF-T002 Acceptance](../../plans/nullforge/PF-T002/ACCEPTANCE.md) | Acceptance criteria and checks. | Repo-local plan artifact. |
-| [PF-T002 Implementor Prompt](../../plans/nullforge/PF-T002/IMPLEMENTOR_PROMPT.md) | Implementor instructions. | Repo-local plan artifact. |
-| [PF-T002 Implementation Report](../../reports/nullforge/PF-T002/IMPLEMENTATION_REPORT.md) | Implementor report. | Created by PF-T002 implementor. |
-| [PF-T002 Changed Files](../../reports/nullforge/PF-T002/CHANGED_FILES.md) | Changed-file inventory. | Created by PF-T002 implementor. |
-| [PF-T002 Test Results](../../reports/nullforge/PF-T002/TEST_RESULTS.md) | Required check results. | Created by PF-T002 implementor. |
-| [PF-T002 Auditor Prompt](../../reports/nullforge/PF-T002/AUDITOR_PROMPT.md) | Independent auditor prompt. | Created by PF-T002 implementor. |
+| [ADR-T001 Context Bundle](../../plans/nullforge/ADR-T001/CONTEXT_BUNDLE.md) | Curated active context for ADR-T001. | Repo-local plan artifact. |
+| [ADR-T001 Context Bundle Manifest](../../plans/nullforge/ADR-T001/CONTEXT_BUNDLE_MANIFEST.md) | Context source list and exclusions. | Repo-local plan artifact. |
+| [ADR-T001 Plan](../../plans/nullforge/ADR-T001/PLAN.md) | Bounded implementation plan. | Repo-local plan artifact. |
+| [ADR-T001 Acceptance](../../plans/nullforge/ADR-T001/ACCEPTANCE.md) | Acceptance criteria and checks. | Repo-local plan artifact. |
+| [ADR-T001 Implementor Prompt](../../plans/nullforge/ADR-T001/IMPLEMENTOR_PROMPT.md) | Implementor instructions. | Repo-local plan artifact. |
+| [ADR-T001 Implementation Report](../../reports/nullforge/ADR-T001/IMPLEMENTATION_REPORT.md) | Implementor report. | Created by ADR-T001 implementor. |
+| [ADR-T001 Changed Files](../../reports/nullforge/ADR-T001/CHANGED_FILES.md) | Changed-file inventory. | Created by ADR-T001 implementor. |
+| [ADR-T001 Test Results](../../reports/nullforge/ADR-T001/TEST_RESULTS.md) | Required check results. | Created by ADR-T001 implementor. |
+| [ADR-T001 Auditor Prompt](../../reports/nullforge/ADR-T001/AUDITOR_PROMPT.md) | Independent auditor prompt. | Created by ADR-T001 implementor. |
+| [ADR-T001 Audit Report](../../audits/nullforge/ADR-T001/AUDIT_REPORT.md) | Independent audit report and disposition. | ADR-T001 audit decision `PASS`. |
+| [ADR-T001 Findings](../../audits/nullforge/ADR-T001/FINDINGS.md) | Independent audit findings summary. | No findings. |
+| [ADR-T001 Repair Prompt](../../audits/nullforge/ADR-T001/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for ADR-T001 audit `PASS`. |
 
 ## Incoming package inputs
 
-These active inputs are external package sources, not repo-local canonical docs in PF-T002. They are listed in plain text and must not be treated as resolved repo links.
+These active inputs are external package sources, not repo-local canonical docs in ADR-T001. They are listed in plain text and must not be treated as resolved repo links.
 
 ```text
-C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T002-create-nullforge-current-status-and-source-index.md
+C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\ADR-T001-name-platform-stack-engine-adr.md
 C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_BRIEF.md
 C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\TICKET_QUEUE.md
 C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\HUMAN_GATE_TRIGGERS.md
@@ -62,12 +66,11 @@ C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_I
 Repo-local paths below are pending or absent in PF-T002 and are intentionally not linked:
 
 ```text
-tickets/nullforge/PF-T002-create-nullforge-current-status-and-source-index.md
+tickets/nullforge/ADR-T001-name-platform-stack-engine-adr.md
 milestones/nullforge/M0-repo-source-import/MILESTONE_BRIEF.md
 milestones/nullforge/M0-repo-source-import/TICKET_QUEUE.md
 milestones/nullforge/M0-repo-source-import/HUMAN_GATE_TRIGGERS.md
-docs/nullforge/adr/ADR-T001.md
-docs/nullforge/adr/ADR-T002.md
+docs/nullforge/adr/ADR-T002-local-first-no-cloud-mvp.md
 ```
 
 ## Design memory
@@ -90,6 +93,7 @@ Prompt files are not canonical volume content. PF-T001 did not import package pr
 
 | Item | Expected role | PF-T002 status |
 |---|---|---|
-| `ADR-T001` | Decide name/platform/stack/engine boundary after PF-T002 audit disposition. | Pending downstream; not created in PF-T002. |
-| `ADR-T002` | Decide local-first/no-cloud MVP boundary after ADR-T001 sequence allows it. | Pending downstream; not created in PF-T002. |
-| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only in PF-T002. |
+| `ADR-T002` | Decide local-first/no-cloud MVP boundary after ADR-T001 closeout. | Pending downstream; not created or started in ADR-T001. |
+| `CX-T001` | NullForge Codex role-loop docs after ADR-T002. | Pending downstream; not created in ADR-T001. |
+| `MB-T001` | M0 milestone handoff after CX-T001. | Pending downstream; not created in ADR-T001. |
+| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only in ADR-T001. |
