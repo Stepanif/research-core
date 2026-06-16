@@ -2,11 +2,11 @@
 
 Date: `2026-06-16`
 
-Active phase: `M1_READINESS_ENVIRONMENT_REPAIR_DECISION_CLOSEOUT`
+Active phase: `M1_READINESS_ENVIRONMENT_REPAIR_PATH_CLOSEOUT`
 
-Active ticket: `QA-T003`
+Active ticket: `QA-T004`
 
-Next action: Close out `QA-T003`; the next scoped ticket requires human direction. Environment repair, `ADR-T003`, desktop bridge/app work, and downstream M1 implementation remain blocked until separately authorized.
+Next action: Close out `QA-T004`; the next scoped ticket requires human direction. Environment repair, `ADR-T003`, desktop bridge/app work, and downstream M1 implementation remain blocked until separately authorized.
 
 ## Status Summary
 
@@ -14,7 +14,7 @@ No NullForge implementation code has started.
 
 The completed M0 repo source import baseline remains identified as `REPO_SOURCE_IMPORT_BASELINE`.
 
-NullForge is in M1 readiness environment repair decisioning closeout after M0 completion through MB-T001 audit `PASS`, QA-T001 audit `PASS`, HY-T001 audit `PASS`, QA-T002 audit `PASS`, and QA-T003 audit `PASS`. The current repo-local NullForge source set contains the PF-T000 import planning docs, the PF-T001 imported Volume 00-07 planning artifacts, the PF-T002 status/source baseline, the ADR-T001 name/platform/stack/engine decision record, the ADR-T002 local-first/no-cloud MVP boundary decision record, the CX-T001 Codex role-loop docs work, the MB-T001 M0 handoff work, the QA-T001 command discovery work, the HY-T001 local-path hygiene work, the QA-T002 local Python environment and CLI/runtime blocker triage work, and the QA-T003 environment repair decision packet. QA-T003 is docs/readiness decisioning only, prepares human-gated repair options, performs no environment repair, has audit decision `PASS`, and is ready for closeout.
+NullForge is in M1 readiness environment repair path closeout after M0 completion through MB-T001 audit `PASS`, QA-T001 audit `PASS`, HY-T001 audit `PASS`, QA-T002 audit `PASS`, QA-T003 audit `PASS`, and QA-T004 audit `PASS`. The current repo-local NullForge source set contains the PF-T000 import planning docs, the PF-T001 imported Volume 00-07 planning artifacts, the PF-T002 status/source baseline, the ADR-T001 name/platform/stack/engine decision record, the ADR-T002 local-first/no-cloud MVP boundary decision record, the CX-T001 Codex role-loop docs work, the MB-T001 M0 handoff work, the QA-T001 command discovery work, the HY-T001 local-path hygiene work, the QA-T002 local Python environment and CLI/runtime blocker triage work, the QA-T003 environment repair decision packet, and the QA-T004 environment repair path preparation packet. QA-T004 is docs/readiness path preparation only, prepares a recommended human-gated repair path, performs no environment repair, has audit `PASS`, and is ready for closeout.
 
 Existing ResearchCore Engine implementation docs, code, package metadata, schemas, tests, and generated references remain separate and authoritative for current engine behavior.
 
@@ -33,18 +33,19 @@ Existing ResearchCore Engine implementation docs, code, package metadata, schema
 | `HY-T001` | Complete; audit `PASS` | [HY-T001 audit report](../../audits/nullforge/HY-T001/AUDIT_REPORT.md) | Sanitizes local absolute path provenance leakage in NullForge docs/plans/reports/audits only; not implementation proof. |
 | `QA-T002` | Complete; audit `PASS`; ready for closeout | [QA-T002 audit report](../../audits/nullforge/QA-T002/AUDIT_REPORT.md) | Records local Python environment and CLI/runtime blocker diagnostics only; not environment repair or implementation proof. |
 | `QA-T003` | Complete; audit `PASS`; ready for closeout | [QA-T003 audit report](../../audits/nullforge/QA-T003/AUDIT_REPORT.md) | Documents human-gated repair/readiness options only; does not run repair or prove CLI readiness. |
+| `QA-T004` | Complete; audit `PASS`; ready for closeout | [QA-T004 audit report](../../audits/nullforge/QA-T004/AUDIT_REPORT.md) | Prepares a recommended human-gated repair/readiness path only; does not run repair or prove CLI readiness. |
 
 ## Blockers And Gates
 
-- QA-T003 is docs/readiness decisioning work only and has audit decision `PASS`; environment repair, ADR-T003, desktop bridge/app work, M1 implementation, or downstream work must still start only through a separate scoped ticket after human direction.
+- QA-T004 is docs/readiness path preparation work only and is ready for closeout after audit `PASS`; environment repair, ADR-T003, desktop bridge/app work, M1 implementation, or downstream work must still start only through a separate scoped ticket after human direction.
 - Any overwrite of existing ResearchCore Engine docs requires human review.
-- Any repo/package/CLI/app/product/public identity change, implementation code, dependency change, schema/test creation, generated-reference update, environment repair, local editable install change, raw data import, ES-derived fixture, prompt import, ticket/milestone import, ADR-T003, M1 implementation, or downstream work is out of QA-T003 scope.
+- Any repo/package/CLI/app/product/public identity change, implementation code, dependency change, schema/test creation, generated-reference update, environment repair, local editable install change, raw data import, ES-derived fixture, prompt import, ticket/milestone import, ADR-T003, M1 implementation, or downstream work is out of QA-T004 scope.
 - Raw/full ES.zip material, private/local data, ES-derived fixtures, desktop scaffold, bridge implementation, sidecar implementation, cloud storage, cloud sync, hosted backend, account/auth, billing, telemetry/analytics, mobile, marketplace, broker-live scope, live execution, network behavior, public release claims, legal/trademark claims, and app scaffolding remain gated.
 
 ## Claim Status
 
 - NullForge is a planning/workflow source corpus in this repo, not an implemented application.
-- QA-T001 records existing command/test discovery only; HY-T001 records local-path hygiene cleanup only; QA-T002 records local environment and CLI/runtime blocker triage only; QA-T003 records environment repair decisioning only. None proves the full test suite passes, docs build success, local install correctness, CLI smoke success, cloud absence enforcement, telemetry blocking, Tauri feasibility, packaging feasibility, bridge reliability, product validation, user validation, market claims, trading validity, financial advice safety, legal clearance, data licensing safety, public distribution safety, or implementation governance beyond bounded docs evidence.
+- QA-T001 records existing command/test discovery only; HY-T001 records local-path hygiene cleanup only; QA-T002 records local environment and CLI/runtime blocker triage only; QA-T003 records environment repair decisioning only; QA-T004 records environment repair path preparation only. None proves the full test suite passes, docs build success, local install correctness, CLI smoke success, cloud absence enforcement, telemetry blocking, Tauri feasibility, packaging feasibility, bridge reliability, product validation, user validation, market claims, trading validity, financial advice safety, legal clearance, data licensing safety, public distribution safety, or implementation governance beyond bounded docs evidence.
 - Product, user, market, trading, validation, and release claims are not proven by M0 import docs.
 - Imported volumes may describe intended direction, but they do not authorize implementation outside a later scoped ticket.
 
