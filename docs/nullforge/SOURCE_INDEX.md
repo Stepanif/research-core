@@ -2,7 +2,7 @@
 
 Date: `2026-06-16`
 
-Active phase: `M1_READINESS_ENVIRONMENT_TRIAGE_CLOSEOUT`
+Active phase: `M1_READINESS_ENVIRONMENT_REPAIR_DECISION_CLOSEOUT`
 
 This index links only to repo-local files that exist. Incoming package sources that are not repo-local are listed in plain text and are not linked as repo paths.
 
@@ -13,7 +13,7 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | Source | Purpose | Truth status |
 |---|---|---|
 | [NullForge README](README.md) | Entry point for NullForge docs. | Active NullForge planning navigation. |
-| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after QA-T002 audit `PASS`. |
+| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline during QA-T003 repair decisioning closeout. |
 | [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after PF-T002 audit disposition. |
 | [Decision Ledger](DECISION_LEDGER.md) | Seed decision and pending ADR ledger. | Active NullForge decision tracking after PF-T002 audit disposition. |
 | [Archive Policy](ARCHIVE_POLICY.md) | Source authority, archive, quarantine, and prompt policy. | Active NullForge governance baseline after PF-T002 audit disposition. |
@@ -21,6 +21,7 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [Codex Role Loop](codex/CODEX_ROLE_LOOP.md) | NullForge-specific context curator, planner, implementor, auditor, repair, and human-gate workflow. | Active CX-T001 workflow source after CX-T001 audit `PASS`; not implementation proof. |
 | [QA Command Discovery](qa/COMMAND_DISCOVERY.md) | QA-T001 existing repo command and test discovery record. | Active QA-T001 discovery source after QA-T001 audit `PASS`; not implementation proof. |
 | [QA Environment Triage](qa/ENVIRONMENT_TRIAGE.md) | QA-T002 local Python environment and CLI/runtime blocker triage record. | Active QA-T002 triage source after audit `PASS`; not environment repair or implementation proof. |
+| [QA Environment Repair Decision](qa/ENVIRONMENT_REPAIR_DECISION.md) | QA-T003 human-gated local Python environment repair/readiness decision packet. | Active QA-T003 implementation source after audit `PASS`; not environment repair or CLI readiness proof. |
 | [ADR-T001 - Name/platform/stack/engine](adr/ADR-T001-name-platform-stack-engine.md) | Records working product name, first platform, default desktop stack direction, and ResearchCore Engine boundary. | Active NullForge decision record after ADR-T001 audit `PASS`; not implementation proof. |
 | [ADR-T002 - Local-first/no-cloud MVP](adr/ADR-T002-local-first-no-cloud-mvp.md) | Records local-first/no-cloud MVP boundary. | Active NullForge decision record after ADR-T002 audit `PASS`; not implementation proof. |
 | [PF-T000 Import Plan](import/PF-T000_IMPORT_PLAN.md) | Bounded import and source-of-truth plan. | Active PF-T000 source after audit `PASS`. |
@@ -130,6 +131,18 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [QA-T002 Audit Report](../../audits/nullforge/QA-T002/AUDIT_REPORT.md) | Independent audit report and disposition. | QA-T002 audit decision `PASS`. |
 | [QA-T002 Findings](../../audits/nullforge/QA-T002/FINDINGS.md) | Independent audit findings summary. | No blocking findings; local environment blocker remains gated by design. |
 | [QA-T002 Repair Prompt](../../audits/nullforge/QA-T002/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for QA-T002 audit `PASS`. |
+| [QA-T003 Context Bundle](../../plans/nullforge/QA-T003/CONTEXT_BUNDLE.md) | Curated context for local Python environment repair decisioning. | Repo-local context artifact. |
+| [QA-T003 Context Bundle Manifest](../../plans/nullforge/QA-T003/CONTEXT_BUNDLE_MANIFEST.md) | QA-T003 context source list and exclusions. | Repo-local context artifact. |
+| [QA-T003 Plan](../../plans/nullforge/QA-T003/PLAN.md) | Bounded implementation plan for repair decisioning. | Repo-local plan artifact. |
+| [QA-T003 Acceptance](../../plans/nullforge/QA-T003/ACCEPTANCE.md) | QA-T003 acceptance criteria and required checks. | Repo-local plan artifact. |
+| [QA-T003 Implementor Prompt](../../plans/nullforge/QA-T003/IMPLEMENTOR_PROMPT.md) | QA-T003 implementor instructions. | Repo-local plan artifact. |
+| [QA-T003 Implementation Report](../../reports/nullforge/QA-T003/IMPLEMENTATION_REPORT.md) | Implementor report. | Created by QA-T003 implementor. |
+| [QA-T003 Changed Files](../../reports/nullforge/QA-T003/CHANGED_FILES.md) | Changed-file inventory. | Created by QA-T003 implementor. |
+| [QA-T003 Test Results](../../reports/nullforge/QA-T003/TEST_RESULTS.md) | Required check results. | Created by QA-T003 implementor. |
+| [QA-T003 Auditor Prompt](../../reports/nullforge/QA-T003/AUDITOR_PROMPT.md) | Independent auditor prompt. | Created by QA-T003 implementor. |
+| [QA-T003 Audit Report](../../audits/nullforge/QA-T003/AUDIT_REPORT.md) | Independent audit report and disposition. | QA-T003 audit decision `PASS`. |
+| [QA-T003 Findings](../../audits/nullforge/QA-T003/FINDINGS.md) | Independent audit findings summary. | No blocking findings; local environment repair remains human-gated by design. |
+| [QA-T003 Repair Prompt](../../audits/nullforge/QA-T003/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for QA-T003 audit `PASS`. |
 
 ## Incoming package inputs
 
@@ -171,6 +184,6 @@ Prompt files are not canonical volume content. PF-T001 did not import package pr
 
 | Item | Expected role | Status |
 |---|---|---|
-| `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started in QA-T002. |
-| M1 desktop/bridge/product implementation tickets | Future scoped M1 implementation work after QA readiness and human direction. | Pending downstream; not created or started in QA-T002. |
-| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in QA-T002. |
+| `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started in QA-T003. |
+| M1 desktop/bridge/product implementation tickets | Future scoped M1 implementation work after QA readiness and human direction. | Pending downstream; not created or started in QA-T003. |
+| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in QA-T003. |
