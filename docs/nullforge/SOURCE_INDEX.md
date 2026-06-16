@@ -1,6 +1,6 @@
 # NullForge Source Index
 
-Date: `2026-06-15`
+Date: `2026-06-16`
 
 Active phase: `REPO_SOURCE_IMPORT_BASELINE`
 
@@ -16,6 +16,7 @@ This index links only to repo-local files that exist. Incoming package sources t
 | [Decision Ledger](DECISION_LEDGER.md) | Seed decision and pending ADR ledger. | Active NullForge decision tracking after PF-T002 audit disposition. |
 | [Archive Policy](ARCHIVE_POLICY.md) | Source authority, archive, quarantine, and prompt policy. | Active NullForge governance baseline after PF-T002 audit disposition. |
 | [ADR-T001 - Name/platform/stack/engine](adr/ADR-T001-name-platform-stack-engine.md) | Records working product name, first platform, default desktop stack direction, and ResearchCore Engine boundary. | Active NullForge decision record after ADR-T001 audit `PASS`; not implementation proof. |
+| [ADR-T002 - Local-first/no-cloud MVP](adr/ADR-T002-local-first-no-cloud-mvp.md) | Records local-first/no-cloud MVP boundary. | Active NullForge decision record after ADR-T002 audit `PASS`; not implementation proof. |
 | [PF-T000 Import Plan](import/PF-T000_IMPORT_PLAN.md) | Bounded import and source-of-truth plan. | Active PF-T000 source after audit `PASS`. |
 | [PF-T000 Repo Inventory](import/PF-T000_REPO_INVENTORY.md) | Repo inventory and ResearchCore boundary context. | Active PF-T000 source after audit `PASS`. |
 | [PF-T000 Conflicts And Gates](import/PF-T000_CONFLICTS_AND_GATES.md) | Conflict and gate register. | Active PF-T000 source after audit `PASS`. |
@@ -51,6 +52,18 @@ This index links only to repo-local files that exist. Incoming package sources t
 | [ADR-T001 Audit Report](../../audits/nullforge/ADR-T001/AUDIT_REPORT.md) | Independent audit report and disposition. | ADR-T001 audit decision `PASS`. |
 | [ADR-T001 Findings](../../audits/nullforge/ADR-T001/FINDINGS.md) | Independent audit findings summary. | No findings. |
 | [ADR-T001 Repair Prompt](../../audits/nullforge/ADR-T001/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for ADR-T001 audit `PASS`. |
+| [ADR-T002 Context Bundle](../../plans/nullforge/ADR-T002/CONTEXT_BUNDLE.md) | Curated active context for ADR-T002. | Repo-local plan artifact. |
+| [ADR-T002 Context Bundle Manifest](../../plans/nullforge/ADR-T002/CONTEXT_BUNDLE_MANIFEST.md) | Context source list and exclusions. | Repo-local plan artifact. |
+| [ADR-T002 Plan](../../plans/nullforge/ADR-T002/PLAN.md) | Bounded implementation plan. | Repo-local plan artifact. |
+| [ADR-T002 Acceptance](../../plans/nullforge/ADR-T002/ACCEPTANCE.md) | Acceptance criteria and checks. | Repo-local plan artifact. |
+| [ADR-T002 Implementor Prompt](../../plans/nullforge/ADR-T002/IMPLEMENTOR_PROMPT.md) | Implementor instructions. | Repo-local plan artifact. |
+| [ADR-T002 Implementation Report](../../reports/nullforge/ADR-T002/IMPLEMENTATION_REPORT.md) | Implementor report. | Created by ADR-T002 implementor. |
+| [ADR-T002 Changed Files](../../reports/nullforge/ADR-T002/CHANGED_FILES.md) | Changed-file inventory. | Created by ADR-T002 implementor. |
+| [ADR-T002 Test Results](../../reports/nullforge/ADR-T002/TEST_RESULTS.md) | Required check results. | Created by ADR-T002 implementor. |
+| [ADR-T002 Auditor Prompt](../../reports/nullforge/ADR-T002/AUDITOR_PROMPT.md) | Independent auditor prompt. | Created by ADR-T002 implementor. |
+| [ADR-T002 Audit Report](../../audits/nullforge/ADR-T002/AUDIT_REPORT.md) | Independent audit report and disposition. | ADR-T002 audit decision `PASS`. |
+| [ADR-T002 Findings](../../audits/nullforge/ADR-T002/FINDINGS.md) | Independent audit findings summary. | No findings. |
+| [ADR-T002 Repair Prompt](../../audits/nullforge/ADR-T002/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for ADR-T002 audit `PASS`. |
 
 ## Incoming package inputs
 
@@ -70,7 +83,6 @@ tickets/nullforge/ADR-T001-name-platform-stack-engine-adr.md
 milestones/nullforge/M0-repo-source-import/MILESTONE_BRIEF.md
 milestones/nullforge/M0-repo-source-import/TICKET_QUEUE.md
 milestones/nullforge/M0-repo-source-import/HUMAN_GATE_TRIGGERS.md
-docs/nullforge/adr/ADR-T002-local-first-no-cloud-mvp.md
 ```
 
 ## Design memory
@@ -93,7 +105,6 @@ Prompt files are not canonical volume content. PF-T001 did not import package pr
 
 | Item | Expected role | PF-T002 status |
 |---|---|---|
-| `ADR-T002` | Decide local-first/no-cloud MVP boundary after ADR-T001 closeout. | Pending downstream; not created or started in ADR-T001. |
-| `CX-T001` | NullForge Codex role-loop docs after ADR-T002. | Pending downstream; not created in ADR-T001. |
-| `MB-T001` | M0 milestone handoff after CX-T001. | Pending downstream; not created in ADR-T001. |
-| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only in ADR-T001. |
+| `CX-T001` | NullForge Codex role-loop docs after ADR-T002 branch closeout. | Pending next scoped ticket; not created or started in ADR-T002. |
+| `MB-T001` | M0 milestone handoff after CX-T001. | Pending downstream; not created or started in ADR-T002. |
+| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only in ADR-T002. |
