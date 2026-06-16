@@ -24,7 +24,7 @@ reports/nullforge/ADR-T001/TEST_RESULTS.md
 Use the incoming package ADR-T001 ticket source unless `tickets/nullforge/ADR-T001-name-platform-stack-engine-adr.md` now exists:
 
 ```text
-C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\ADR-T001-name-platform-stack-engine-adr.md
+<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\ADR-T001-name-platform-stack-engine-adr.md
 ```
 
 ## Verify

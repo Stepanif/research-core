@@ -28,7 +28,7 @@ Audited only PF-T002. No fixes were implemented. No `ADR-T001` or downstream tic
 - `reports/nullforge/PF-T002/TEST_RESULTS.md`
 - `reports/nullforge/PF-T002/AUDITOR_PROMPT.md`
 - Incoming package ticket source:
-  `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T002-create-nullforge-current-status-and-source-index.md`
+  `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T002-create-nullforge-current-status-and-source-index.md`
 
 ## Audit Checks
 

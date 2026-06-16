@@ -16,7 +16,7 @@ Implemented only the bounded docs/source-of-truth import for PF-T001. No impleme
 - `plans/nullforge/PF-T001/PLAN.md`
 - `plans/nullforge/PF-T001/ACCEPTANCE.md`
 - `plans/nullforge/PF-T001/IMPLEMENTOR_PROMPT.md`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T001-import-nullforge-volumes-into-repo-docs.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T001-import-nullforge-volumes-into-repo-docs.md`
 
 The in-repo PF-T001 ticket path was checked and was absent, so the incoming package ticket remained the active ticket source.
 

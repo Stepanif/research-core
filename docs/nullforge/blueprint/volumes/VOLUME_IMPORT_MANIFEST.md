@@ -22,13 +22,13 @@ tickets/nullforge/PF-T001-import-nullforge-volumes-into-repo-docs.md
 The active PF-T001 ticket source used for this import was:
 
 ```text
-C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T001-import-nullforge-volumes-into-repo-docs.md
+<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T001-import-nullforge-volumes-into-repo-docs.md
 ```
 
 ## Source Package Root
 
 ```text
-C:\Users\Filip\Desktop\NullForge_Incoming\packages\
+<nullforge-incoming-root>\packages\
 ```
 
 ## Imported Artifact Records

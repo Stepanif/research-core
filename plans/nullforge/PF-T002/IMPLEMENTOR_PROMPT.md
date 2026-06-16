@@ -24,7 +24,7 @@ tickets/nullforge/PF-T002-create-nullforge-current-status-and-source-index.md
 At planner time that path was absent. Use this incoming package ticket source unless the in-repo path now exists:
 
 ```text
-C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T002-create-nullforge-current-status-and-source-index.md
+<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T002-create-nullforge-current-status-and-source-index.md
 ```
 
 If both paths exist, compare enough to identify the active source used and record that in the implementation report.

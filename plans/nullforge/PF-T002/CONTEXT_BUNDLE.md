@@ -11,7 +11,7 @@ This bundle is context only. It does not plan implementation, create status docs
 
 ## Repo State
 
-- Repo root: `C:\Users\Filip\Desktop\Repos\research-core`
+- Repo root: `<repo-root>`
 - Starting branch before this pass: `main`
 - Starting status: clean, `## main...origin/main`
 - Current branch created for this pass: `docs/PF-T002-nullforge-status-source-index`
@@ -66,10 +66,10 @@ Repo-local PF-T002 ticket and M0 milestone paths were checked and absent:
 
 Use the incoming package source until a scoped ticket imports these files into the repo:
 
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T002-create-nullforge-current-status-and-source-index.md`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_BRIEF.md`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\TICKET_QUEUE.md`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\HUMAN_GATE_TRIGGERS.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T002-create-nullforge-current-status-and-source-index.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_BRIEF.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\TICKET_QUEUE.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\HUMAN_GATE_TRIGGERS.md`
 
 Repo-local dependency and imported-source docs inspected:
 

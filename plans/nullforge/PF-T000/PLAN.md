@@ -15,7 +15,7 @@ PF-T000 does not import NullForge volumes, change engine docs, modify code, inst
 - `plans/nullforge/PF-T000/CONTEXT_BUNDLE.md`
 - `plans/nullforge/PF-T000/CONTEXT_BUNDLE_MANIFEST.md`
 - Active ticket source from incoming package:
-  - `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T000-repo-inventory-and-nullforge-import-plan.md`
+  - `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T000-repo-inventory-and-nullforge-import-plan.md`
 - The in-repo path requested by the planner prompt is currently absent:
   - `tickets/nullforge/PF-T000-repo-inventory-and-nullforge-import-plan.md`
 

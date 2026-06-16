@@ -2,7 +2,7 @@
 
 Date: `2026-06-16`
 
-Active phase: `M1_READINESS_COMMAND_DISCOVERY`
+Active phase: `M1_READINESS_LOCAL_PATH_HYGIENE`
 
 This index links only to repo-local files that exist. Incoming package sources that are not repo-local are listed in plain text and are not linked as repo paths.
 
@@ -13,7 +13,7 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | Source | Purpose | Truth status |
 |---|---|---|
 | [NullForge README](README.md) | Entry point for NullForge docs. | Active NullForge planning navigation. |
-| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after QA-T001 audit `PASS`. |
+| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after HY-T001 audit `PASS`. |
 | [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after PF-T002 audit disposition. |
 | [Decision Ledger](DECISION_LEDGER.md) | Seed decision and pending ADR ledger. | Active NullForge decision tracking after PF-T002 audit disposition. |
 | [Archive Policy](ARCHIVE_POLICY.md) | Source authority, archive, quarantine, and prompt policy. | Active NullForge governance baseline after PF-T002 audit disposition. |
@@ -105,16 +105,28 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [QA-T001 Audit Report](../../audits/nullforge/QA-T001/AUDIT_REPORT.md) | Independent audit report and disposition. | QA-T001 audit decision `PASS`. |
 | [QA-T001 Findings](../../audits/nullforge/QA-T001/FINDINGS.md) | Independent audit findings summary. | No blocking findings; non-blocking local environment blocker recorded. |
 | [QA-T001 Repair Prompt](../../audits/nullforge/QA-T001/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for QA-T001 audit `PASS`. |
+| [HY-T001 Context Bundle](../../plans/nullforge/HY-T001/CONTEXT_BUNDLE.md) | Curated context for local-path hygiene cleanup. | Repo-local context artifact. |
+| [HY-T001 Context Bundle Manifest](../../plans/nullforge/HY-T001/CONTEXT_BUNDLE_MANIFEST.md) | HY-T001 source list, discovery commands, and candidate files. | Repo-local context artifact. |
+| [HY-T001 Plan](../../plans/nullforge/HY-T001/PLAN.md) | Bounded implementation plan for local-path hygiene cleanup. | Repo-local plan artifact. |
+| [HY-T001 Acceptance](../../plans/nullforge/HY-T001/ACCEPTANCE.md) | HY-T001 acceptance criteria and required checks. | Repo-local plan artifact. |
+| [HY-T001 Implementor Prompt](../../plans/nullforge/HY-T001/IMPLEMENTOR_PROMPT.md) | HY-T001 implementor instructions. | Repo-local plan artifact. |
+| [HY-T001 Implementation Report](../../reports/nullforge/HY-T001/IMPLEMENTATION_REPORT.md) | Implementor report. | Created by HY-T001 implementor. |
+| [HY-T001 Changed Files](../../reports/nullforge/HY-T001/CHANGED_FILES.md) | Changed-file inventory. | Created by HY-T001 implementor. |
+| [HY-T001 Test Results](../../reports/nullforge/HY-T001/TEST_RESULTS.md) | Required check results. | Created by HY-T001 implementor. |
+| [HY-T001 Auditor Prompt](../../reports/nullforge/HY-T001/AUDITOR_PROMPT.md) | Independent auditor prompt. | Created by HY-T001 implementor. |
+| [HY-T001 Audit Report](../../audits/nullforge/HY-T001/AUDIT_REPORT.md) | Independent audit report and disposition. | HY-T001 audit decision `PASS`. |
+| [HY-T001 Findings](../../audits/nullforge/HY-T001/FINDINGS.md) | Independent audit findings summary. | No blocking findings; no repair required. |
+| [HY-T001 Repair Prompt](../../audits/nullforge/HY-T001/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for HY-T001 audit `PASS`. |
 
 ## Incoming package inputs
 
 These active inputs are external package sources, not repo-local canonical docs in current M0 status. They are listed in plain text and must not be treated as resolved repo links.
 
 ```text
-C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\ADR-T001-name-platform-stack-engine-adr.md
-C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_BRIEF.md
-C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\TICKET_QUEUE.md
-C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\HUMAN_GATE_TRIGGERS.md
+<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\ADR-T001-name-platform-stack-engine-adr.md
+<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_BRIEF.md
+<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\TICKET_QUEUE.md
+<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\HUMAN_GATE_TRIGGERS.md
 ```
 
 Repo-local paths below are pending or absent in PF-T002 and are intentionally not linked:
@@ -146,6 +158,6 @@ Prompt files are not canonical volume content. PF-T001 did not import package pr
 
 | Item | Expected role | Status |
 |---|---|---|
-| `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started in QA-T001. |
-| M1 desktop/bridge/product implementation tickets | Future scoped M1 implementation work after QA readiness and human direction. | Pending downstream; not created or started in QA-T001. |
-| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in QA-T001. |
+| `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started in HY-T001. |
+| M1 desktop/bridge/product implementation tickets | Future scoped M1 implementation work after QA readiness and human direction. | Pending downstream; not created or started in HY-T001. |
+| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in HY-T001. |

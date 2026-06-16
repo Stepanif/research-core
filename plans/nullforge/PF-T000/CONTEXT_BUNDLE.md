@@ -11,7 +11,7 @@ This bundle is context only. It does not plan implementation, import NullForge v
 
 ## Repo State
 
-- Repo root: `C:\Users\Filip\Desktop\Repos\research-core`
+- Repo root: `<repo-root>`
 - Git repo exists: YES
 - Clean before branch creation: YES (`git status --porcelain=v1` returned no files)
 - Starting branch: `main`
@@ -21,23 +21,23 @@ This bundle is context only. It does not plan implementation, import NullForge v
 
 ## Incoming Package Discovery
 
-- Incoming root: `C:\Users\Filip\Desktop\NullForge_Incoming`
-- M0 package zip found: `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_M0_Repo_Source_Import_v0_4_Package.zip`
-- M0 package root used: `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package`
+- Incoming root: `<nullforge-incoming-root>`
+- M0 package zip found: `<nullforge-incoming-root>\packages\NullForge_M0_Repo_Source_Import_v0_4_Package.zip`
+- M0 package root used: `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package`
 - Required M0 files found: YES
-- Setup/volume package inputs are present as zips under `C:\Users\Filip\Desktop\NullForge_Incoming\packages` and remain outside the repo.
+- Setup/volume package inputs are present as zips under `<nullforge-incoming-root>\packages` and remain outside the repo.
 
 Setup/volume draft package paths:
 
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Setup_Package_v0_4.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_00_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_01_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_02_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_03_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_04_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_05_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_06_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_07_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Setup_Package_v0_4.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_00_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_01_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_02_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_03_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_04_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_05_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_06_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_07_v0_4_Package.zip`
 
 ## Ticket Summary
 
@@ -190,7 +190,7 @@ Human gates triggered in this curator pass: NONE.
 
 Next prompt to run after user confirmation:
 
-`C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\prompts\nullforge\PF-T000\01_PLANNER_PROMPT.md`
+`<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\prompts\nullforge\PF-T000\01_PLANNER_PROMPT.md`
 
 The Planner should consume this bundle and produce planning artifacts only. It should not code, import volumes, or run implementation.
 

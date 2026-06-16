@@ -27,7 +27,7 @@ Repo-local context:
 
 Active incoming ticket source:
 
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T002-create-nullforge-current-status-and-source-index.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T002-create-nullforge-current-status-and-source-index.md`
 
 The in-repo PF-T002 ticket path is absent at planner time:
 

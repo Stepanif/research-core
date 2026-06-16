@@ -49,7 +49,7 @@ QA-T001 does not run full tests, install dependencies, generate docs, build docs
 |---|---|
 | `python --version` | Succeeded with `Python 3.13.7`. |
 | `python -m pip --version` | Succeeded with `pip 25.2` for Python 3.13. |
-| `python -m pip show research-core` | Succeeded, but the editable project location points to `C:\Users\Filip\AppData\Local\Temp\research-core-gha-clone-4240fe0c-bf57-4da4-9836-29bf7009cdca`, not the current workspace. |
+| `python -m pip show research-core` | Succeeded, but the editable project location points to `<local-temp-editable-install>`, not the current workspace. |
 | `python -m pip show pyarrow` | Succeeded with installed `pyarrow` version `23.0.1`. |
 | `python -m pip show pytest` | Succeeded with installed `pytest` version `9.0.2`. |
 | `python -m pytest --version` | Succeeded with `pytest 9.0.2`. |

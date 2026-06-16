@@ -11,7 +11,7 @@ This bundle is context only. It does not plan implementation, import volume cont
 
 ## Repo State
 
-- Repo root: `C:\Users\Filip\Desktop\Repos\research-core`
+- Repo root: `<repo-root>`
 - Current branch created for this pass: `docs/PF-T001-import-nullforge-volumes`
 - Starting branch before creation: `main`
 - `main` was clean and synced with `origin/main` before branch creation.
@@ -53,11 +53,11 @@ NullForge is a Windows-first local desktop research workbench that helps a solo 
 
 Incoming M0 package docs inspected:
 
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T001-import-nullforge-volumes-into-repo-docs.md`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_BRIEF.md`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\TICKET_QUEUE.md`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\DEPENDENCY_MAP.md`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\HUMAN_GATE_TRIGGERS.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T001-import-nullforge-volumes-into-repo-docs.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_BRIEF.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\TICKET_QUEUE.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\DEPENDENCY_MAP.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\HUMAN_GATE_TRIGGERS.md`
 
 Prior dependency outputs inspected:
 
@@ -122,7 +122,7 @@ PF-T001 target path status:
 
 ## Volume Package Inventory
 
-The generated volume packages were inspected read-only from `C:\Users\Filip\Desktop\NullForge_Incoming\packages`. They were not extracted or copied into the repo during this curator pass.
+The generated volume packages were inspected read-only from `<nullforge-incoming-root>\packages`. They were not extracted or copied into the repo during this curator pass.
 
 | Volume | Package zip | Zip SHA256 | Artifact entry or entries observed |
 |---|---|---|---|

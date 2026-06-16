@@ -5,7 +5,7 @@ No repair is required for QA-T001 audit `PASS`.
 If future drift is found before closeout, use this bounded repair prompt:
 
 ```text
-You are Codex working in `C:\Users\Filip\Desktop\Repos\research-core`.
+You are Codex working in `<repo-root>`.
 
 Task: repair QA-T001 only.
 

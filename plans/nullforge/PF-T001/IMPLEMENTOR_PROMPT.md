@@ -24,7 +24,7 @@ tickets/nullforge/PF-T001-import-nullforge-volumes-into-repo-docs.md
 At planner time that path was absent. Use this incoming package ticket source unless the in-repo path now exists:
 
 ```text
-C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T001-import-nullforge-volumes-into-repo-docs.md
+<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T001-import-nullforge-volumes-into-repo-docs.md
 ```
 
 If both paths exist, compare enough to identify the active source used and record that in the implementation report.
@@ -53,7 +53,7 @@ reports/nullforge/PF-T001/AUDITOR_PROMPT.md
 You may read external volume zip packages from:
 
 ```text
-C:\Users\Filip\Desktop\NullForge_Incoming\packages\
+<nullforge-incoming-root>\packages\
 ```
 
 You may use PowerShell/.NET zip APIs or equivalent local commands to read selected markdown entries from the zips. Do not create repo scripts.

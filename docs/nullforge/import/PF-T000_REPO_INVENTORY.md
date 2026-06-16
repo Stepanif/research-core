@@ -3,7 +3,7 @@
 Ticket: PF-T000 - Repo inventory and NullForge import plan
 Milestone: M0 - Repo Source Import + Canonical Baseline
 Branch observed: `docs/PF-T000-nullforge-import-plan`
-Repo root: `C:\Users\Filip\Desktop\Repos\research-core`
+Repo root: `<repo-root>`
 
 ## Source Context
 
@@ -17,7 +17,7 @@ Repo-local PF-T000 context used:
 
 Active incoming ticket source used:
 
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T000-repo-inventory-and-nullforge-import-plan.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T000-repo-inventory-and-nullforge-import-plan.md`
 
 The in-repo ticket path requested by the role prompt was checked and was absent during implementation:
 

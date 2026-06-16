@@ -8,39 +8,39 @@ Purpose: Provide the smallest sufficient active context for the PF-T000 Planner 
 
 | File | Truth status | Why included |
 |---|---|---|
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\prompts\nullforge\PF-T000\00_CONTEXT_CURATOR_PROMPT.md` | Active M0 role prompt for this pass | Defines curator boundaries and required context bundle outputs. |
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\prompts\nullforge\PF-T000\01_PLANNER_PROMPT.md` | Next role prompt, verified only | Provides exact next prompt path; not executed in this pass. |
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T000-repo-inventory-and-nullforge-import-plan.md` | Active ticket source | Defines ticket purpose, scope, outputs, forbidden actions, checks, gates, and closeout requirements. |
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_BRIEF.md` | Active milestone source | Defines M0 goal, doctrine, target layout, non-goals, and success definition. |
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\TICKET_QUEUE.md` | Active milestone queue | Defines required serial ticket order and stop conditions. |
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\DEPENDENCY_MAP.md` | Active dependency source | Confirms PF-T000 has no prior dependency and downstream ticket order must be serial. |
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\CONTEXT_REFRESH_RULES.md` | Active context policy | Defines refresh triggers and bundle include/exclude policy. |
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\HUMAN_GATE_TRIGGERS.md` | Active gate policy | Defines source-of-truth, technical, data, and product/legal human gates. |
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_ACCEPTANCE.md` | Active milestone acceptance source | Defines M0 completion criteria and audit decision boundaries. |
-| `C:\Users\Filip\Desktop\Repos\research-core\README.md` | Existing repo truth for public/project framing | Establishes ResearchCore identity, validation standard, repo structure, and typical verification commands. |
-| `C:\Users\Filip\Desktop\Repos\research-core\docs\index.md` | Existing docs hub | Shows current docs organization and generated reference surfaces. |
-| `C:\Users\Filip\Desktop\Repos\research-core\docs\STATUS.md` | Existing current-state truth source | Captures implemented/partial/planned repo status and non-goals. |
-| `C:\Users\Filip\Desktop\Repos\research-core\docs\ARCHITECTURE.md` | Existing architecture truth source | Defines current local Python CLI/artifact architecture and extension boundaries. |
-| `C:\Users\Filip\Desktop\Repos\research-core\docs\getting-started\repo-tour.md` | Existing repo map | Identifies core folders and operational data folders relevant to import planning. |
-| `C:\Users\Filip\Desktop\Repos\research-core\docs\how-to\run_ci_locally.md` | Existing verification guide | Provides known local test/docs/CI commands. |
-| `C:\Users\Filip\Desktop\Repos\research-core\docs\contributing\docs_style_guide.md` | Existing docs governance guide | Defines repo-truth-only docs rules and TODO-over-guessing policy. |
-| `C:\Users\Filip\Desktop\Repos\research-core\docs\README_ANALYSIS_ES5M.md` | Existing ES5m workflow doc | Relevant to ES/fixture/data boundaries and local generated artifact handling. |
-| `C:\Users\Filip\Desktop\Repos\research-core\docs\dataset_catalog_spec_v1.md` | Existing dataset contract doc | Relevant to dataset capability/import planning and immutable dataset registration concepts. |
-| `C:\Users\Filip\Desktop\Repos\research-core\pyproject.toml` | Existing package/config truth | Provides package name, Python constraints, dependencies, and pytest config. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\prompts\nullforge\PF-T000\00_CONTEXT_CURATOR_PROMPT.md` | Active M0 role prompt for this pass | Defines curator boundaries and required context bundle outputs. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\prompts\nullforge\PF-T000\01_PLANNER_PROMPT.md` | Next role prompt, verified only | Provides exact next prompt path; not executed in this pass. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T000-repo-inventory-and-nullforge-import-plan.md` | Active ticket source | Defines ticket purpose, scope, outputs, forbidden actions, checks, gates, and closeout requirements. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_BRIEF.md` | Active milestone source | Defines M0 goal, doctrine, target layout, non-goals, and success definition. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\TICKET_QUEUE.md` | Active milestone queue | Defines required serial ticket order and stop conditions. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\DEPENDENCY_MAP.md` | Active dependency source | Confirms PF-T000 has no prior dependency and downstream ticket order must be serial. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\CONTEXT_REFRESH_RULES.md` | Active context policy | Defines refresh triggers and bundle include/exclude policy. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\HUMAN_GATE_TRIGGERS.md` | Active gate policy | Defines source-of-truth, technical, data, and product/legal human gates. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_ACCEPTANCE.md` | Active milestone acceptance source | Defines M0 completion criteria and audit decision boundaries. |
+| `<repo-root>\README.md` | Existing repo truth for public/project framing | Establishes ResearchCore identity, validation standard, repo structure, and typical verification commands. |
+| `<repo-root>\docs\index.md` | Existing docs hub | Shows current docs organization and generated reference surfaces. |
+| `<repo-root>\docs\STATUS.md` | Existing current-state truth source | Captures implemented/partial/planned repo status and non-goals. |
+| `<repo-root>\docs\ARCHITECTURE.md` | Existing architecture truth source | Defines current local Python CLI/artifact architecture and extension boundaries. |
+| `<repo-root>\docs\getting-started\repo-tour.md` | Existing repo map | Identifies core folders and operational data folders relevant to import planning. |
+| `<repo-root>\docs\how-to\run_ci_locally.md` | Existing verification guide | Provides known local test/docs/CI commands. |
+| `<repo-root>\docs\contributing\docs_style_guide.md` | Existing docs governance guide | Defines repo-truth-only docs rules and TODO-over-guessing policy. |
+| `<repo-root>\docs\README_ANALYSIS_ES5M.md` | Existing ES5m workflow doc | Relevant to ES/fixture/data boundaries and local generated artifact handling. |
+| `<repo-root>\docs\dataset_catalog_spec_v1.md` | Existing dataset contract doc | Relevant to dataset capability/import planning and immutable dataset registration concepts. |
+| `<repo-root>\pyproject.toml` | Existing package/config truth | Provides package name, Python constraints, dependencies, and pytest config. |
 
 ## Included Package Inputs Without Full Text
 
 These draft inputs were located and intentionally not expanded into the bundle text:
 
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Setup_Package_v0_4.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_00_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_01_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_02_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_03_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_04_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_05_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_06_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_07_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Setup_Package_v0_4.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_00_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_01_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_02_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_03_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_04_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_05_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_06_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_07_v0_4_Package.zip`
 
 Truth status for package inputs: draft/design inputs only until reviewed, imported, and audited through M0.
 

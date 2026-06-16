@@ -1,6 +1,6 @@
 # MB-T001 Implementor Prompt
 
-You are Codex working in `C:\Users\Filip\Desktop\Repos\research-core`.
+You are Codex working in `<repo-root>`.
 
 Task: implement `MB-T001` only. Do not commit.
 

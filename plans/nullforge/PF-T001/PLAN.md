@@ -29,7 +29,7 @@ Repo-local context:
 
 Active ticket source from incoming package:
 
-- `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T001-import-nullforge-volumes-into-repo-docs.md`
+- `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T001-import-nullforge-volumes-into-repo-docs.md`
 
 The in-repo PF-T001 ticket path is absent at planner time:
 
@@ -37,14 +37,14 @@ The in-repo PF-T001 ticket path is absent at planner time:
 
 Volume package sources:
 
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_00_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_01_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_02_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_03_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_04_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_05_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_06_v0_4_Package.zip`
-- `C:\Users\Filip\Desktop\NullForge_Incoming\packages\NullForge_Volume_07_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_00_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_01_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_02_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_03_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_04_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_05_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_06_v0_4_Package.zip`
+- `<nullforge-incoming-root>\packages\NullForge_Volume_07_v0_4_Package.zip`
 
 ## Dependencies And Current Status
 

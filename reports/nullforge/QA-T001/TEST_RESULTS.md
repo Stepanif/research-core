@@ -25,7 +25,7 @@ This file records bounded discovery and verification only. It does not record fu
 | `Test-Path -LiteralPath requirements-docs.txt` | `True`. |
 | `python --version` | Succeeded with `Python 3.13.7`. |
 | `python -m pip --version` | Succeeded with `pip 25.2`. |
-| `python -m pip show research-core` | Succeeded; reported editable project location outside the current workspace at `C:\Users\Filip\AppData\Local\Temp\research-core-gha-clone-4240fe0c-bf57-4da4-9836-29bf7009cdca`. |
+| `python -m pip show research-core` | Succeeded; reported editable project location outside the current workspace at `<local-temp-editable-install>`. |
 | `python -m pip show pyarrow` | Succeeded with `pyarrow 23.0.1`. |
 | `python -m pip show pytest` | Succeeded with `pytest 9.0.2`. |
 | `python -m pytest --version` | Succeeded with `pytest 9.0.2`. |

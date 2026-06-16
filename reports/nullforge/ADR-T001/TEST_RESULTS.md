@@ -146,7 +146,7 @@ The full command output included additional matches for source file paths, risks
 48:| [ADR-T001 Changed Files](../../reports/nullforge/ADR-T001/CHANGED_FILES.md) | Changed-file inventory. | Created by ADR-T001 implementor. |
 49:| [ADR-T001 Test Results](../../reports/nullforge/ADR-T001/TEST_RESULTS.md) | Required check results. | Created by ADR-T001 implementor. |
 50:| [ADR-T001 Auditor Prompt](../../reports/nullforge/ADR-T001/AUDITOR_PROMPT.md) | Independent auditor prompt. | Created by ADR-T001 implementor. |
-57:C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\ADR-T001-name-platform-stack-engine-adr.md
+57:<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\ADR-T001-name-platform-stack-engine-adr.md
 66:tickets/nullforge/ADR-T001-name-platform-stack-engine-adr.md
 70:docs/nullforge/adr/ADR-T002-local-first-no-cloud-mvp.md
 93:| `ADR-T002` | Decide local-first/no-cloud MVP boundary after ADR-T001 audit disposition. | Pending downstream; not created in ADR-T001. |

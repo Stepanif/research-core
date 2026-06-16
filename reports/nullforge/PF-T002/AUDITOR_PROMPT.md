@@ -27,7 +27,7 @@ reports/nullforge/PF-T002/TEST_RESULTS.md
 Use the incoming package PF-T002 ticket source unless `tickets/nullforge/PF-T002-create-nullforge-current-status-and-source-index.md` now exists:
 
 ```text
-C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T002-create-nullforge-current-status-and-source-index.md
+<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\PF-T002-create-nullforge-current-status-and-source-index.md
 ```
 
 ## Verify

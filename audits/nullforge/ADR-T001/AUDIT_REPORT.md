@@ -25,7 +25,7 @@ Audited only ADR-T001. No fixes were implemented. No `ADR-T002` or downstream ti
 - `reports/nullforge/ADR-T001/TEST_RESULTS.md`
 - `reports/nullforge/ADR-T001/AUDITOR_PROMPT.md`
 - Incoming package ticket source:
-  `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\ADR-T001-name-platform-stack-engine-adr.md`
+  `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\ADR-T001-name-platform-stack-engine-adr.md`
 - Dependency evidence:
   - `audits/nullforge/PF-T002/AUDIT_REPORT.md`
   - `reports/nullforge/PF-T002/TEST_RESULTS.md`

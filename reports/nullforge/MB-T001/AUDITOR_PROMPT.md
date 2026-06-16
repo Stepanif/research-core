@@ -1,6 +1,6 @@
 # MB-T001 Auditor Prompt
 
-You are Codex working in `C:\Users\Filip\Desktop\Repos\research-core`.
+You are Codex working in `<repo-root>`.
 
 Task: independently audit `MB-T001` only.
 

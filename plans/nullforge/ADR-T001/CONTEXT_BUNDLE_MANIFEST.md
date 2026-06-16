@@ -8,10 +8,10 @@ Purpose: Provide the smallest sufficient active context for the ADR-T001 Planner
 
 | File | Truth status | Why included |
 |---|---|---|
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\ADR-T001-name-platform-stack-engine-adr.md` | Active ADR-T001 ticket source | Defines purpose, scope, outputs, acceptance criteria, checks, human gates, forbidden actions, and closeout requirement. |
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_BRIEF.md` | Active milestone source | Defines M0 goal, non-goals, target baseline, source doctrine, mission slice, and no-implementation boundary. |
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\TICKET_QUEUE.md` | Active milestone queue | Confirms serial order: PF-T002 -> ADR-T001 -> ADR-T002. |
-| `C:\Users\Filip\Desktop\NullForge_Incoming\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\HUMAN_GATE_TRIGGERS.md` | Active gate policy | Defines source-of-truth, technical, data, and product/legal gate triggers. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\tickets\nullforge\ADR-T001-name-platform-stack-engine-adr.md` | Active ADR-T001 ticket source | Defines purpose, scope, outputs, acceptance criteria, checks, human gates, forbidden actions, and closeout requirement. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\MILESTONE_BRIEF.md` | Active milestone source | Defines M0 goal, non-goals, target baseline, source doctrine, mission slice, and no-implementation boundary. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\TICKET_QUEUE.md` | Active milestone queue | Confirms serial order: PF-T002 -> ADR-T001 -> ADR-T002. |
+| `<nullforge-incoming-root>\01_extracts\NullForge_M0_Repo_Source_Import_v0_4_Package\milestones\nullforge\M0-repo-source-import\HUMAN_GATE_TRIGGERS.md` | Active gate policy | Defines source-of-truth, technical, data, and product/legal gate triggers. |
 | `docs/nullforge/README.md` | Active NullForge docs entry point | Establishes NullForge docs authority boundary and no-implementation status. |
 | `docs/nullforge/CURRENT_STATUS.md` | Active NullForge current status | Confirms current phase, PF-T000/PF-T001/PF-T002 dependency state, next action ADR-T001, gates, and claim status. |
 | `docs/nullforge/SOURCE_INDEX.md` | Active NullForge source index | Identifies active docs, imported volumes, external package inputs, and pending ADR-T001/ADR-T002. |
