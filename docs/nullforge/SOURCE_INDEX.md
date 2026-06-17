@@ -2,7 +2,7 @@
 
 Date: `2026-06-17`
 
-Active phase: `M1_TAURI_SCAFFOLD_PLAN_COMPLETE`
+Active phase: `M1_TAURI_SHELL_SCAFFOLD_TOOLCHAIN_HOLD`
 
 This index links only to repo-local files that exist. Incoming package sources that are not repo-local are listed in plain text and are not linked as repo paths.
 
@@ -13,8 +13,8 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | Source | Purpose | Truth status |
 |---|---|---|
 | [NullForge README](README.md) | Entry point for NullForge docs. | Active NullForge planning navigation. |
-| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after DA-T002 audit `PASS`. |
-| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after DA-T002 audit `PASS`. |
+| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after DA-T003 audit `HOLD`. |
+| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after DA-T003 audit `HOLD`. |
 | [Decision Ledger](DECISION_LEDGER.md) | Seed decision and pending ADR ledger. | Active NullForge decision tracking after PF-T002 audit disposition. |
 | [Archive Policy](ARCHIVE_POLICY.md) | Source authority, archive, quarantine, and prompt policy. | Active NullForge governance baseline after PF-T002 audit disposition. |
 | [M0 Handoff](M0_HANDOFF.md) | M0 repo source import and canonical baseline handoff summary. | Active MB-T001 handoff source after MB-T001 audit `PASS`; not implementation proof. |
@@ -195,6 +195,18 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [DA-T002 Audit Report](../../audits/nullforge/DA-T002/AUDIT_REPORT.md) | Independent audit report and disposition. | DA-T002 audit decision `PASS`. |
 | [DA-T002 Findings](../../audits/nullforge/DA-T002/FINDINGS.md) | Independent audit findings summary. | No blocking findings; DA-T002 remains docs-only scaffold plan source work. |
 | [DA-T002 Repair Prompt](../../audits/nullforge/DA-T002/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for DA-T002 audit `PASS`. |
+| [DA-T003 Context Bundle](../../plans/nullforge/DA-T003/CONTEXT_BUNDLE.md) | Curated context for minimal Tauri shell scaffold implementation. | Repo-local context artifact; DA-T003 audit `HOLD` due missing Rust/Cargo before scaffold creation. |
+| [DA-T003 Context Bundle Manifest](../../plans/nullforge/DA-T003/CONTEXT_BUNDLE_MANIFEST.md) | DA-T003 context source list and exclusions. | Repo-local context artifact; DA-T003 audit `HOLD` due missing Rust/Cargo before scaffold creation. |
+| [DA-T003 Plan](../../plans/nullforge/DA-T003/PLAN.md) | Bounded implementation plan for minimal launch-only Tauri shell scaffold. | Repo-local plan artifact; DA-T003 audit `HOLD` due missing Rust/Cargo before scaffold creation. |
+| [DA-T003 Acceptance](../../plans/nullforge/DA-T003/ACCEPTANCE.md) | DA-T003 acceptance criteria and required checks. | Repo-local plan artifact; DA-T003 audit `HOLD` due missing Rust/Cargo before scaffold creation. |
+| [DA-T003 Implementor Prompt](../../plans/nullforge/DA-T003/IMPLEMENTOR_PROMPT.md) | DA-T003 implementor instructions. | Repo-local plan artifact; DA-T003 audit `HOLD` due missing Rust/Cargo before scaffold creation. |
+| [DA-T003 Implementation Report](../../reports/nullforge/DA-T003/IMPLEMENTATION_REPORT.md) | Blocked implementor report. | DA-T003 stopped before scaffold creation; no `apps/`, app package, lockfile, Tauri, Rust, React, TypeScript, JavaScript, CSS, or HTML files were created. |
+| [DA-T003 Changed Files](../../reports/nullforge/DA-T003/CHANGED_FILES.md) | Changed-file inventory for blocked attempt. | Records DA-T003 report-only implementation attempt and no scaffold files. |
+| [DA-T003 Test Results](../../reports/nullforge/DA-T003/TEST_RESULTS.md) | Required probe and skipped-check results. | Records `node`/`pnpm` available, `rustc`/`cargo` unavailable, and DA-T003 stopped before scaffold creation. |
+| [DA-T003 Auditor Prompt](../../reports/nullforge/DA-T003/AUDITOR_PROMPT.md) | Independent auditor prompt. | Created by DA-T003 blocked implementor attempt. |
+| [DA-T003 Audit Report](../../audits/nullforge/DA-T003/AUDIT_REPORT.md) | Independent audit report and disposition. | DA-T003 audit decision `HOLD`; toolchain blocker confirmed. |
+| [DA-T003 Findings](../../audits/nullforge/DA-T003/FINDINGS.md) | Independent audit findings summary. | Blocking finding: `rustc` and `cargo` unavailable on PATH. |
+| [DA-T003 Repair Prompt](../../audits/nullforge/DA-T003/REPAIR_PROMPT.md) | Bounded resume prompt after human-approved toolchain availability or plan change. | Repair prompt only; no environment repair or implementation performed. |
 
 ## Incoming package inputs
 
@@ -236,6 +248,7 @@ Prompt files are not canonical volume content. PF-T001 did not import package pr
 
 | Item | Expected role | Status |
 |---|---|---|
-| `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started in DA-T002. |
-| `DA-T003`, `DA-T004`, `WB-T001`, `MB-T002` | Future scoped M1 desktop bridge proof work after DA-T002 closeout and human direction. | Pending downstream; not created or started in DA-T002. |
+| `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started. |
+| `DA-T003` resume | Future scoped resume only after human-approved `rustc`/`cargo` availability or plan change. | Blocked with audit `HOLD`; no scaffold was created. |
+| `DA-T004`, `WB-T001`, `MB-T002` | Future scoped M1 desktop bridge proof work after DA-T003 is unblocked and separately authorized. | Pending downstream; not created or started. |
 | M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in DA-T002. |
