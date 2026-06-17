@@ -2,7 +2,7 @@
 
 Date: `2026-06-17`
 
-Active phase: `M1_DESKTOP_BRIDGE_CONTRACT_COMPLETE`
+Active phase: `M1_TAURI_SCAFFOLD_PLAN_COMPLETE`
 
 This index links only to repo-local files that exist. Incoming package sources that are not repo-local are listed in plain text and are not linked as repo paths.
 
@@ -13,8 +13,8 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | Source | Purpose | Truth status |
 |---|---|---|
 | [NullForge README](README.md) | Entry point for NullForge docs. | Active NullForge planning navigation. |
-| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after DA-T001 audit `PASS` closeout. |
-| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after DA-T001 audit `PASS` closeout. |
+| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after DA-T002 audit `PASS`. |
+| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after DA-T002 audit `PASS`. |
 | [Decision Ledger](DECISION_LEDGER.md) | Seed decision and pending ADR ledger. | Active NullForge decision tracking after PF-T002 audit disposition. |
 | [Archive Policy](ARCHIVE_POLICY.md) | Source authority, archive, quarantine, and prompt policy. | Active NullForge governance baseline after PF-T002 audit disposition. |
 | [M0 Handoff](M0_HANDOFF.md) | M0 repo source import and canonical baseline handoff summary. | Active MB-T001 handoff source after MB-T001 audit `PASS`; not implementation proof. |
@@ -25,6 +25,7 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [QA Environment Repair Path](qa/ENVIRONMENT_REPAIR_PATH.md) | QA-T004 human-gated local Python environment repair/readiness path preparation packet. | Active QA-T004 implementation source after audit `PASS`; not environment repair or CLI readiness proof. |
 | [QA Environment Repair Execution](qa/ENVIRONMENT_REPAIR_EXECUTION.md) | QA-T005 human-approved isolated project-local virtual environment repair/readiness execution record. | Active QA-T005 execution source after audit `PASS`; readiness proof is limited to `.venv-qa-t005`. |
 | [Engine Bridge Contract](architecture/ENGINE_BRIDGE_CONTRACT.md) | DA-T001 planned desktop bridge command contract. | Active DA-T001 source after audit `PASS`; docs-only and not bridge/app implementation proof. |
+| [Tauri Scaffold Plan](architecture/TAURI_SCAFFOLD_PLAN.md) | DA-T002 planned Tauri app scaffold source document. | Active DA-T002 source after audit `PASS`; docs-only and not app/scaffold/runtime implementation proof. |
 | [ADR-T001 - Name/platform/stack/engine](adr/ADR-T001-name-platform-stack-engine.md) | Records working product name, first platform, default desktop stack direction, and ResearchCore Engine boundary. | Active NullForge decision record after ADR-T001 audit `PASS`; not implementation proof. |
 | [ADR-T002 - Local-first/no-cloud MVP](adr/ADR-T002-local-first-no-cloud-mvp.md) | Records local-first/no-cloud MVP boundary. | Active NullForge decision record after ADR-T002 audit `PASS`; not implementation proof. |
 | [PF-T000 Import Plan](import/PF-T000_IMPORT_PLAN.md) | Bounded import and source-of-truth plan. | Active PF-T000 source after audit `PASS`. |
@@ -182,6 +183,18 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [DA-T001 Audit Report](../../audits/nullforge/DA-T001/AUDIT_REPORT.md) | Independent audit report and disposition. | DA-T001 audit decision `PASS`. |
 | [DA-T001 Findings](../../audits/nullforge/DA-T001/FINDINGS.md) | Independent audit findings summary. | No blocking findings; DA-T001 remains docs-only bridge contract source work. |
 | [DA-T001 Repair Prompt](../../audits/nullforge/DA-T001/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for DA-T001 audit `PASS`. |
+| [DA-T002 Context Bundle](../../plans/nullforge/DA-T002/CONTEXT_BUNDLE.md) | Curated context for Tauri scaffold plan finalization. | Repo-local context artifact. |
+| [DA-T002 Context Bundle Manifest](../../plans/nullforge/DA-T002/CONTEXT_BUNDLE_MANIFEST.md) | DA-T002 context source list and exclusions. | Repo-local context artifact. |
+| [DA-T002 Plan](../../plans/nullforge/DA-T002/PLAN.md) | Bounded implementation plan for Tauri scaffold plan finalization. | Repo-local plan artifact. |
+| [DA-T002 Acceptance](../../plans/nullforge/DA-T002/ACCEPTANCE.md) | DA-T002 acceptance criteria and required checks. | Repo-local plan artifact. |
+| [DA-T002 Implementor Prompt](../../plans/nullforge/DA-T002/IMPLEMENTOR_PROMPT.md) | DA-T002 implementor instructions. | Repo-local plan artifact. |
+| [DA-T002 Implementation Report](../../reports/nullforge/DA-T002/IMPLEMENTATION_REPORT.md) | Implementor report. | Created by DA-T002 implementor. |
+| [DA-T002 Changed Files](../../reports/nullforge/DA-T002/CHANGED_FILES.md) | Changed-file inventory. | Created by DA-T002 implementor. |
+| [DA-T002 Test Results](../../reports/nullforge/DA-T002/TEST_RESULTS.md) | Required check results. | Created by DA-T002 implementor. |
+| [DA-T002 Auditor Prompt](../../reports/nullforge/DA-T002/AUDITOR_PROMPT.md) | Independent auditor prompt. | Created by DA-T002 implementor. |
+| [DA-T002 Audit Report](../../audits/nullforge/DA-T002/AUDIT_REPORT.md) | Independent audit report and disposition. | DA-T002 audit decision `PASS`. |
+| [DA-T002 Findings](../../audits/nullforge/DA-T002/FINDINGS.md) | Independent audit findings summary. | No blocking findings; DA-T002 remains docs-only scaffold plan source work. |
+| [DA-T002 Repair Prompt](../../audits/nullforge/DA-T002/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for DA-T002 audit `PASS`. |
 
 ## Incoming package inputs
 
@@ -223,6 +236,6 @@ Prompt files are not canonical volume content. PF-T001 did not import package pr
 
 | Item | Expected role | Status |
 |---|---|---|
-| `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started in DA-T001. |
-| `DA-T002`, `DA-T003`, `DA-T004`, `WB-T001`, `MB-T002` | Future scoped M1 desktop bridge proof work after DA-T001 audit disposition and human direction. | Pending downstream; not created or started in DA-T001. |
-| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in DA-T001. |
+| `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started in DA-T002. |
+| `DA-T003`, `DA-T004`, `WB-T001`, `MB-T002` | Future scoped M1 desktop bridge proof work after DA-T002 closeout and human direction. | Pending downstream; not created or started in DA-T002. |
+| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in DA-T002. |
