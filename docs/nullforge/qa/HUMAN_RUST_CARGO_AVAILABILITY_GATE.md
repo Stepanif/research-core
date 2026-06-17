@@ -108,6 +108,67 @@ This table is a record template. The DA-T003H implementation does not fill it wi
 
 The `rustc --version` and `cargo --version` entries above are human-recorded external observations only. They are not commands run by DA-T003H and are not DA-T003H execution proof.
 
+## DA-T003V Human Evidence Entry
+
+Date/time of human action: `2026-06-17 2:28 PM ET`
+
+Actor/approver: `Filip Stepanian / project owner / human approver`
+
+Method category: Human local PowerShell verification on Windows 11 x64 from `C:\Users\Filip\Desktop\Repos\research-core`.
+
+PATH visibility note for Codex shell:
+
+```text
+Human PowerShell could not resolve rustc or cargo via PATH. where.exe rustc and where.exe cargo returned "INFO: Could not find files for the given pattern(s)." rustc --version and cargo --version both failed because the commands were not recognized. Codex shell PATH visibility should not be assumed. DA-T003V should be treated as HOLD/BLOCKED for Rust toolchain verification until Rust/PATH setup is handled through an approved human-gated setup step or a scoped follow-up ticket. No install, dependency change, Tauri scaffold, package creation, or app setup is authorized by this verification record.
+```
+
+Human-observed `rustc --version` output:
+
+```text
+rustc : The term 'rustc' is not recognized as the name of a cmdlet, function, script file, or operable program. Check
+the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:8 char:1
++ rustc --version
++ ~~~~~
+    + CategoryInfo          : ObjectNotFound: (rustc:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+```
+
+Human-observed `cargo --version` output:
+
+```text
+cargo : The term 'cargo' is not recognized as the name of a cmdlet, function, script file, or operable program. Check
+the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:9 char:1
++ cargo --version
++ ~~~~~
+    + CategoryInfo          : ObjectNotFound: (cargo:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+```
+
+Human confirmation that no app scaffold/package files were created:
+
+```text
+Confirmed by human local PowerShell after DA-T003V verification commands: no app scaffold/package files were detected. The checked paths all returned False:
+
+- src-tauri: False
+- package.json: False
+- package-lock.json: False
+- pnpm-lock.yaml: False
+- yarn.lock: False
+- bun.lockb: False
+- vite.config.ts: False
+- vite.config.js: False
+- apps\nullforge: False
+- apps\desktop: False
+- packages\nullforge: False
+- packages\desktop: False
+
+git status --short printed no changes before or after the verification commands, so the repo appeared clean from this PowerShell output.
+```
+
+DA-T003V records negative human evidence only. It does not prove Rust/Cargo availability and does not unblock DA-T003. DA-T003 remains blocked until a separate human-approved setup action makes `rustc` and `cargo` available on PATH and a later scoped DA-T003 resume ticket independently verifies `rustc --version` and `cargo --version`, or until a separate scoped plan changes DA-T003.
+
 ## Future DA-T003 Resume Boundary
 
 A later DA-T003 resume ticket may check:
@@ -199,4 +260,4 @@ The following remain excluded:
 
 ## Next Action After Audit
 
-After DA-T003H independent audit disposition, human direction is still needed before any Rust/Cargo availability action, DA-T003 resume, app scaffold creation, dependency work, runtime command, bridge implementation, sidecar work, ADR-T003, DA-T004, WB-T001, MB-T002, or downstream M1 work.
+After DA-T003V evidence recording, human direction is still needed before any Rust/Cargo setup action, DA-T003 resume, app scaffold creation, dependency work, runtime command, bridge implementation, sidecar work, ADR-T003, DA-T004, WB-T001, MB-T002, or downstream M1 work.
