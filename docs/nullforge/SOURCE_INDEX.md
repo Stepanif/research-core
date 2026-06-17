@@ -1,8 +1,8 @@
 # NullForge Source Index
 
-Date: `2026-06-16`
+Date: `2026-06-17`
 
-Active phase: `M1_READINESS_ENVIRONMENT_REPAIR_PATH_CLOSEOUT`
+Active phase: `M1_READINESS_ENVIRONMENT_REPAIR_EXECUTION_COMPLETE`
 
 This index links only to repo-local files that exist. Incoming package sources that are not repo-local are listed in plain text and are not linked as repo paths.
 
@@ -13,8 +13,8 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | Source | Purpose | Truth status |
 |---|---|---|
 | [NullForge README](README.md) | Entry point for NullForge docs. | Active NullForge planning navigation. |
-| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after QA-T004 audit `PASS`. |
-| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after PF-T002 audit disposition. |
+| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after QA-T005 audit `PASS` closeout. |
+| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after QA-T005 audit `PASS` closeout. |
 | [Decision Ledger](DECISION_LEDGER.md) | Seed decision and pending ADR ledger. | Active NullForge decision tracking after PF-T002 audit disposition. |
 | [Archive Policy](ARCHIVE_POLICY.md) | Source authority, archive, quarantine, and prompt policy. | Active NullForge governance baseline after PF-T002 audit disposition. |
 | [M0 Handoff](M0_HANDOFF.md) | M0 repo source import and canonical baseline handoff summary. | Active MB-T001 handoff source after MB-T001 audit `PASS`; not implementation proof. |
@@ -23,6 +23,7 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [QA Environment Triage](qa/ENVIRONMENT_TRIAGE.md) | QA-T002 local Python environment and CLI/runtime blocker triage record. | Active QA-T002 triage source after audit `PASS`; not environment repair or implementation proof. |
 | [QA Environment Repair Decision](qa/ENVIRONMENT_REPAIR_DECISION.md) | QA-T003 human-gated local Python environment repair/readiness decision packet. | Active QA-T003 implementation source after audit `PASS`; not environment repair or CLI readiness proof. |
 | [QA Environment Repair Path](qa/ENVIRONMENT_REPAIR_PATH.md) | QA-T004 human-gated local Python environment repair/readiness path preparation packet. | Active QA-T004 implementation source after audit `PASS`; not environment repair or CLI readiness proof. |
+| [QA Environment Repair Execution](qa/ENVIRONMENT_REPAIR_EXECUTION.md) | QA-T005 human-approved isolated project-local virtual environment repair/readiness execution record. | Active QA-T005 execution source after audit `PASS`; readiness proof is limited to `.venv-qa-t005`. |
 | [ADR-T001 - Name/platform/stack/engine](adr/ADR-T001-name-platform-stack-engine.md) | Records working product name, first platform, default desktop stack direction, and ResearchCore Engine boundary. | Active NullForge decision record after ADR-T001 audit `PASS`; not implementation proof. |
 | [ADR-T002 - Local-first/no-cloud MVP](adr/ADR-T002-local-first-no-cloud-mvp.md) | Records local-first/no-cloud MVP boundary. | Active NullForge decision record after ADR-T002 audit `PASS`; not implementation proof. |
 | [PF-T000 Import Plan](import/PF-T000_IMPORT_PLAN.md) | Bounded import and source-of-truth plan. | Active PF-T000 source after audit `PASS`. |
@@ -156,6 +157,18 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [QA-T004 Audit Report](../../audits/nullforge/QA-T004/AUDIT_REPORT.md) | Independent audit report and disposition. | QA-T004 audit decision `PASS`. |
 | [QA-T004 Findings](../../audits/nullforge/QA-T004/FINDINGS.md) | Independent audit findings summary. | No blocking findings; local environment repair remains human-gated by design. |
 | [QA-T004 Repair Prompt](../../audits/nullforge/QA-T004/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for QA-T004 audit `PASS`. |
+| [QA-T005 Context Bundle](../../plans/nullforge/QA-T005/CONTEXT_BUNDLE.md) | Curated context for human-approved local Python environment repair/readiness execution. | Repo-local context artifact. |
+| [QA-T005 Context Bundle Manifest](../../plans/nullforge/QA-T005/CONTEXT_BUNDLE_MANIFEST.md) | QA-T005 context source list and exclusions. | Repo-local context artifact. |
+| [QA-T005 Plan](../../plans/nullforge/QA-T005/PLAN.md) | Bounded implementation plan for environment repair/readiness execution. | Repo-local plan artifact. |
+| [QA-T005 Acceptance](../../plans/nullforge/QA-T005/ACCEPTANCE.md) | QA-T005 acceptance criteria and required checks. | Repo-local plan artifact. |
+| [QA-T005 Implementor Prompt](../../plans/nullforge/QA-T005/IMPLEMENTOR_PROMPT.md) | QA-T005 implementor instructions. | Repo-local plan artifact. |
+| [QA-T005 Implementation Report](../../reports/nullforge/QA-T005/IMPLEMENTATION_REPORT.md) | Implementor report. | Created by QA-T005 implementor. |
+| [QA-T005 Changed Files](../../reports/nullforge/QA-T005/CHANGED_FILES.md) | Changed-file inventory. | Created by QA-T005 implementor. |
+| [QA-T005 Test Results](../../reports/nullforge/QA-T005/TEST_RESULTS.md) | Required check and approved command results. | Created by QA-T005 implementor. |
+| [QA-T005 Auditor Prompt](../../reports/nullforge/QA-T005/AUDITOR_PROMPT.md) | Independent auditor prompt. | Created by QA-T005 implementor. |
+| [QA-T005 Audit Report](../../audits/nullforge/QA-T005/AUDIT_REPORT.md) | Independent audit report and disposition. | QA-T005 audit decision `PASS`. |
+| [QA-T005 Findings](../../audits/nullforge/QA-T005/FINDINGS.md) | Independent audit findings summary. | No blocking findings; QA-T005 readiness proof remains scoped to `.venv-qa-t005`. |
+| [QA-T005 Repair Prompt](../../audits/nullforge/QA-T005/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for QA-T005 audit `PASS`. |
 
 ## Incoming package inputs
 
@@ -197,6 +210,6 @@ Prompt files are not canonical volume content. PF-T001 did not import package pr
 
 | Item | Expected role | Status |
 |---|---|---|
-| `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started in QA-T004. |
-| M1 desktop/bridge/product implementation tickets | Future scoped M1 implementation work after QA readiness and human direction. | Pending downstream; not created or started in QA-T004. |
-| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in QA-T004. |
+| `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started in QA-T005. |
+| M1 desktop/bridge/product implementation tickets | Future scoped M1 implementation work after QA readiness and human direction. | Pending downstream; not created or started in QA-T005. |
+| M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in QA-T005. |
