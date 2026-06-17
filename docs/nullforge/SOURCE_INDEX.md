@@ -13,8 +13,8 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | Source | Purpose | Truth status |
 |---|---|---|
 | [NullForge README](README.md) | Entry point for NullForge docs. | Active NullForge planning navigation. |
-| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after DA-T003 audit `HOLD`. |
-| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after DA-T003 audit `HOLD`. |
+| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after DA-T003R audit `PASS`; DA-T003 remains blocked. |
+| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after DA-T003R audit `PASS`; DA-T003 remains blocked. |
 | [Decision Ledger](DECISION_LEDGER.md) | Seed decision and pending ADR ledger. | Active NullForge decision tracking after PF-T002 audit disposition. |
 | [Archive Policy](ARCHIVE_POLICY.md) | Source authority, archive, quarantine, and prompt policy. | Active NullForge governance baseline after PF-T002 audit disposition. |
 | [M0 Handoff](M0_HANDOFF.md) | M0 repo source import and canonical baseline handoff summary. | Active MB-T001 handoff source after MB-T001 audit `PASS`; not implementation proof. |
@@ -24,6 +24,7 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [QA Environment Repair Decision](qa/ENVIRONMENT_REPAIR_DECISION.md) | QA-T003 human-gated local Python environment repair/readiness decision packet. | Active QA-T003 implementation source after audit `PASS`; not environment repair or CLI readiness proof. |
 | [QA Environment Repair Path](qa/ENVIRONMENT_REPAIR_PATH.md) | QA-T004 human-gated local Python environment repair/readiness path preparation packet. | Active QA-T004 implementation source after audit `PASS`; not environment repair or CLI readiness proof. |
 | [QA Environment Repair Execution](qa/ENVIRONMENT_REPAIR_EXECUTION.md) | QA-T005 human-approved isolated project-local virtual environment repair/readiness execution record. | Active QA-T005 execution source after audit `PASS`; readiness proof is limited to `.venv-qa-t005`. |
+| [Rust/Cargo Toolchain Decision](qa/RUST_CARGO_TOOLCHAIN_DECISION.md) | DA-T003R human-gated Rust/Cargo availability decision path for DA-T003 HOLD. | Active DA-T003R source after audit `PASS`; docs-only and not Rust/Cargo installation, PATH repair, environment repair, toolchain proof, app scaffold, package/dependency work, or runtime proof. |
 | [Engine Bridge Contract](architecture/ENGINE_BRIDGE_CONTRACT.md) | DA-T001 planned desktop bridge command contract. | Active DA-T001 source after audit `PASS`; docs-only and not bridge/app implementation proof. |
 | [Tauri Scaffold Plan](architecture/TAURI_SCAFFOLD_PLAN.md) | DA-T002 planned Tauri app scaffold source document. | Active DA-T002 source after audit `PASS`; docs-only and not app/scaffold/runtime implementation proof. |
 | [ADR-T001 - Name/platform/stack/engine](adr/ADR-T001-name-platform-stack-engine.md) | Records working product name, first platform, default desktop stack direction, and ResearchCore Engine boundary. | Active NullForge decision record after ADR-T001 audit `PASS`; not implementation proof. |
@@ -207,6 +208,19 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [DA-T003 Audit Report](../../audits/nullforge/DA-T003/AUDIT_REPORT.md) | Independent audit report and disposition. | DA-T003 audit decision `HOLD`; toolchain blocker confirmed. |
 | [DA-T003 Findings](../../audits/nullforge/DA-T003/FINDINGS.md) | Independent audit findings summary. | Blocking finding: `rustc` and `cargo` unavailable on PATH. |
 | [DA-T003 Repair Prompt](../../audits/nullforge/DA-T003/REPAIR_PROMPT.md) | Bounded resume prompt after human-approved toolchain availability or plan change. | Repair prompt only; no environment repair or implementation performed. |
+| [DA-T003R Context Bundle](../../plans/nullforge/DA-T003R/CONTEXT_BUNDLE.md) | Curated context for Rust/Cargo toolchain availability decisioning. | Repo-local context artifact. |
+| [DA-T003R Context Bundle Manifest](../../plans/nullforge/DA-T003R/CONTEXT_BUNDLE_MANIFEST.md) | DA-T003R context source list and exclusions. | Repo-local context artifact. |
+| [DA-T003R Plan](../../plans/nullforge/DA-T003R/PLAN.md) | Bounded implementation plan for docs-only Rust/Cargo decision source. | Repo-local plan artifact. |
+| [DA-T003R Acceptance](../../plans/nullforge/DA-T003R/ACCEPTANCE.md) | DA-T003R acceptance criteria and required checks. | Repo-local plan artifact. |
+| [DA-T003R Implementor Prompt](../../plans/nullforge/DA-T003R/IMPLEMENTOR_PROMPT.md) | DA-T003R implementor instructions. | Repo-local plan artifact. |
+| [DA-T003R Decision Source](qa/RUST_CARGO_TOOLCHAIN_DECISION.md) | Human-gated Rust/Cargo availability decision path. | DA-T003R source after audit `PASS`; not toolchain proof or environment repair. |
+| [DA-T003R Implementation Report](../../reports/nullforge/DA-T003R/IMPLEMENTATION_REPORT.md) | Implementor report. | Created by DA-T003R implementor. |
+| [DA-T003R Changed Files](../../reports/nullforge/DA-T003R/CHANGED_FILES.md) | Changed-file inventory. | Created by DA-T003R implementor. |
+| [DA-T003R Test Results](../../reports/nullforge/DA-T003R/TEST_RESULTS.md) | Required check results. | Created by DA-T003R implementor. |
+| [DA-T003R Auditor Prompt](../../reports/nullforge/DA-T003R/AUDITOR_PROMPT.md) | Independent auditor prompt. | Created by DA-T003R implementor. |
+| [DA-T003R Audit Report](../../audits/nullforge/DA-T003R/AUDIT_REPORT.md) | Independent audit report and disposition. | DA-T003R audit decision `PASS`. |
+| [DA-T003R Findings](../../audits/nullforge/DA-T003R/FINDINGS.md) | Independent audit findings summary. | No blocking findings; DA-T003R remains docs-only toolchain availability decision work. |
+| [DA-T003R Repair Prompt](../../audits/nullforge/DA-T003R/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for DA-T003R audit `PASS`. |
 
 ## Incoming package inputs
 
@@ -249,6 +263,6 @@ Prompt files are not canonical volume content. PF-T001 did not import package pr
 | Item | Expected role | Status |
 |---|---|---|
 | `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started. |
-| `DA-T003` resume | Future scoped resume only after human-approved `rustc`/`cargo` availability or plan change. | Blocked with audit `HOLD`; no scaffold was created. |
+| `DA-T003` resume | Future scoped resume only after human-approved `rustc`/`cargo` availability or plan change. | Blocked with audit `HOLD`; DA-T003R audit `PASS`; no scaffold was created. |
 | `DA-T004`, `WB-T001`, `MB-T002` | Future scoped M1 desktop bridge proof work after DA-T003 is unblocked and separately authorized. | Pending downstream; not created or started. |
 | M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in DA-T002. |
