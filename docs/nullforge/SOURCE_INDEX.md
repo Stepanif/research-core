@@ -2,7 +2,7 @@
 
 Date: `2026-06-17`
 
-Active phase: `M1_TAURI_SHELL_SCAFFOLD_TOOLCHAIN_SETUP_AUDIT_PASS`
+Active phase: `M1_TAURI_SHELL_SCAFFOLD_HUMAN_EVIDENCE_AUDIT_PASS`
 
 This index links only to repo-local files that exist. Incoming package sources that are not repo-local are listed in plain text and are not linked as repo paths.
 
@@ -13,8 +13,8 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | Source | Purpose | Truth status |
 |---|---|---|
 | [NullForge README](README.md) | Entry point for NullForge docs. | Active NullForge planning navigation. |
-| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after DA-T003S audit `PASS`. |
-| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after DA-T003S audit `PASS`. |
+| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after DA-T003V audit `PASS`. |
+| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after DA-T003V audit `PASS`. |
 | [Decision Ledger](DECISION_LEDGER.md) | Seed decision and pending ADR ledger. | Active NullForge decision tracking after PF-T002 audit disposition. |
 | [Archive Policy](ARCHIVE_POLICY.md) | Source authority, archive, quarantine, and prompt policy. | Active NullForge governance baseline after PF-T002 audit disposition. |
 | [M0 Handoff](M0_HANDOFF.md) | M0 repo source import and canonical baseline handoff summary. | Active MB-T001 handoff source after MB-T001 audit `PASS`; not implementation proof. |
@@ -25,7 +25,7 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [QA Environment Repair Path](qa/ENVIRONMENT_REPAIR_PATH.md) | QA-T004 human-gated local Python environment repair/readiness path preparation packet. | Active QA-T004 implementation source after audit `PASS`; not environment repair or CLI readiness proof. |
 | [QA Environment Repair Execution](qa/ENVIRONMENT_REPAIR_EXECUTION.md) | QA-T005 human-approved isolated project-local virtual environment repair/readiness execution record. | Active QA-T005 execution source after audit `PASS`; readiness proof is limited to `.venv-qa-t005`. |
 | [Rust/Cargo Toolchain Decision](qa/RUST_CARGO_TOOLCHAIN_DECISION.md) | DA-T003R human-gated Rust/Cargo availability decision path for DA-T003 HOLD. | Active DA-T003R source after audit `PASS`; docs-only and not Rust/Cargo installation, PATH repair, environment repair, toolchain proof, app scaffold, package/dependency work, or runtime proof. |
-| [Human Rust/Cargo Availability Gate](qa/HUMAN_RUST_CARGO_AVAILABILITY_GATE.md) | DA-T003H human-only Rust/Cargo availability gate with DA-T003V human evidence entry. | Active DA-T003H source after audit `PASS`, updated by DA-T003V evidence recording pending independent audit; docs-only and not Rust/Cargo installation, PATH repair, environment repair, toolchain proof, app scaffold, package/dependency work, or runtime proof. |
+| [Human Rust/Cargo Availability Gate](qa/HUMAN_RUST_CARGO_AVAILABILITY_GATE.md) | DA-T003H human-only Rust/Cargo availability gate with DA-T003V human evidence entry. | Active DA-T003H source after audit `PASS`, updated by DA-T003V evidence recording after audit `PASS`; docs-only and not Rust/Cargo installation, PATH repair, environment repair, toolchain proof, app scaffold, package/dependency work, or runtime proof. |
 | [Rust/Cargo Setup Path](qa/RUST_CARGO_SETUP_PATH.md) | DA-T003S human-approved Rust/Cargo setup path and setup evidence. | Active DA-T003S source after audit `PASS`; setup evidence only and not DA-T003 resume, app scaffold, package/dependency readiness, Tauri runtime, bridge behavior, sidecar behavior, or runtime proof. |
 | [Engine Bridge Contract](architecture/ENGINE_BRIDGE_CONTRACT.md) | DA-T001 planned desktop bridge command contract. | Active DA-T001 source after audit `PASS`; docs-only and not bridge/app implementation proof. |
 | [Tauri Scaffold Plan](architecture/TAURI_SCAFFOLD_PLAN.md) | DA-T002 planned Tauri app scaffold source document. | Active DA-T002 source after audit `PASS`; docs-only and not app/scaffold/runtime implementation proof. |
@@ -236,10 +236,13 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [DA-T003H Audit Report](../../audits/nullforge/DA-T003H/AUDIT_REPORT.md) | Independent audit report and disposition. | DA-T003H audit decision `PASS`. |
 | [DA-T003H Findings](../../audits/nullforge/DA-T003H/FINDINGS.md) | Independent audit findings summary. | No blocking findings; DA-T003H remains docs-only human Rust/Cargo availability gate work. |
 | [DA-T003H Repair Prompt](../../audits/nullforge/DA-T003H/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for DA-T003H audit `PASS`. |
-| [DA-T003V Evidence Record](../../reports/nullforge/DA-T003V/EVIDENCE_RECORD.md) | Human-provided Rust/Cargo evidence record. | DA-T003V negative evidence recorded; pending independent audit; not Codex verification or toolchain proof. |
+| [DA-T003V Evidence Record](../../reports/nullforge/DA-T003V/EVIDENCE_RECORD.md) | Human-provided Rust/Cargo evidence record. | DA-T003V negative evidence recorded after audit `PASS`; not Codex verification or toolchain proof. |
 | [DA-T003V Changed Files](../../reports/nullforge/DA-T003V/CHANGED_FILES.md) | Changed-file inventory. | Created by DA-T003V evidence recorder. |
 | [DA-T003V Test Results](../../reports/nullforge/DA-T003V/TEST_RESULTS.md) | Required check results. | Created by DA-T003V evidence recorder. |
 | [DA-T003V Auditor Prompt](../../reports/nullforge/DA-T003V/AUDITOR_PROMPT.md) | Independent auditor prompt. | Created by DA-T003V evidence recorder. |
+| [DA-T003V Audit Report](../../audits/nullforge/DA-T003V/AUDIT_REPORT.md) | Independent audit report and disposition. | DA-T003V audit decision `PASS`. |
+| [DA-T003V Findings](../../audits/nullforge/DA-T003V/FINDINGS.md) | Independent audit findings summary. | No blocking findings; DA-T003V remains historical negative human evidence only. |
+| [DA-T003V Repair Prompt](../../audits/nullforge/DA-T003V/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for DA-T003V audit `PASS`. |
 | [DA-T003S Context Bundle](../../plans/nullforge/DA-T003S/CONTEXT_BUNDLE.md) | Curated context for human-gated Rust/Cargo setup path. | Repo-local plan artifact. |
 | [DA-T003S Context Bundle Manifest](../../plans/nullforge/DA-T003S/CONTEXT_BUNDLE_MANIFEST.md) | DA-T003S context source list and exclusions. | Repo-local plan artifact. |
 | [DA-T003S Plan](../../plans/nullforge/DA-T003S/PLAN.md) | Bounded plan for Rust/Cargo setup path. | Repo-local plan artifact; latest implementor prompt explicitly authorized setup execution. |
@@ -296,6 +299,6 @@ Prompt files are not canonical volume content. PF-T001 did not import package pr
 |---|---|---|
 | `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started. |
 | Rust/Cargo setup action or scoped plan change | Separate human-approved setup action to make `rustc` and `cargo` available on PATH, or a separate scoped plan change before DA-T003 can resume. | DA-T003S setup evidence recorded with audit `PASS`; DA-T003 still requires separate scoped resume verification before any scaffold work. |
-| `DA-T003` resume | Future scoped resume only after Rust/Cargo setup is independently audited and a separate resume ticket independently verifies `rustc --version` and `cargo --version`, or after a separate scoped plan change. | Blocked with audit `HOLD`; DA-T003R audit `PASS`; DA-T003H audit `PASS`; DA-T003V negative evidence pending audit; DA-T003S audit `PASS`; no scaffold was created. |
+| `DA-T003` resume | Future scoped resume only after Rust/Cargo setup is independently audited and a separate resume ticket independently verifies `rustc --version` and `cargo --version`, or after a separate scoped plan change. | Blocked with audit `HOLD`; DA-T003R audit `PASS`; DA-T003H audit `PASS`; DA-T003V audit `PASS` for historical negative human evidence; DA-T003S audit `PASS`; no scaffold was created. |
 | `DA-T004`, `WB-T001`, `MB-T002` | Future scoped M1 desktop bridge proof work after DA-T003 is unblocked and separately authorized. | Pending downstream; not created or started. |
 | M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in DA-T002. |

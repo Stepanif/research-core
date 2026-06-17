@@ -169,6 +169,12 @@ git status --short printed no changes before or after the verification commands,
 
 DA-T003V records negative human evidence only. It does not prove Rust/Cargo availability and does not unblock DA-T003. DA-T003 remains blocked until a separate human-approved setup action makes `rustc` and `cargo` available on PATH and a later scoped DA-T003 resume ticket independently verifies `rustc --version` and `cargo --version`, or until a separate scoped plan changes DA-T003.
 
+DA-T003V audit closeout status:
+
+- `audits/nullforge/DA-T003V/AUDIT_REPORT.md` records `Decision: PASS`.
+- DA-T003V remains historical negative human evidence from before DA-T003S setup.
+- DA-T003S later setup evidence does not contradict DA-T003V and is not DA-T003 resume proof.
+
 ## Future DA-T003 Resume Boundary
 
 A later DA-T003 resume ticket may check:
@@ -258,6 +264,6 @@ The following remain excluded:
 - ES-derived fixtures;
 - product, market, trading, or validation claims.
 
-## Next Action After Audit
+## Next Action After DA-T003V Audit PASS
 
-After DA-T003V evidence recording, human direction is still needed before any Rust/Cargo setup action, DA-T003 resume, app scaffold creation, dependency work, runtime command, bridge implementation, sidecar work, ADR-T003, DA-T004, WB-T001, MB-T002, or downstream M1 work.
+After DA-T003V audit `PASS`, human direction is still needed before any DA-T003 resume, app scaffold creation, dependency work, runtime command, bridge implementation, sidecar work, ADR-T003, DA-T004, WB-T001, MB-T002, or downstream M1 work.
