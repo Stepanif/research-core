@@ -1,0 +1,14 @@
+[package]
+name = "nullforge-desktop"
+version = "0.0.0"
+description = "Launch-only NullForge desktop shell scaffold."
+authors = ["Filip Stepanian"]
+edition = "2021"
+rust-version = "1.77"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+tauri = { version = "2", features = [] }

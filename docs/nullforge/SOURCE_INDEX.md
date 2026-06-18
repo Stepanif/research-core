@@ -1,8 +1,8 @@
 # NullForge Source Index
 
-Date: `2026-06-17`
+Date: `2026-06-18`
 
-Active phase: `M1_TAURI_SHELL_SCAFFOLD_HUMAN_EVIDENCE_AUDIT_PASS`
+Active phase: `M1_WB_T001_AUDIT_PASS`
 
 This index links only to repo-local files that exist. Incoming package sources that are not repo-local are listed in plain text and are not linked as repo paths.
 
@@ -13,8 +13,8 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | Source | Purpose | Truth status |
 |---|---|---|
 | [NullForge README](README.md) | Entry point for NullForge docs. | Active NullForge planning navigation. |
-| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after DA-T003V audit `PASS`. |
-| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after DA-T003V audit `PASS`. |
+| [Current Status](CURRENT_STATUS.md) | Current NullForge state, gates, blockers, next action. | Active NullForge status baseline after WB-T001 repo-local audit `PASS`; MB-T002 and downstream work are not started. |
+| [Source Index](SOURCE_INDEX.md) | Index of repo-local NullForge sources and external active inputs. | Active NullForge source navigation after WB-T001 repo-local audit `PASS`; DA-T004 audit `PASS` remains the bridge-smoke authority, and WB-T001 adds only read-only display of returned artifact metadata. |
 | [Decision Ledger](DECISION_LEDGER.md) | Seed decision and pending ADR ledger. | Active NullForge decision tracking after PF-T002 audit disposition. |
 | [Archive Policy](ARCHIVE_POLICY.md) | Source authority, archive, quarantine, and prompt policy. | Active NullForge governance baseline after PF-T002 audit disposition. |
 | [M0 Handoff](M0_HANDOFF.md) | M0 repo source import and canonical baseline handoff summary. | Active MB-T001 handoff source after MB-T001 audit `PASS`; not implementation proof. |
@@ -256,6 +256,59 @@ Completed M0 baseline context: `REPO_SOURCE_IMPORT_BASELINE`.
 | [DA-T003S Audit Report](../../audits/nullforge/DA-T003S/AUDIT_REPORT.md) | Independent audit report and disposition. | DA-T003S audit decision `PASS`. |
 | [DA-T003S Findings](../../audits/nullforge/DA-T003S/FINDINGS.md) | Independent audit findings summary. | No blocking findings; DA-T003S remains setup-evidence-only work. |
 | [DA-T003S Repair Prompt](../../audits/nullforge/DA-T003S/REPAIR_PROMPT.md) | Bounded repair prompt if later drift is found. | No repair required for DA-T003S audit `PASS`. |
+| [DA-T003 Resume Context Bundle](../../plans/nullforge/DA-T003-RESUME/CONTEXT_BUNDLE.md) | Curated context for DA-T003 resume after DA-T003S setup evidence. | Repo-local plan artifact; not scaffold implementation proof. |
+| [DA-T003 Resume Context Bundle Manifest](../../plans/nullforge/DA-T003-RESUME/CONTEXT_BUNDLE_MANIFEST.md) | DA-T003 resume context source list and exclusions. | Repo-local plan artifact; not scaffold implementation proof. |
+| [DA-T003 Resume Plan](../../plans/nullforge/DA-T003-RESUME/PLAN.md) | Bounded plan for DA-T003 resume. | Repo-local plan artifact; requires fresh resume probes before scaffold creation. |
+| [DA-T003 Resume Acceptance](../../plans/nullforge/DA-T003-RESUME/ACCEPTANCE.md) | DA-T003 resume acceptance criteria and required checks. | Repo-local plan artifact. |
+| [DA-T003 Resume Implementor Prompt](../../plans/nullforge/DA-T003-RESUME/IMPLEMENTOR_PROMPT.md) | DA-T003 resume implementor instructions. | Repo-local plan artifact. |
+| [DA-T003 Resume Implementation Report](../../reports/nullforge/DA-T003-RESUME/IMPLEMENTATION_REPORT.md) | DA-T003-RESUME implementor report. | Created by DA-T003-RESUME; records fresh tool gate pass, bounded scaffold creation, app-local pnpm/icon repair, exact app-local install/build pass, process-level `tauri dev` launch evidence, and generated-output cleanup. |
+| [DA-T003 Resume Changed Files](../../reports/nullforge/DA-T003-RESUME/CHANGED_FILES.md) | Changed-file inventory for DA-T003-RESUME. | Records app-local scaffold files, app-local lockfiles, status/source updates, and DA-T003-RESUME reports only. |
+| [DA-T003 Resume Test Results](../../reports/nullforge/DA-T003-RESUME/TEST_RESULTS.md) | Required probe, install/build, launch-smoke, and boundary-check results. | Records `rustc`/`cargo`/`node`/`pnpm` available, app-local install/build pass, historical pre-repair Vite watcher and icon blockers, human-authorized app-local repairs, final process-level launch evidence, and no screenshot-level UI proof. |
+| [DA-T003 Resume Auditor Prompt](../../reports/nullforge/DA-T003-RESUME/AUDITOR_PROMPT.md) | Independent auditor prompt for DA-T003-RESUME. | Created by DA-T003-RESUME implementor; asks auditor to review bounded scaffold, app-local pnpm/icon repair, install/build proof, process-level launch evidence, and proof boundaries. |
+| [DA-T003 Resume Audit Report](../../audits/nullforge/DA-T003-RESUME/AUDIT_REPORT.md) | Independent audit report and disposition for DA-T003-RESUME. | DA-T003-RESUME audit decision `PASS`; process-level `nullforge-desktop.exe` launch evidence accepted for the launch-only scaffold, with no screenshot-level UI proof. |
+| [DA-T003 Resume Findings](../../audits/nullforge/DA-T003-RESUME/FINDINGS.md) | Independent audit findings and cleanup status for DA-T003-RESUME. | No blocking findings; non-blocking stale icon-blocker wording finding cleaned up by documentation-only follow-up. |
+| [DA-T003 Resume Repair Prompt](../../audits/nullforge/DA-T003-RESUME/REPAIR_PROMPT.md) | Bounded repair/cleanup prompt for DA-T003-RESUME drift. | No blocking repair required; cleanup prompt is retained only for future wording drift. |
+| [DA-T004 Context Bundle](../../plans/nullforge/DA-T004/CONTEXT_BUNDLE.md) | Curated context for the first desktop bridge smoke. | Repo-local plan artifact. |
+| [DA-T004 Context Bundle Manifest](../../plans/nullforge/DA-T004/CONTEXT_BUNDLE_MANIFEST.md) | DA-T004 context source list and exclusions. | Repo-local plan artifact. |
+| [DA-T004 Plan](../../plans/nullforge/DA-T004/PLAN.md) | Bounded plan for exactly one temporary dev-only bridge smoke command. | Repo-local plan artifact. |
+| [DA-T004 Acceptance](../../plans/nullforge/DA-T004/ACCEPTANCE.md) | DA-T004 acceptance criteria and required checks. | Repo-local plan artifact. |
+| [DA-T004 Implementor Prompt](../../plans/nullforge/DA-T004/IMPLEMENTOR_PROMPT.md) | DA-T004 implementor instructions. | Repo-local plan artifact; latest human prompt explicitly authorized `engine.cli_help_smoke` as the temporary dev-only first bridge proof. |
+| [DA-T004 Implementation Report](../../reports/nullforge/DA-T004/IMPLEMENTATION_REPORT.md) | DA-T004 implementor report. | Created by DA-T004 implementor; records one app-local `engine.cli_help_smoke` bridge command, fixed `.venv-qa-t005` help-smoke target, app-local dependency updates, build/check evidence, launch evidence, and boundaries. |
+| [DA-T004 Changed Files](../../reports/nullforge/DA-T004/CHANGED_FILES.md) | Changed-file inventory for DA-T004. | Records app-local bridge/UI/dependency files, status/source updates, and DA-T004 reports only. |
+| [DA-T004 Test Results](../../reports/nullforge/DA-T004/TEST_RESULTS.md) | Required DA-T004 check results. | Records app-local install/build/check results, fixed CLI help-smoke result, Tauri process-level launch evidence, cleanup state, skipped `rustfmt` reason, and no screenshot-level visual UI or button-click proof. |
+| [DA-T004 Auditor Prompt](../../reports/nullforge/DA-T004/AUDITOR_PROMPT.md) | Independent auditor prompt for DA-T004. | Created by DA-T004 implementor; asks auditor to verify the single-command bridge smoke and forbidden-scope boundaries. |
+| [DA-T004 Audit Report](../../audits/nullforge/DA-T004/AUDIT_REPORT.md) | Independent audit report and disposition for DA-T004. | DA-T004 audit decision `PASS`; accepts the bounded single-command bridge smoke with explicit evidence limits and no screenshot/button-click proof. |
+| [DA-T004 Findings](../../audits/nullforge/DA-T004/FINDINGS.md) | Independent audit findings and observations for DA-T004. | No blocking findings; records non-blocking observation that audit-time process-query reruns were sandbox-blocked while implementation test results recorded cleanup success. |
+| [DA-T004 Repair Prompt](../../audits/nullforge/DA-T004/REPAIR_PROMPT.md) | Bounded repair prompt if later DA-T004 drift is found. | No blocking repair required for DA-T004 audit `PASS`. |
+| [WB-T001 Context Bundle](../../plans/nullforge/WB-T001/CONTEXT_BUNDLE.md) | Curated context for artifact metadata read-only viewer. | Repo-local plan artifact; scopes WB-T001 to displaying DA-T004 bridge-returned `artifacts` only. |
+| [WB-T001 Context Bundle Manifest](../../plans/nullforge/WB-T001/CONTEXT_BUNDLE_MANIFEST.md) | WB-T001 context source list and exclusions. | Repo-local plan artifact. |
+| [WB-T001 Plan](../../plans/nullforge/WB-T001/PLAN.md) | Bounded plan for read-only artifact metadata display. | Repo-local plan artifact. |
+| [WB-T001 Acceptance](../../plans/nullforge/WB-T001/ACCEPTANCE.md) | WB-T001 acceptance criteria and required checks. | Repo-local plan artifact. |
+| [WB-T001 Implementor Prompt](../../plans/nullforge/WB-T001/IMPLEMENTOR_PROMPT.md) | WB-T001 implementor instructions. | Repo-local plan artifact. |
+| [WB-T001 Implementation Report](../../reports/nullforge/WB-T001/IMPLEMENTATION_REPORT.md) | WB-T001 implementor report. | Created by WB-T001 implementor; records frontend-only read-only artifact metadata display and evidence boundaries. |
+| [WB-T001 Changed Files](../../reports/nullforge/WB-T001/CHANGED_FILES.md) | Changed-file inventory for WB-T001. | Records `App.tsx`, `styles.css`, status/source updates, and WB-T001 reports only. |
+| [WB-T001 Test Results](../../reports/nullforge/WB-T001/TEST_RESULTS.md) | Required WB-T001 check results. | Records app-local build pass, diff hygiene, forbidden-scope scans, and no screenshot/button-click proof. |
+| [WB-T001 Auditor Prompt](../../reports/nullforge/WB-T001/AUDITOR_PROMPT.md) | Repo-local auditor prompt for WB-T001. | Used for repo-local closeout; WB-T001 audit decision is `PASS`. |
+| [WB-T001 Audit Report](../../audits/nullforge/WB-T001/AUDIT_REPORT.md) | Repo-local audit report and disposition for WB-T001. | WB-T001 audit decision `PASS`; closes the read-only returned-artifact metadata viewer with explicit evidence limits. |
+| [WB-T001 Findings](../../audits/nullforge/WB-T001/FINDINGS.md) | Repo-local audit findings and observations for WB-T001. | No blocking or reject-level findings; records accepted evidence limits for no screenshot/button-click/Tauri dev/non-empty runtime artifact proof. |
+| [WB-T001 Repair Prompt](../../audits/nullforge/WB-T001/REPAIR_PROMPT.md) | Bounded repair prompt if later WB-T001 drift is found. | No blocking repair required for WB-T001 audit `PASS`. |
+| [NullForge Desktop Gitignore](../../apps/nullforge-desktop/.gitignore) | App-local ignore rules for dependency/build outputs. | DA-T003-RESUME scaffold file; ignores `node_modules/`, `dist/`, `src-tauri/target/`, and `src-tauri/gen/`. |
+| [NullForge Desktop HTML](../../apps/nullforge-desktop/index.html) | Static app entry HTML. | DA-T003-RESUME launch-only scaffold file. |
+| [NullForge Desktop Package Manifest](../../apps/nullforge-desktop/package.json) | App-local pnpm package manifest and scripts. | DA-T004 adds only app-local `@tauri-apps/api` for the single bridge-smoke UI; no root package file exists. |
+| [NullForge Desktop pnpm Lock](../../apps/nullforge-desktop/pnpm-lock.yaml) | App-local resolved Node package graph. | DA-T004 app-local dependency artifact; no root lockfile. |
+| [NullForge Desktop pnpm Workspace Settings](../../apps/nullforge-desktop/pnpm-workspace.yaml) | App-local pnpm 11 build-script approval settings. | DA-T003-RESUME repair file; approves only `esbuild` for Vite dependency installation and does not create a root workspace. |
+| [NullForge Desktop TypeScript Config](../../apps/nullforge-desktop/tsconfig.json) | App-local TypeScript config. | DA-T003-RESUME scaffold file. |
+| [NullForge Desktop Vite Config](../../apps/nullforge-desktop/vite.config.ts) | App-local Vite config. | DA-T003-RESUME scaffold file; Vite dev server is loopback only and ignores Tauri generated/build outputs. |
+| [NullForge Desktop React App](../../apps/nullforge-desktop/src/App.tsx) | DA-T004 bridge-smoke UI plus WB-T001 read-only artifact metadata display. | Adds exactly one user-triggered `engine.cli_help_smoke` invoke action and bounded result display; WB-T001 displays only `result.artifacts` from the bridge response and an empty state; no workspace, sidecar, artifact file access, dataset, network, telemetry, public release, broker/live, AI/model, or financial advice behavior. |
+| [NullForge Desktop React Main](../../apps/nullforge-desktop/src/main.tsx) | React mount entrypoint. | DA-T003-RESUME scaffold file. |
+| [NullForge Desktop Styles](../../apps/nullforge-desktop/src/styles.css) | DA-T004 bridge-smoke UI and WB-T001 artifact metadata styling. | Styles the single trigger/result surface and read-only artifact metadata empty/list state while preserving app-local bounded UI scope. |
+| [NullForge Desktop Cargo Manifest](../../apps/nullforge-desktop/src-tauri/Cargo.toml) | App-local Rust/Tauri manifest. | DA-T004 adds only app-local `serde` for bounded bridge response serialization; no root Cargo manifest exists. |
+| [NullForge Desktop Cargo Lock](../../apps/nullforge-desktop/src-tauri/Cargo.lock) | App-local resolved Rust package graph. | DA-T004 app-local dependency artifact; no root Cargo lockfile. |
+| [NullForge Desktop Tauri Build Script](../../apps/nullforge-desktop/src-tauri/build.rs) | Tauri build script. | DA-T003-RESUME scaffold file; default Tauri build behavior requires a Windows ICO file for launch smoke. |
+| [NullForge Desktop Icon](../../apps/nullforge-desktop/src-tauri/icons/icon.ico) | App-local Windows icon required by Tauri resource generation. | DA-T003-RESUME repair asset; minimal local icon only, not branding/legal/trademark proof. |
+| [NullForge Desktop Tauri Config](../../apps/nullforge-desktop/src-tauri/tauri.conf.json) | Tauri app config. | DA-T003-RESUME scaffold file; bundle inactive, static window only. |
+| [NullForge Desktop Default Capability](../../apps/nullforge-desktop/src-tauri/capabilities/default.json) | Minimal Tauri capability file. | DA-T003-RESUME scaffold file; empty permission list. |
+| [NullForge Desktop Rust Main](../../apps/nullforge-desktop/src-tauri/src/main.rs) | DA-T004 app-local Tauri command entrypoint. | Implements exactly one Tauri command, `engine.cli_help_smoke`, using fixed `.venv-qa-t005` Python/help arguments, timeout, bounded output excerpts, and structured `OK`/`ERROR`/`TIMEOUT`/`BLOCKED` responses; no plugins, sidecar, workspace, network, telemetry, updater, signing, public release, broker/live, AI/model, or financial advice behavior. |
 
 ## Incoming package inputs
 
@@ -298,7 +351,7 @@ Prompt files are not canonical volume content. PF-T001 did not import package pr
 | Item | Expected role | Status |
 |---|---|---|
 | `ADR-T003` | Future scoped decision if later required. | Pending downstream; not created or started. |
-| Rust/Cargo setup action or scoped plan change | Separate human-approved setup action to make `rustc` and `cargo` available on PATH, or a separate scoped plan change before DA-T003 can resume. | DA-T003S setup evidence recorded with audit `PASS`; DA-T003 still requires separate scoped resume verification before any scaffold work. |
-| `DA-T003` resume | Future scoped resume only after Rust/Cargo setup is independently audited and a separate resume ticket independently verifies `rustc --version` and `cargo --version`, or after a separate scoped plan change. | Blocked with audit `HOLD`; DA-T003R audit `PASS`; DA-T003H audit `PASS`; DA-T003V audit `PASS` for historical negative human evidence; DA-T003S audit `PASS`; no scaffold was created. |
-| `DA-T004`, `WB-T001`, `MB-T002` | Future scoped M1 desktop bridge proof work after DA-T003 is unblocked and separately authorized. | Pending downstream; not created or started. |
+| Rust/Cargo setup action or scoped plan change | Historical setup path for making `rustc` and `cargo` visible to a later resume shell. | DA-T003S setup evidence recorded with audit `PASS`; DA-T003-RESUME independently verified Rust/Cargo availability in the restarted PowerShell Codex shell. |
+| `DA-T003` resume launch-smoke repair | Human-authorized repair for pnpm 11 build approval and Tauri Windows icon requirement. | Closed by DA-T003-RESUME audit `PASS`; repair files exist under `apps/nullforge-desktop/`; process-level `tauri dev` launch evidence was accepted; no screenshot-level UI proof was captured. |
+| `MB-T002` or next scoped implementation | Human-selected next step after WB-T001 closeout. | WB-T001 is closed with audit `PASS`; `MB-T002` is not started. |
 | M0 milestone and ticket queue repo import | Potential future source import or handoff task. | Incoming-package-only; not created or started in DA-T002. |
